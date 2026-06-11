@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { ADMIN_COOKIE, makeToken, verifyToken } from "@/lib/admin-auth";
 
@@ -108,6 +109,7 @@ export async function adminSave(
     pkValue === null
       ? await db.from(table).insert(payload)
       : await db.from(table).update(payload).eq(pk, pkValue);
+  if (!error) revalidatePath("/", "layout"); // refresh the whole site immediately
   return { error: error?.message ?? "" };
 }
 
@@ -121,6 +123,7 @@ export async function adminDelete(
   const db = supabaseAdmin();
   if (!db) return { error: "SUPABASE_SERVICE_ROLE_KEY missing in .env.local." };
   const { error } = await db.from(table).delete().eq(pk, pkValue);
+  if (!error) revalidatePath("/", "layout"); // refresh the whole site immediately
   return { error: error?.message ?? "" };
 }
 
