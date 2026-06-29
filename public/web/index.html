@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Veloura Living — Premium & Custom Sofas, Crafted in India</title>
+<meta name="description" content="Veloura Living crafts premium and fully-custom sofas — luxury sofas, sectionals, recliners and bespoke seating. Handcrafted frames, premium upholstery, made to your dimensions. Showroom in Mumbai." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#F4F2EE; --band:#EAE7E1; --card:#FFFFFF; --card2:#FBFAF7;
+    --ink:#241D17; --body:#6B6258; --muted:#8A8175;
+    --bronze:#B5835A; --bronze-deep:#9C6B42; --bronze-tint:#EFE3D4; --bronze-soft:#C9A876;
+    --line:#E4DFD6; --green:#25A35A; --footer:#2A221B; --gold:#C99A5B;
+    --display:"Cormorant Garamond", Georgia, serif;
+    --sans:"Jost", system-ui, -apple-system, sans-serif;
+    --shell:min(1200px,92vw); --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);font-weight:300;background:var(--bg);color:var(--body);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .topbar{height:6px;background:#15110D;position:fixed;inset:0 0 auto 0;z-index:60}
+  h1,h2,h3,h4{font-family:var(--display);color:var(--ink);line-height:1.08;font-weight:600;letter-spacing:-.005em}
+  a{color:inherit;text-decoration:none}
+  img{display:block;width:100%;height:100%;object-fit:cover}
+  .shell{width:var(--shell);margin-inline:auto}
+  .eyebrow{font-family:var(--sans);font-size:11px;font-weight:400;text-transform:uppercase;letter-spacing:.18em;color:var(--bronze)}
+  .center{text-align:center}
+  :focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
+
+  .btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--sans);font-size:12px;font-weight:400;text-transform:uppercase;letter-spacing:.12em;padding:.85rem 1.7rem;border:1px solid transparent;cursor:pointer;transition:all .4s var(--ease);border-radius:6px;background:none;line-height:1}
+  .btn-primary{background:linear-gradient(135deg,var(--bronze),var(--bronze-deep));color:#fff;box-shadow:0 8px 20px -10px rgba(156,107,66,.6)}
+  .btn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .btn-outline{border-color:var(--bronze);color:var(--bronze-deep)}
+  .btn-outline:hover{background:var(--bronze);color:#fff}
+  .btn-green{background:var(--green);color:#fff;width:100%;justify-content:center}
+  .btn-green:hover{filter:brightness(1.05)}
+  .btn-light{background:#fff;color:var(--ink)}
+  .btn-light:hover{background:var(--bronze-tint)}
+  .btn-ghost-light{border-color:rgba(255,255,255,.5);color:#fff}
+  .btn-ghost-light:hover{background:#fff;color:var(--ink)}
+
+  /* NAV */
+  header.nav{position:fixed;inset:6px 0 auto 0;z-index:55;background:rgba(247,245,241,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav .bar{display:flex;align-items:center;justify-content:space-between;padding:1rem 0}
+  .logo{display:flex;align-items:center;gap:.6rem}
+  .logo svg{width:30px;height:30px;color:var(--bronze)}
+  .logo b{font-family:var(--display);font-size:1.5rem;font-weight:700;color:var(--ink);letter-spacing:.01em}
+  .nav-links{display:flex;align-items:center;gap:1.9rem}
+  .nav-links a{font-size:13px;letter-spacing:.02em;color:var(--ink);position:relative;padding:.3rem 0;cursor:pointer;background:none;border:0;font-family:var(--sans);font-weight:400}
+  .nav-links a:hover{color:var(--bronze-deep)}
+  .nav-links a.active{color:var(--bronze-deep)}
+  .nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1.5px;background:var(--bronze)}
+  .nav .quote{margin-left:.4rem}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:6px}
+  .burger span{width:24px;height:2px;background:var(--ink)}
+  .drawer{position:fixed;inset:0;z-index:70;background:var(--bg);transform:translateX(100%);transition:transform .45s var(--ease);padding:1.4rem 6vw;display:flex;flex-direction:column}
+  .drawer.open{transform:none}
+  .drawer .dt{display:flex;justify-content:space-between;align-items:center}
+  .drawer nav{display:flex;flex-direction:column;margin-top:14vh}
+  .drawer nav a{font-family:var(--display);font-size:2rem;font-weight:600;padding:.5rem 0;border-bottom:1px solid var(--line);cursor:pointer}
+  .x{background:none;border:0;font-size:2rem;line-height:1;cursor:pointer;color:var(--ink)}
+
+  main{padding-top:0}
+  .page{display:none}
+  .page.show{display:block;animation:fade .5s var(--ease)}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* page header band */
+  .phead{background:var(--band);padding:9rem 0 4.5rem;text-align:center}
+  .phead h1{font-size:clamp(2.6rem,6vw,4rem);font-weight:700}
+  .phead p{max-width:42rem;margin:1.2rem auto 0;color:var(--body)}
+  .phead .accent{color:var(--bronze-deep)}
+
+  section.block{padding:5rem 0}
+  .sec-head{text-align:center;max-width:44rem;margin:0 auto 3rem}
+  .sec-head h2{font-size:clamp(2rem,4vw,2.9rem);font-weight:700}
+  .sec-head p{margin-top:.9rem;color:var(--body)}
+  .alt{background:var(--band)}
+
+  /* HOME hero */
+  .hero{background:var(--band);padding:9rem 0 5rem}
+  .pill{display:inline-block;border:1px solid var(--bronze);color:var(--bronze-deep);background:var(--bronze-tint);border-radius:99px;font-size:11px;letter-spacing:.06em;padding:.4rem 1rem;font-weight:400;margin-bottom:1.6rem}
+  .hero h1{font-size:clamp(3rem,7.5vw,5.6rem);font-weight:700;max-width:14ch}
+  .hero h1 em{font-style:italic;color:var(--bronze-deep)}
+  .hero .lead{max-width:40ch;margin:1.6rem 0 2.2rem;font-size:1.08rem;color:var(--body)}
+  .hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+  .hero-stats{display:flex;gap:2.5rem;margin-top:3rem;flex-wrap:wrap}
+  .hero-stats .s b{font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--ink);display:block}
+  .hero-stats .s span{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+
+  /* product cards */
+  .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+  .pcard:hover{transform:translateY(-4px);box-shadow:0 24px 44px -28px rgba(36,29,23,.4)}
+  .pcard .pic{position:relative;aspect-ratio:16/11;overflow:hidden;background:var(--bronze-tint)}
+  .pcard .pic .img{position:absolute;inset:0;transition:transform 1s var(--ease)}
+  .pcard:hover .pic .img{transform:scale(1.05)}
+  .badge{position:absolute;top:.8rem;right:.8rem;background:linear-gradient(135deg,var(--bronze),var(--bronze-deep));color:#fff;font-size:10px;letter-spacing:.08em;padding:.3rem .7rem;border-radius:5px;text-transform:capitalize}
+  .pcard .body{padding:1.3rem 1.4rem 1.5rem}
+  .pcard .cat{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--bronze)}
+  .pcard h3{font-size:1.45rem;font-weight:600;margin:.3rem 0 .5rem}
+  .pcard .desc{font-size:.86rem;color:var(--body);line-height:1.55;min-height:3.6em}
+  .pcard .row{display:flex;align-items:center;justify-content:space-between;margin-top:1.1rem}
+  .pcard .price{font-family:var(--display);font-size:1.5rem;font-weight:700;color:var(--bronze-deep)}
+  .vd{font-size:11px;text-transform:uppercase;letter-spacing:.1em;border:1px solid var(--line);border-radius:6px;padding:.55rem .9rem;color:var(--ink);transition:all .35s var(--ease)}
+  .vd:hover{background:var(--bronze);color:#fff;border-color:var(--bronze)}
+  .ph-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;background:linear-gradient(135deg,#EBE3D5,#C9A876);color:rgba(36,29,23,.5)}
+  .ph-fallback b{font-family:var(--display);font-size:1.4rem;font-weight:600}
+  .ph-fallback span{font-size:9px;letter-spacing:.2em;text-transform:uppercase}
+
+  /* feature cards (why / philosophy) */
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+  .fcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.8rem;transition:box-shadow .4s var(--ease),transform .4s var(--ease)}
+  .fcard:hover{box-shadow:0 18px 36px -26px rgba(36,29,23,.35);transform:translateY(-3px)}
+  .fcard .ic{width:46px;height:46px;border-radius:50%;background:var(--bronze-tint);display:flex;align-items:center;justify-content:center;color:var(--bronze-deep);margin-bottom:1.1rem}
+  .fcard .ic svg{width:20px;height:20px}
+  .fcard h3{font-size:1.3rem;font-weight:600;margin-bottom:.45rem}
+  .fcard p{font-size:.88rem;color:var(--body)}
+
+  /* craftsmanship split */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+  .split .visual{aspect-ratio:5/4;border-radius:10px;overflow:hidden;position:relative;background:var(--bronze-tint);box-shadow:0 26px 50px -30px rgba(36,29,23,.45)}
+  .split h2{font-size:clamp(1.9rem,3.6vw,2.7rem);font-weight:700;margin-bottom:1.6rem}
+  .craft-list .ci{padding:1rem 0;border-bottom:1px solid var(--line)}
+  .craft-list .ci:first-child{padding-top:0}
+  .craft-list h3{font-size:1.2rem;font-weight:600}
+  .craft-list p{font-size:.86rem;color:var(--body);margin-top:.2rem}
+
+  /* process */
+  .process{background:var(--band)}
+  .proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+  .pstep{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.6rem}
+  .pstep .n{width:42px;height:42px;border-radius:50%;background:var(--bronze-tint);color:var(--bronze-deep);font-family:var(--display);font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+  .pstep h3{font-size:1.25rem;font-weight:600;margin-bottom:.4rem}
+  .pstep p{font-size:.86rem;color:var(--body)}
+
+  /* testimonials */
+  .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.7rem}
+  .stars{color:var(--gold);font-size:.9rem;letter-spacing:.1em;margin-bottom:.9rem}
+  .tcard q{display:block;font-style:italic;color:#4f4639;font-size:.98rem;line-height:1.6}
+  .tcard .who{display:flex;align-items:center;gap:.8rem;margin-top:1.2rem}
+  .tcard .av{width:40px;height:40px;border-radius:50%;background:var(--bronze-tint);overflow:hidden;flex:none}
+  .tcard .who b{font-family:var(--sans);font-weight:500;font-size:.9rem;color:var(--ink);display:block}
+  .tcard .who span{font-size:11px;color:var(--muted)}
+
+  /* CTA */
+  .cta{background:var(--bronze-tint);text-align:center;padding:5rem 0}
+  .cta h2{font-size:clamp(2rem,4vw,3rem);font-weight:700}
+  .cta p{max-width:34rem;margin:1rem auto 1.8rem;color:var(--body)}
+  .cta .row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+  /* filter chips */
+  .chips{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-bottom:3rem}
+  .chip{font-size:12px;letter-spacing:.04em;padding:.55rem 1.2rem;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;transition:all .35s var(--ease)}
+  .chip:hover{border-color:var(--bronze)}
+  .chip.on{background:linear-gradient(135deg,var(--bronze),var(--bronze-deep));color:#fff;border-color:transparent}
+
+  /* about story */
+  .story{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center}
+  .story .visual{aspect-ratio:4/3;border-radius:10px;overflow:hidden;position:relative;background:var(--bronze-tint);box-shadow:0 26px 50px -30px rgba(36,29,23,.45)}
+  .story h2{font-size:clamp(1.9rem,3.6vw,2.6rem);font-weight:700;margin-bottom:1.2rem}
+  .story p{margin-bottom:1rem;font-size:.96rem}
+  .matsplit{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center}
+  .mat .mi{padding:1rem 0;border-bottom:1px solid var(--line)}
+  .mat .mi:first-child{padding-top:0}
+  .mat .mi h3{font-size:1.2rem;font-weight:600}
+  .mat .mi p{font-size:.86rem;color:var(--body);margin-top:.2rem}
+
+  /* custom checks */
+  .check-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem}
+  .ccard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.8rem 1.4rem;text-align:center}
+  .ccard .ck{width:44px;height:44px;border-radius:50%;background:var(--bronze-tint);color:var(--bronze-deep);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+  .ccard h3{font-size:1.15rem;font-weight:600}
+  .opt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+  .ocard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.4rem}
+  .ocard h3{font-size:1.15rem;font-weight:600;margin-bottom:.3rem}
+  .ocard p{font-size:.82rem;color:var(--bronze-deep)}
+
+  /* gallery */
+  .gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+  .gtile{position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--bronze-tint)}
+  .gtile .img{position:absolute;inset:0;transition:transform 1.1s var(--ease)}
+  .gtile:hover .img{transform:scale(1.06)}
+  .gtile .veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(36,29,23,.82),transparent 55%)}
+  .gtile .cap{position:absolute;left:0;bottom:0;padding:1.2rem}
+  .gtile .cap small{color:var(--bronze-soft);font-size:9px;letter-spacing:.18em;text-transform:uppercase}
+  .gtile .cap h3{color:#fff;font-size:1.3rem;font-weight:600;margin-top:.2rem}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:3rem;align-items:start}
+  .cinfo h2{font-size:1.7rem;font-weight:700;margin-bottom:1.6rem}
+  .cinfo .ci{display:flex;gap:1rem;margin-bottom:1.3rem}
+  .cinfo .ci .ic{width:42px;height:42px;border-radius:8px;background:var(--bronze-tint);color:var(--bronze-deep);display:flex;align-items:center;justify-content:center;flex:none}
+  .cinfo .ci b{font-family:var(--sans);font-weight:500;color:var(--ink);display:block;font-size:.92rem}
+  .cinfo .ci p{font-size:.88rem;color:var(--body);margin-top:.15rem}
+  .cinfo .ci .bronze{color:var(--bronze-deep)}
+  .cbtns{margin-top:1.8rem;display:flex;flex-direction:column;gap:.7rem}
+  .formcard{background:var(--band);border-radius:12px;padding:2rem}
+  form .fg{margin-bottom:1.1rem}
+  form .two{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+  form label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink);font-weight:500;display:block;margin-bottom:.45rem}
+  form input,form select,form textarea{width:100%;font-family:var(--sans);font-weight:300;font-size:.92rem;padding:.8rem .9rem;background:#fff;border:1px solid var(--line);border-radius:7px;color:var(--ink)}
+  form input:focus,form select:focus,form textarea:focus{outline:none;border-color:var(--bronze)}
+  form .send{width:100%;justify-content:center;margin-top:.4rem}
+  .okmsg{display:none;background:#fff;border:1px solid var(--line);border-radius:10px;padding:2rem;text-align:center}
+  .okmsg .tk{width:46px;height:46px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.3rem}
+
+  /* showroom */
+  .show{background:var(--band)}
+  .showcard{display:grid;grid-template-columns:.9fr 1.1fr;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 50px -34px rgba(36,29,23,.4)}
+  .showcard .info{padding:2.2rem}
+  .showcard .info h3{font-size:1.6rem;font-weight:700;margin-bottom:1.3rem}
+  .showcard .info .r{margin-bottom:1rem}
+  .showcard .info .r b{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--bronze);display:block;margin-bottom:.2rem}
+  .showcard .info .r p{font-size:.9rem;color:var(--body)}
+  .showcard .visual{position:relative;background:var(--bronze-tint);min-height:300px}
+
+  /* footer */
+  footer.ft{background:var(--footer);color:rgba(251,248,241,.7);padding:4rem 0 1.6rem}
+  .ft .cols{display:grid;grid-template-columns:1.7fr 1fr 1fr 1.1fr;gap:2rem}
+  .ft .logo b{color:#fff}
+  .ft .blurb{font-size:.86rem;margin-top:.9rem;max-width:30ch}
+  .ft h4{font-family:var(--sans);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--bronze-soft);margin-bottom:1rem}
+  .ft a,.ft .line{display:block;font-size:.88rem;padding:.22rem 0;color:rgba(251,248,241,.7);cursor:pointer}
+  .ft a:hover{color:#fff}
+  .ft .social{display:flex;gap:1rem;justify-content:center;margin-top:2.5rem}
+  .ft .social a{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center}
+  .ft .social a:hover{background:var(--bronze);border-color:var(--bronze)}
+  .ft .base{text-align:center;border-top:1px solid rgba(255,255,255,.12);margin-top:2rem;padding-top:1.4rem;font-size:.78rem;color:rgba(251,248,241,.5)}
+
+  .wa{position:fixed;right:1.4rem;bottom:1.4rem;z-index:50;display:flex;align-items:center;gap:.6rem;background:var(--green);color:#fff;padding:.8rem 1.1rem;border-radius:99px;box-shadow:0 16px 34px -16px rgba(37,163,90,.7);cursor:pointer}
+  .wa svg{width:22px;height:22px}
+  .wa span{font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+
+  .demo-flag{position:fixed;left:50%;top:6px;transform:translateX(-50%);z-index:65;background:var(--bronze);color:#fff;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:.25rem .9rem;border-radius:0 0 6px 6px}
+
+  @media(max-width:980px){
+    .nav-links{display:none}.burger{display:flex}.nav .quote{display:none}
+    .prod-grid,.feat-grid,.proc-grid,.check-grid,.opt-grid,.gal-grid{grid-template-columns:1fr 1fr}
+    .split,.story,.matsplit,.contact-grid,.showcard{grid-template-columns:1fr;gap:2.5rem}
+    .split .visual,.story .visual{order:-1}
+    .tgrid{grid-template-columns:1fr}
+    .ft .cols{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:600px){
+    .prod-grid,.feat-grid,.proc-grid,.check-grid,.opt-grid,.gal-grid{grid-template-columns:1fr}
+    .hero-stats{gap:1.6rem}.wa span{display:none}
+    .ft .cols{grid-template-columns:1fr 1fr}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="demo-flag">Demo Preview</div>
+
+<header class="nav">
+  <div class="shell bar">
+    <a class="logo" data-nav="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/><path d="M2 13a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3h12v-3a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v5H2z"/></svg>
+      <b>Veloura</b>
+    </a>
+    <nav class="nav-links" id="navlinks">
+      <a data-nav="home" class="active">Home</a>
+      <a data-nav="about">About</a>
+      <a data-nav="collections">Collections</a>
+      <a data-nav="custom">Custom Sofas</a>
+      <a data-nav="gallery">Gallery</a>
+      <a data-nav="contact">Contact</a>
+      <a class="btn btn-primary quote" data-nav="contact">Get Quote</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <div class="dt"><span class="logo"><b>Veloura</b></span><button class="x" id="closeD" aria-label="Close">&times;</button></div>
+  <nav>
+    <a data-nav="home" data-close>Home</a>
+    <a data-nav="about" data-close>About</a>
+    <a data-nav="collections" data-close>Collections</a>
+    <a data-nav="custom" data-close>Custom Sofas</a>
+    <a data-nav="gallery" data-close>Gallery</a>
+    <a data-nav="contact" data-close>Contact</a>
+  </nav>
+</div>
+
+<main id="top">
+
+<!-- ============ HOME ============ -->
+<div class="page show" data-page="home">
+  <section class="hero">
+    <div class="shell">
+      <span class="pill">Premium Furniture Since 2010</span>
+      <h1>Crafted for <em>comfort,</em> made to <em>last.</em></h1>
+      <p class="lead">Premium and fully-custom sofas — handcrafted frames, fine upholstery and seating built to your exact dimensions.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" data-nav="collections">Explore Collections</a>
+        <a class="btn btn-outline" data-nav="custom">Design Your Own</a>
+      </div>
+      <div class="hero-stats">
+        <div class="s"><b>15+</b><span>Years of craft</span></div>
+        <div class="s"><b>5,000+</b><span>Homes furnished</span></div>
+        <div class="s"><b>300+</b><span>Fabrics &amp; leathers</span></div>
+        <div class="s"><b>10-yr</b><span>Frame warranty</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="shell">
+      <div class="sec-head">
+        <h2>Featured Collections</h2>
+        <p>Explore our curated selection of premium sofa collections, each designed with meticulous attention to comfort and style.</p>
+      </div>
+      <div class="prod-grid" id="featGrid"></div>
+      <div class="center" style="margin-top:2.4rem"><a class="btn btn-outline" data-nav="collections">View All Collections</a></div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="shell">
+      <div class="sec-head"><h2>Why Choose Veloura Living</h2><p>We believe in delivering excellence in every aspect of our craft.</p></div>
+      <div class="feat-grid" id="whyGrid"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="shell split">
+      <div class="visual"><div class="img" data-img="craft"></div></div>
+      <div>
+        <span class="eyebrow">Signature Craftsmanship</span>
+        <h2 style="margin-top:.6rem">Made by hand, measured to the millimetre</h2>
+        <div class="craft-list" id="craftList"></div>
+        <div style="margin-top:1.6rem"><a class="btn btn-primary" data-nav="custom">Learn About Our Process</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block process">
+    <div class="shell">
+      <div class="sec-head"><h2>Custom Sofa Process</h2><p>From consultation to delivery, we guide you through every step of creating your perfect sofa.</p></div>
+      <div class="proc-grid" id="procGrid"></div>
+      <div class="center" style="margin-top:2.4rem"><a class="btn btn-primary" data-nav="custom">Start Your Custom Sofa</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="shell">
+      <div class="sec-head"><h2>Loved by Our Customers</h2><p>Hear from homeowners, designers, and architects who trust Veloura Living.</p></div>
+      <div class="tgrid" id="tGrid"></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="shell">
+      <h2>Design Your Dream Sofa</h2>
+      <p>Let our experts help you create the perfect sofa that matches your style, space, and comfort needs.</p>
+      <div class="row"><a class="btn btn-primary" data-nav="contact">Book Consultation</a><a class="btn btn-outline" data-nav="contact">WhatsApp Us</a></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<div class="page" data-page="about">
+  <section class="phead"><div class="shell"><h1>Our Story</h1><p>Veloura Living was founded on a simple belief: every home deserves furniture that combines <span class="accent">beauty, comfort, and craftsmanship.</span></p></div></section>
+
+  <section class="block">
+    <div class="shell story">
+      <div class="visual"><div class="img" data-img="story"></div></div>
+      <div>
+        <h2>Founded on Passion</h2>
+        <p>In 2010, Veloura Living was born from a passion for craftsmanship and a vision to bring premium, made-to-measure sofas to Indian homes. Our founders set out to create sofas that would become heirlooms.</p>
+        <p>What started as a small workshop with a handful of artisans has grown into a thriving studio — but our core values remain unchanged: quality, integrity, and a deep respect for the craft.</p>
+        <p>Today, Veloura Living serves homeowners, interior designers, architects and hospitality businesses across India, each a testament to our commitment to excellence.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="shell">
+      <div class="sec-head"><h2>Our Manufacturing Philosophy</h2><p>We believe in slow, intentional craftsmanship that prioritises quality over quantity.</p></div>
+      <div class="feat-grid" id="philGrid"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="shell matsplit">
+      <div>
+        <h2 style="font-size:clamp(1.9rem,3.6vw,2.6rem);font-weight:700;margin-bottom:1.4rem">Premium Materials &amp; Quality Standards</h2>
+        <div class="mat" id="matList"></div>
+      </div>
+      <div class="visual" style="aspect-ratio:5/4;border-radius:10px;overflow:hidden;position:relative;background:var(--bronze-tint)"><div class="img" data-img="craft"></div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="shell"><h2>Visit Our Workshop</h2><p>See our artisans at work and feel the quality firsthand at our Mumbai atelier.</p><div class="row"><a class="btn btn-primary" data-nav="contact">Book a Visit</a></div></div>
+  </section>
+</div>
+
+<!-- ============ COLLECTIONS ============ -->
+<div class="page" data-page="collections">
+  <section class="phead"><div class="shell"><h1>Our Collections</h1><p>Explore our curated selection of premium sofas, each designed with meticulous attention to comfort, style, and craftsmanship.</p></div></section>
+  <section class="block">
+    <div class="shell">
+      <div class="chips" id="chips"></div>
+      <div class="prod-grid" id="colGrid"></div>
+    </div>
+  </section>
+  <section class="cta"><div class="shell"><h2>Can't find the perfect fit?</h2><p>Almost every model can be resized and re-upholstered — or design one entirely from scratch.</p><div class="row"><a class="btn btn-primary" data-nav="custom">Design a Custom Sofa</a><a class="btn btn-outline" data-nav="contact">Get a Quote</a></div></div></section>
+</div>
+
+<!-- ============ CUSTOM ============ -->
+<div class="page" data-page="custom">
+  <section class="phead"><div class="shell"><h1>Custom Sofa<br/>Manufacturing</h1><p>Design your dream sofa with our expert team. From concept to creation, <span class="accent">we bring your vision to life.</span></p></div></section>
+
+  <section class="block">
+    <div class="shell">
+      <div class="sec-head"><h2>Why Go Custom?</h2><p>Off-the-shelf sofas rarely fit your space perfectly. Our custom manufacturing ensures your sofa is tailored to your exact needs.</p></div>
+      <div class="check-grid" id="checkGrid"></div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="shell">
+      <div class="sec-head"><h2>Customization Options</h2><p>Endless possibilities to create your perfect sofa.</p></div>
+      <div class="opt-grid" id="optGrid"></div>
+    </div>
+  </section>
+
+  <section class="block process">
+    <div class="shell">
+      <div class="sec-head"><h2>How It Works</h2><p>Six considered steps from first sketch to your living room.</p></div>
+      <div class="proc-grid" id="procGrid2"></div>
+    </div>
+  </section>
+
+  <section class="cta"><div class="shell"><h2>Ready to start your commission?</h2><p>Share your space and ideas — a Veloura designer will follow up with options, swatches and pricing.</p><div class="row"><a class="btn btn-primary" data-nav="contact">Start Your Custom Sofa</a></div></div></section>
+</div>
+
+<!-- ============ GALLERY ============ -->
+<div class="page" data-page="gallery">
+  <section class="phead"><div class="shell"><h1>Interior Inspiration</h1><p>Explore our collection of completed projects and installations featuring Veloura Living sofas in beautiful homes and spaces.</p></div></section>
+  <section class="block"><div class="shell"><div class="gal-grid" id="galGrid"></div></div></section>
+  <section class="cta"><div class="shell"><h2>See Your Space Transform</h2><p>Inspired by our gallery? Let us help you create a beautiful living space with a Veloura Living sofa.</p><div class="row"><a class="btn btn-primary" data-nav="collections">Explore Collections</a><a class="btn btn-outline" data-nav="contact">Chat with Expert</a></div></div></section>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div class="page" data-page="contact">
+  <section class="phead"><div class="shell"><h1>Get In Touch</h1><p>Have questions about our sofas or need help finding the perfect piece? We are here to help.</p></div></section>
+
+  <section class="block">
+    <div class="shell contact-grid">
+      <div class="cinfo">
+        <h2>Contact Information</h2>
+        <div class="ci"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></div><div><b>Phone</b><p>+91 98765 43210</p></div></div>
+        <div class="ci"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><div><b>Email</b><p class="bronze">info@veloura.com</p></div></div>
+        <div class="ci"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><b>Address</b><p>123 Design Street, Bandra West<br/>Mumbai, Maharashtra 400050<br/>India</p></div></div>
+        <div class="ci"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><b>Business Hours</b><p>Monday – Saturday: 10 AM – 7 PM<br/>Sunday: 12 PM – 6 PM</p></div></div>
+        <div class="cbtns">
+          <a class="btn btn-green"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.6 7.6 0 0 1-2.2-1.4 8.3 8.3 0 0 1-1.6-1.9c-.1-.3 0-.4.1-.6l.4-.5.3-.5c.1-.1 0-.3 0-.4l-.9-2.1c-.2-.5-.4-.5-.6-.5h-.5a1 1 0 0 0-.7.3A2.9 2.9 0 0 0 5.5 8a5 5 0 0 0 1.1 2.7 11.5 11.5 0 0 0 4.4 3.9c2.6 1 2.6.7 3.1.7a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .1-1.2c-.1-.1-.2-.2-.4-.2zM12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2z"/></svg>WhatsApp Us</a>
+          <a class="btn btn-outline" data-nav="custom" style="justify-content:center">Request Custom Quote</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="formcard" id="cform">
+          <form id="contactForm">
+            <div class="two">
+              <div class="fg"><label>Full Name</label><input required placeholder="Your name" /></div>
+              <div class="fg"><label>Email</label><input type="email" placeholder="your@email.com" /></div>
+            </div>
+            <div class="fg"><label>Phone Number</label><input placeholder="+91 98765 43210" /></div>
+            <div class="fg"><label>Subject</label><input placeholder="How can we help?" /></div>
+            <div class="fg"><label>Message</label><textarea rows="5" placeholder="Tell us more about your inquiry…"></textarea></div>
+            <button type="submit" class="btn btn-primary send">Send Message</button>
+          </form>
+        </div>
+        <div class="okmsg" id="okmsg"><div class="tk">✓</div><h3 style="font-size:1.5rem;font-weight:700">Message sent</h3><p style="margin-top:.4rem">Thanks — a Veloura designer will be in touch shortly. <em>(Demo form — not connected.)</em></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block show">
+    <div class="shell">
+      <div class="sec-head"><h2>Visit Our Showroom</h2><p>Experience our sofas firsthand at our flagship showroom in Mumbai. Our design consultants are ready to assist you.</p></div>
+      <div class="showcard">
+        <div class="info">
+          <h3>Veloura Living Showroom</h3>
+          <div class="r"><b>Address</b><p>123 Design Street, Bandra West<br/>Mumbai, Maharashtra 400050</p></div>
+          <div class="r"><b>Phone</b><p>+91 98765 43210</p></div>
+          <div class="r"><b>Email</b><p>info@veloura.com</p></div>
+          <div class="r"><b>Hours</b><p>Monday – Saturday: 10 AM – 7 PM<br/>Sunday: 12 PM – 6 PM</p></div>
+          <div style="margin-top:1.4rem"><a class="btn btn-primary" style="width:100%;justify-content:center" data-nav="contact">Book a Showroom Visit</a></div>
+        </div>
+        <div class="visual"><div class="img" data-img="showroom"></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer class="ft">
+  <div class="shell">
+    <div class="cols">
+      <div>
+        <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="var(--bronze)" stroke-width="1.6" style="width:26px;height:26px"><path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/><path d="M2 13a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3h12v-3a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v5H2z"/></svg><b>Veloura</b></span>
+        <p class="blurb">Crafting premium sofas for discerning homeowners and design professionals since 2010.</p>
+      </div>
+      <div><h4>Quick Links</h4><a data-nav="home">Home</a><a data-nav="about">About Us</a><a data-nav="collections">Collections</a><a data-nav="gallery">Gallery</a></div>
+      <div><h4>Categories</h4><a data-nav="collections">Luxury Sofas</a><a data-nav="collections">L-Shape Sofa</a><a data-nav="collections">Recliners</a><a data-nav="custom">Custom Sofas</a></div>
+      <div><h4>Contact</h4><span class="line">+91 98765 43210</span><span class="line">info@veloura.com</span><span class="line">Mumbai, India</span></div>
+    </div>
+    <div class="social">
+      <a aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M14 9h3l.5-3H14V4.5c0-.8.3-1.5 1.5-1.5H17V.2C16.7.1 15.7 0 14.6 0 12.1 0 10.5 1.5 10.5 4.2V6H8v3h2.5v9H14z"/></svg></a>
+      <a aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM0 8h5v16H0zM7.5 8H12v2.2h.1c.6-1.1 2.1-2.3 4.3-2.3 4.6 0 5.5 3 5.5 7V24h-5v-6.3c0-1.5 0-3.5-2.1-3.5s-2.5 1.6-2.5 3.3V24h-5z"/></svg></a>
+    </div>
+    <div class="base">© 2026 Veloura Living. All rights reserved. | Crafted with precision and passion.</div>
+  </div>
+</footer>
+
+<a class="wa" data-nav="contact"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.6 7.6 0 0 1-2.2-1.4 8.3 8.3 0 0 1-1.6-1.9c-.1-.3 0-.4.1-.6l.4-.5.3-.5c.1-.1 0-.3 0-.4l-.9-2.1c-.2-.5-.4-.5-.6-.5h-.5a1 1 0 0 0-.7.3A2.9 2.9 0 0 0 5.5 8a5 5 0 0 0 1.1 2.7 11.5 11.5 0 0 0 4.4 3.9c2.6 1 2.6.7 3.1.7a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .1-1.2c-.1-.1-.2-.2-.4-.2zM12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2z"/></svg><span>Chat with us</span></a>
+
+<script>
+const U = (id,w=800)=>`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+const IMG = {
+  craft:U('1586023492125-27b2c045efd7',1000),
+  story:U('1567016432779-094069958ea5',1000),
+  showroom:U('1540574163026-643ea20ade25',1000)
+};
+const PRODUCTS = [
+  {name:'Verona Luxe 3-Seater',cat:'3 Seater Sofas',price:'₹65,000',badge:'Bestseller',img:'1567016432779-094069958ea5',desc:'A timeless 3-seater sofa with clean lines and exceptional comfort. Crafted with a solid wood frame and premium foam.'},
+  {name:'Milan Corner Sectional',cat:'Sectional Sofas',price:'₹95,000',badge:'Customizable',img:'1493663284031-b7e3aefcae8e',desc:'An expansive L-shaped sectional that combines luxury with functionality. Perfect for large living rooms and family spaces.'},
+  {name:'Aurelia Recliner Sofa',cat:'Recliners',price:'₹85,000',badge:'New',img:'1550254478-ead40cc54513',desc:'The ultimate comfort experience with motorized reclining mechanism. Upholstered in premium leather with built-in lumbar support.'},
+  {name:'Haven L-Shape',cat:'L-Shape Sofas',price:'₹75,000',badge:'',img:'1540574163026-643ea20ade25',desc:'A spacious L-shaped sofa designed for comfort and style. Features a chaise lounge extension for ultimate relaxation.'},
+  {name:'Florence Chesterfield',cat:'2 Seater Sofas',price:'₹55,000',badge:'Bestseller',img:'1586023492125-27b2c045efd7',desc:'A sophisticated Chesterfield sofa with button-tufted back and rolled armrests. A timeless piece that adds elegance to any space.'},
+  {name:'Nordic Cloud Sofa',cat:'3 Seater Sofas',price:'₹70,000',badge:'',img:'1555041469-a586c61ea9bc',desc:'Inspired by Scandinavian design, the Nordic Cloud offers minimalist elegance with maximum comfort. Perfect for contemporary homes.'}
+];
+const CATS = ['All Products','2 Seater Sofas','3 Seater Sofas','L-Shape Sofas','Recliners','Sectional Sofas','Sofa Cum Beds','Office Sofas','Accent Chairs'];
+const ic = (p)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${p}</svg>`;
+const WHY = [
+  {t:'Handcrafted Precision',d:'Every sofa is meticulously crafted by skilled artisans with years of experience in furniture making.',i:'<path d="M14 7l3 3-9 9-3 1 1-3z"/><path d="M3 21h18"/>'},
+  {t:'Premium Materials',d:'We source the finest fabrics, leathers and foams from trusted suppliers across the globe.',i:'<path d="M12 2l3 6 6 .5-4.5 4 1.5 6-6-3.5L6 18.5 7.5 12.5 3 8.5 9 8z"/>'},
+  {t:'Custom Dimensions',d:'Need a specific size? We offer fully customizable dimensions to fit your space perfectly.',i:'<path d="M3 12h18M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/>'},
+  {t:'Long-Lasting Quality',d:'Our solid wood frames and premium construction ensure your sofa lasts for decades.',i:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'},
+  {t:'Pan-City Delivery',d:'Professional delivery and installation service available across major cities in India.',i:'<rect x="1" y="6" width="14" height="11" rx="1"/><path d="M15 9h4l3 3v5h-7z"/><circle cx="6" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/>'},
+  {t:'Expert Consultation',d:'Our interior-friendly consultants help you choose the perfect sofa for your home.',i:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'}
+];
+const CRAFT = [
+  {t:'Solid Wood Frame',d:'We use only the finest hardwoods, carefully selected and kiln-dried for durability and stability.'},
+  {t:'Premium Foam',d:'High-density foam provides superior comfort and maintains its shape for years to come.'},
+  {t:'Fabric Selection',d:'Choose from premium fabrics, leathers and natural textiles sourced from trusted suppliers worldwide.'},
+  {t:'Hand-Finishing',d:'Every sofa is hand-finished by skilled artisans, ensuring impeccable quality and attention to detail.'}
+];
+const PROCESS = [
+  {n:'01',t:'Consultation',d:'Meet with our design experts to discuss your vision and requirements.'},
+  {n:'02',t:'Design Selection',d:'Choose from our collection or create a custom design with our team.'},
+  {n:'03',t:'Material & Fabric',d:'Select from premium fabrics, leathers and finishes.'},
+  {n:'04',t:'Size Customization',d:'Customize dimensions to perfectly fit your space.'},
+  {n:'05',t:'Manufacturing',d:'Your sofa is handcrafted with precision and care.'},
+  {n:'06',t:'Delivery & Installation',d:'Professional delivery and installation at your home.'}
+];
+const TESTI = [
+  {q:'The Veloura Luxe sofa has completely transformed our living room. The quality is exceptional, and the customer service was outstanding. Highly recommend!',n:'Priya Sharma',r:'Homeowner, Mumbai',a:'1438761681033-6461ffad8d80'},
+  {q:"I've been recommending Veloura Living to my clients for over 2 years. Their craftsmanship and attention to detail is unmatched in the premium furniture space.",n:'Rajesh Kapoor',r:'Interior Designer, Delhi',a:'1500648767791-00dcc994a43e'},
+  {q:'For my high-end residential projects, Veloura Living is my go-to partner. Their custom sofa solutions are perfect for luxury homes.',n:'Anjali Desai',r:'Architect, Bangalore',a:'1494790108377-be9c29b29330'},
+  {q:"We furnished our entire hotel lobby with Veloura's sofas. The durability and elegance have impressed both our staff and guests.",n:'Vikram Singh',r:'Hotel Owner, Goa',a:'1507003211169-0a1dd7228f2d'}
+];
+const PHIL = [
+  {t:'Sustainable Sourcing',d:'We source materials from ethical suppliers who share our commitment to sustainability and quality.',i:'<path d="M12 22c5-2 8-6 8-12V5l-8-3-8 3v5c0 6 3 10 8 12z"/>'},
+  {t:'Skilled Artisans',d:'Our team of master craftspeople brings decades of experience to every sofa they create.',i:'<path d="M14 7l3 3-9 9-3 1 1-3z"/><path d="M3 21h18"/>'},
+  {t:'Quality Control',d:'Every piece undergoes rigorous quality checks to ensure it meets our exacting standards.',i:'<path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/>'},
+  {t:'Innovation',d:'We continuously invest in new techniques and materials to enhance comfort and durability.',i:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/>'},
+  {t:'Customization',d:'We believe furniture should reflect individual style, which is why we offer extensive customization.',i:'<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 1-.1 1.3l2 1.6-2 3.4-2.4-1a7 7 0 0 1-2.2 1.3L14 22h-4l-.3-2.5a7 7 0 0 1-2.2-1.3l-2.4 1-2-3.4 2-1.6A7 7 0 0 1 5 12l-2-1.6 2-3.4 2.4 1A7 7 0 0 1 9.6 6.7L10 4h4l.3 2.7a7 7 0 0 1 2.2 1.3l2.4-1 2 3.4L19 12z"/>'},
+  {t:'Customer Care',d:'Our relationship with customers extends beyond the sale — we provide lifetime support.',i:'<path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>'}
+];
+const MAT = [
+  {t:'Hardwood Frames',d:'We use only kiln-dried hardwoods like oak, walnut and maple, selected for their strength and stability.'},
+  {t:'Premium Foams',d:'High-density foams with varying firmness levels ensure optimal comfort and durability.'},
+  {t:'Natural Fabrics',d:'We source premium linens, wools and cottons from trusted mills across Europe and Asia.'},
+  {t:'Premium Leathers',d:'Full-grain and top-grain leathers that age beautifully and develop character over time.'}
+];
+const WHYCUSTOM = ['Perfect fit for your space','Personalized design & style','Premium material selection','Unique & one-of-a-kind'];
+const OPTS = [
+  {t:'Size',d:'Custom dimensions to fit your space perfectly'},
+  {t:'Shape',d:'L-shape, U-shape, sectional or modular configurations'},
+  {t:'Upholstery',d:'Premium fabrics, leathers and natural textiles'},
+  {t:'Foam Density',d:'Soft, medium or firm comfort levels'},
+  {t:'Color',d:'Choose from our palette or provide your own'},
+  {t:'Armrest Style',d:'Rolled, track or minimalist designs'},
+  {t:'Leg Finish',d:'Wood stain, metal or upholstered options'},
+  {t:'Special Features',d:'Storage, recliners, USB ports and more'}
+];
+const GALLERY = [
+  {t:'Modern Living Room',c:'Residential',img:'1567016432779-094069958ea5'},
+  {t:'Luxury Showroom',c:'Commercial',img:'1540574163026-643ea20ade25'},
+  {t:'Craftsmanship Details',c:'Process',img:'1586023492125-27b2c045efd7'},
+  {t:'Custom Sofa Process',c:'Process',img:'1493663284031-b7e3aefcae8e'},
+  {t:'Modern Apartment',c:'Residential',img:'1555041469-a586c61ea9bc'},
+  {t:'Hotel Reception',c:'Commercial',img:'1550254478-ead40cc54513'}
+];
+
+function fallback(name){return `<div class="ph-fallback"><b>Veloura</b><span>${name}</span></div>`;}
+function imageBlock(imgId,name){
+  const wrap=document.createElement('div'); wrap.className='img';
+  const im=document.createElement('img'); im.loading='lazy'; im.alt=name; im.src=U(imgId);
+  im.onerror=function(){ const p=this.closest('.pic,.visual,.gtile'); if(p){p.innerHTML=fallback(name);} };
+  wrap.appendChild(im); return wrap;
+}
+
+function productCard(p){
+  const el=document.createElement('div'); el.className='pcard';
+  el.innerHTML=`<div class="pic">${p.badge?`<span class="badge">${p.badge}</span>`:''}</div>
+    <div class="body"><div class="cat">${p.cat}</div><h3>${p.name}</h3>
+    <p class="desc">${p.desc}</p>
+    <div class="row"><span class="price">${p.price}</span><a class="vd" data-nav="contact">View Details</a></div></div>`;
+  el.querySelector('.pic').appendChild(imageBlock(p.img,p.name));
+  return el;
+}
+
+function render(){
+  // featured (first 6) + collections
+  const fg=document.getElementById('featGrid'); PRODUCTS.forEach(p=>fg.appendChild(productCard(p)));
+  const cg=document.getElementById('colGrid'); PRODUCTS.forEach(p=>cg.appendChild(productCard(p)));
+
+  // why
+  const wg=document.getElementById('whyGrid');
+  WHY.forEach(w=>{const d=document.createElement('div');d.className='fcard';d.innerHTML=`<div class="ic">${ic(w.i)}</div><h3>${w.t}</h3><p>${w.d}</p>`;wg.appendChild(d);});
+
+  // craft list + image
+  const cl=document.getElementById('craftList');
+  CRAFT.forEach(c=>{const d=document.createElement('div');d.className='ci';d.innerHTML=`<h3>${c.t}</h3><p>${c.d}</p>`;cl.appendChild(d);});
+
+  // process (home + custom)
+  [['procGrid'],['procGrid2']].forEach(([id])=>{const g=document.getElementById(id);PROCESS.forEach(s=>{const d=document.createElement('div');d.className='pstep';d.innerHTML=`<div class="n">${s.n}</div><h3>${s.t}</h3><p>${s.d}</p>`;g.appendChild(d);});});
+
+  // testimonials
+  const tg=document.getElementById('tGrid');
+  TESTI.forEach(t=>{const d=document.createElement('div');d.className='tcard';
+    d.innerHTML=`<div class="stars">★★★★★</div><q>"${t.q}"</q>
+    <div class="who"><div class="av"><img loading="lazy" alt="${t.n}" src="${U(t.a,120)}" onerror="this.parentNode.innerHTML=''"></div><div><b>${t.n}</b><span>${t.r}</span></div></div>`;tg.appendChild(d);});
+
+  // philosophy + materials
+  const pg=document.getElementById('philGrid');
+  PHIL.forEach(w=>{const d=document.createElement('div');d.className='fcard';d.innerHTML=`<div class="ic">${ic(w.i)}</div><h3>${w.t}</h3><p>${w.d}</p>`;pg.appendChild(d);});
+  const ml=document.getElementById('matList');
+  MAT.forEach(m=>{const d=document.createElement('div');d.className='mi';d.innerHTML=`<h3>${m.t}</h3><p>${m.d}</p>`;ml.appendChild(d);});
+
+  // custom checks + options
+  const ck=document.getElementById('checkGrid');
+  WHYCUSTOM.forEach(t=>{const d=document.createElement('div');d.className='ccard';d.innerHTML=`<div class="ck">${ic('<path d="M20 6 9 17l-5-5"/>')}</div><h3>${t}</h3>`;ck.appendChild(d);});
+  const og=document.getElementById('optGrid');
+  OPTS.forEach(o=>{const d=document.createElement('div');d.className='ocard';d.innerHTML=`<h3>${o.t}</h3><p>${o.d}</p>`;og.appendChild(d);});
+
+  // gallery
+  const gg=document.getElementById('galGrid');
+  GALLERY.forEach(g=>{const d=document.createElement('div');d.className='gtile';
+    d.innerHTML=`<div class="veil"></div><div class="cap"><small>${g.c}</small><h3>${g.t}</h3></div>`;
+    d.insertBefore(imageBlock(g.img,g.t),d.firstChild);gg.appendChild(d);});
+
+  // chips
+  const ch=document.getElementById('chips');
+  CATS.forEach((c,i)=>{const b=document.createElement('button');b.className='chip'+(i===0?' on':'');b.textContent=c;b.onclick=()=>filter(c,b);ch.appendChild(b);});
+
+  // data-img placeholders (craft/story/showroom split visuals)
+  document.querySelectorAll('[data-img]').forEach(el=>{
+    const key=el.getAttribute('data-img'); const id=({craft:'1586023492125-27b2c045efd7',story:'1567016432779-094069958ea5',showroom:'1540574163026-643ea20ade25'})[key];
+    const im=document.createElement('img');im.loading='lazy';im.alt=key;im.src=U(id,1000);
+    im.onerror=function(){const p=this.closest('.visual');if(p)p.innerHTML=fallback(key);};
+    el.appendChild(im);
+  });
+}
+function filter(cat,btn){
+  document.querySelectorAll('#chips .chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');
+  const cards=document.querySelectorAll('#colGrid .pcard');
+  cards.forEach((card,i)=>{const p=PRODUCTS[i];card.style.display=(cat==='All Products'||p.cat===cat)?'':'none';});
+}
+
+// ROUTER
+function go(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('show',p.dataset.page===page));
+  document.querySelectorAll('#navlinks a[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===page&&!a.classList.contains('quote')));
+  if(location.hash!=='#'+page) history.replaceState(null,'','#'+page);
+  window.scrollTo({top:0,behavior:'instant' in window?'instant':'auto'});
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-nav]'); if(!t)return; e.preventDefault();
+  go(t.dataset.nav);
+  if(t.hasAttribute('data-close')||t.closest('.drawer'))document.getElementById('drawer').classList.remove('open');
+});
+document.getElementById('burger').onclick=()=>document.getElementById('drawer').classList.add('open');
+document.getElementById('closeD').onclick=()=>document.getElementById('drawer').classList.remove('open');
+
+// contact form demo
+document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('cform').style.display='none';document.getElementById('okmsg').style.display='block';});
+
+render();
+const start=(location.hash||'#home').slice(1);
+go(['home','about','collections','custom','gallery','contact'].includes(start)?start:'home');
+</script>
+</body>
+</html>
