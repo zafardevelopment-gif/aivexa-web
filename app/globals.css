@@ -87,7 +87,7 @@ button{font-family:inherit}
 
 /* ===== HERO PRODUCTS MARQUEE ===== */
 .hero-marquee{position:relative;max-width:1180px;margin:3.2rem auto 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.hero-marquee-track{display:flex;gap:1rem;width:max-content;animation:heroMarqueeScroll 28s linear infinite}
+.hero-marquee-track{display:flex;gap:1rem;width:max-content;animation:heroMarqueeScroll 40s linear infinite}
 .hero-marquee:hover .hero-marquee-track{animation-play-state:paused}
 .hero-marquee-item{display:flex;align-items:center;gap:.65rem;background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);padding:.7rem 1.1rem;box-shadow:var(--shadow-sm);white-space:nowrap;transition:all .2s}
 .hero-marquee-item:hover{border-color:var(--indigo);box-shadow:var(--shadow-md);transform:translateY(-2px)}

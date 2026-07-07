@@ -67,9 +67,7 @@ export default async function Home() {
               {settings.hero_badge}
             </div>
             <h1>
-              One AI platform for your <span className="accent">clinic</span>,{" "}
-              <span className="accent">business</span>, <span className="accent">events</span>{" "}
-              and <span className="accent">vehicle safety</span>
+              One AI platform for <span className="accent">real-world operations</span>
             </h1>
             <p className="sub">{settings.hero_subtitle}</p>
             <div className="hero-btns">

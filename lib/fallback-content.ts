@@ -11,7 +11,7 @@ export const fallbackSettings: Settings = {
   site_name: "AIVEXA",
   site_tagline: "AI. Vision. Automation. Excellence.",
   hero_badge: "Enterprise-grade AI for healthcare, business & everyday life",
-  hero_title: "One AI platform for your clinic, business, events and vehicle safety",
+  hero_title: "One AI platform for real-world operations",
   hero_subtitle:
     "AIVEXA builds AI systems that answer your calls, manage your books, schedule your appointments, collect your rent, run your events and protect your vehicle — on WhatsApp, Voice and smart QR, in your language.",
   legal_name: "MD ZAFAR EQBAL",
