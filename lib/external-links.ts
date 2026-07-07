@@ -5,6 +5,7 @@
 // instead of an internal /products/<slug> route.
 export const externalProductLinks: Record<string, string> = {
   "saferide-qr": "https://saferide.aivexallp.com/",
+  myrentsaathi: "https://www.myrentsaathi.com/",
 };
 
 export function getExternalLink(slug: string): string | undefined {

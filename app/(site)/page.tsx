@@ -67,8 +67,9 @@ export default async function Home() {
               {settings.hero_badge}
             </div>
             <h1>
-              AI that runs your <span className="accent">clinic</span> and{" "}
-              <span className="accent">business</span> operations
+              One AI platform for your <span className="accent">clinic</span>,{" "}
+              <span className="accent">business</span>, <span className="accent">events</span>{" "}
+              and <span className="accent">vehicle safety</span>
             </h1>
             <p className="sub">{settings.hero_subtitle}</p>
             <div className="hero-btns">
@@ -227,7 +228,7 @@ export default async function Home() {
           <div className="section-header center">
             <div className="section-label">Products</div>
             <h2 className="section-title">
-              One platform. <span className="accent">Five AI systems.</span>
+              One platform. <span className="accent">Six AI systems.</span>
             </h2>
             <p className="section-desc">
               Purpose-built AI for healthcare and business operations — delivered through

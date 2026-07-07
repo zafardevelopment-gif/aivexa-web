@@ -9,9 +9,9 @@ export default function Footer({ settings }: { settings: Settings }) {
         <div className="footer-brand">
           <Link href="/" className="nav-logo">
             <Image
-              src="/aivexa-logo.svg"
-              alt="AIVEXA LLP — AI. Vision. Automation. Excellence."
-              width={170}
+              src="/aivexa-logo-mark.svg"
+              alt="AIVEXA"
+              width={124}
               height={50}
               className="brand-logo"
             />
@@ -26,6 +26,7 @@ export default function Footer({ settings }: { settings: Settings }) {
             <Link href="/products/ai-hospital">AI Hospital</Link>
             <Link href="/products/ai-camp">AI Camp</Link>
             <Link href="/products/saferide-qr">SafeRide QR</Link>
+            <Link href="/products/myrentsaathi">MyRentSaathi</Link>
           </div>
         </div>
         <div>

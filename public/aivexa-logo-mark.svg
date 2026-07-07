@@ -1,0 +1,25 @@
+<svg width="100%" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>AIVEXA</title>
+<desc>Compact AIVEXA logo — hexagon circuit mark with the AIVEXA wordmark, no fine print, for use at small sizes like the nav bar and footer.</desc>
+<defs>
+<linearGradient id="hexGradMark" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#4f46e5"/>
+<stop offset="100%" stop-color="#7c3aed"/>
+</linearGradient>
+</defs>
+
+<g transform="translate(60,20)">
+<polygon points="80,0 155,40 155,120 80,160 5,120 5,40" fill="none" stroke="url(#hexGradMark)" stroke-width="6"/>
+<line x1="35" y1="40" x2="125" y2="120" stroke="#4f46e5" stroke-width="6" stroke-linecap="round"/>
+<line x1="125" y1="40" x2="35" y2="120" stroke="#4f46e5" stroke-width="6" stroke-linecap="round"/>
+<circle cx="35" cy="40" r="7" fill="#7c3aed"/>
+<circle cx="125" cy="40" r="7" fill="#7c3aed"/>
+<circle cx="35" cy="120" r="7" fill="#7c3aed"/>
+<circle cx="125" cy="120" r="7" fill="#7c3aed"/>
+<circle cx="80" cy="80" r="8" fill="#4f46e5"/>
+</g>
+
+<line x1="260" y1="40" x2="260" y2="140" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<text x="290" y="105" text-anchor="start" font-family="Arial, sans-serif" font-size="52" font-weight="700" fill="#0f172a" letter-spacing="3">AIVEXA</text>
+</svg>

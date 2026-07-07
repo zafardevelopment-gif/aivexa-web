@@ -27,10 +27,10 @@ export default function Nav({ siteName }: { siteName: string }) {
       <div className="nav-inner">
         <Link href="/" className="nav-logo" onClick={() => setOpen(false)}>
           <Image
-            src="/aivexa-logo.svg"
-            alt="AIVEXA LLP — AI. Vision. Automation. Excellence."
-            width={170}
-            height={50}
+            src="/aivexa-logo-mark.svg"
+            alt="AIVEXA"
+            width={112}
+            height={45}
             priority
             className="brand-logo"
           />

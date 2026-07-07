@@ -22,10 +22,10 @@ create policy "Public read settings" on public.aivexa_settings
 
 insert into public.aivexa_settings (setting_key, setting_value) values
 ('site_name',     'AIVEXA'),
-('site_tagline',  'AI That Runs Your Business'),
-('hero_badge',    'Enterprise-grade AI for healthcare & business'),
-('hero_title',    'AI that runs your clinic and business operations'),
-('hero_subtitle', 'AIVEXA builds AI systems that answer your calls, manage your books and schedule your appointments — on WhatsApp and Voice, in your language.'),
+('site_tagline',  'AI. Vision. Automation. Excellence.'),
+('hero_badge',    'Enterprise-grade AI for healthcare, business & everyday life'),
+('hero_title',    'One AI platform for your clinic, business, events and vehicle safety'),
+('hero_subtitle', 'AIVEXA builds AI systems that answer your calls, manage your books, schedule your appointments, collect your rent, run your events and protect your vehicle — on WhatsApp, Voice and smart QR, in your language.'),
 ('legal_name',    'MD ZAFAR EQBAL'),
 ('trade_name',    'MART NEST'),
 ('gst_number',    '10AAKPE8885H1ZL'),
@@ -35,7 +35,7 @@ insert into public.aivexa_settings (setting_key, setting_value) values
 ('address',       '2nd Floor, Gehumi Shivdhara Road, Light Pink Building, Front of Dr. Abu Zafar Clinic, Darbhanga, Bihar - 846004, India'),
 ('city',          'Darbhanga, Bihar 846004'),
 ('country',       'India'),
-('footer_about',  'AI-powered automation across WhatsApp and Voice. Secure, scalable and intelligent systems built for real-world operations.')
+('footer_about',  'AI-powered automation across WhatsApp, Voice and smart QR. Secure, scalable and intelligent systems built for real-world operations.')
 on conflict (setting_key) do update set setting_value = excluded.setting_value;
 
 -- ------------------------------------------------------------
@@ -79,7 +79,11 @@ insert into public.aivexa_products (slug, name, tagline, badge, description, ico
 ('saferide-qr', 'SafeRide QR', 'Your vehicle speaks. You stay safe.', 'Live',
  'A smart QR sticker system for bikes, cars and scooters. When someone scans the sticker, the owner gets an instant SMS and WhatsApp alert — without ever sharing their phone number. Built for parking conflicts, forgotten lights and roadside emergencies across India. Live at saferide.aivexallp.com.',
  'shield',
- '["Instant SMS & WhatsApp Alerts","Number Stays 100% Private","Emergency Mode with Location & Medical Info","Wrong-Parking Notifications","No App Needed to Scan","Weatherproof QR Stickers"]', 5)
+ '["Instant SMS & WhatsApp Alerts","Number Stays 100% Private","Emergency Mode with Location & Medical Info","Wrong-Parking Notifications","No App Needed to Scan","Weatherproof QR Stickers"]', 5),
+('myrentsaathi', 'MyRentSaathi', 'Society + Rent + Tenant = Sab Ek Jagah.', 'Live',
+ 'A WhatsApp-native platform for landlords and housing societies. Collect rent and maintenance online, send automatic reminders, generate AI rental agreements, and track complaints — all from one dashboard, with zero app downloads for tenants. Live at myrentsaathi.com.',
+ 'building',
+ '["WhatsApp Rent & Maintenance Reminders","0% Commission UPI Collection","AI Rental Agreement Generator","Complaint Ticket System","Parking & Visitor Management","Tax-Ready Financial Reports"]', 6)
 on conflict (slug) do nothing;
 
 -- ------------------------------------------------------------
