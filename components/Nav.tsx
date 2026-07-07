@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Sparkles } from "lucide-react";
 
 const links = [
   { href: "/#products", label: "Products" },
@@ -26,12 +26,14 @@ export default function Nav({ siteName }: { siteName: string }) {
     <nav className={`nav${scrolled ? " scrolled" : ""}`}>
       <div className="nav-inner">
         <Link href="/" className="nav-logo" onClick={() => setOpen(false)}>
-          <span className="logo-mark">
-            <Sparkles size={20} strokeWidth={2} />
-          </span>
-          <span className="logo-word">
-            AIVE<span className="accent">XA</span>
-          </span>
+          <Image
+            src="/aivexa-logo.svg"
+            alt="AIVEXA LLP — AI. Vision. Automation. Excellence."
+            width={170}
+            height={50}
+            priority
+            className="brand-logo"
+          />
         </Link>
         <div className={`nav-links${open ? " open" : ""}`}>
           {links.map((l) => (

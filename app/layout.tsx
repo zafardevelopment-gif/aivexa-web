@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AIVEXA — AI Solutions for Healthcare & Business",
+  title: "AIVEXA LLP — AI. Vision. Automation. Excellence.",
   description:
     "AIVEXA builds enterprise-grade AI systems that answer calls, manage accounts and schedule appointments — on WhatsApp and Voice, in your language.",
   keywords: [
@@ -20,10 +20,11 @@ export const metadata: Metadata = {
     "AI Voice Agent",
     "AI Hospital",
     "AI Camp",
+    "SafeRide QR",
     "Healthcare AI",
   ],
   openGraph: {
-    title: "AIVEXA — AI Solutions for Healthcare & Business",
+    title: "AIVEXA LLP — AI. Vision. Automation. Excellence.",
     description:
       "Enterprise-grade AI automation for clinics, hospitals and businesses — delivered on WhatsApp and Voice.",
     type: "website",

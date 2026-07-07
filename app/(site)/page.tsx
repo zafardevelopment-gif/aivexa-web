@@ -26,6 +26,8 @@ import {
   getSteps,
   getTestimonials,
 } from "@/lib/data";
+import { getExternalLink } from "@/lib/external-links";
+import { ExternalLink as ExternalLinkIcon } from "lucide-react";
 
 export const revalidate = 60;
 
@@ -59,6 +61,7 @@ export default async function Home() {
       <section className="hero" id="home">
         <div className="hero-content">
           <div>
+            <div className="hero-tagline">AI. VISION. AUTOMATION. EXCELLENCE.</div>
             <div className="hero-badge">
               <span className="dot"></span>
               {settings.hero_badge}
@@ -168,6 +171,31 @@ export default async function Home() {
             </div>
           </div>
         </div>
+
+        {/* Scrolling products strip */}
+        <div className="hero-marquee">
+          <div className="hero-marquee-track">
+            {[...products, ...products].map((product, i) => {
+              const external = getExternalLink(product.slug);
+              return (
+                <a
+                  href={external ?? `/products/${product.slug}`}
+                  className="hero-marquee-item"
+                  key={`${product.slug}-${i}`}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  <span className="hero-marquee-icon">
+                    <Icon name={product.icon} size={18} strokeWidth={2} />
+                  </span>
+                  <span>
+                    <b>{product.name}</b>
+                    <small>{product.tagline}</small>
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
       {/* ===== TRUSTED BY ===== */}
@@ -199,7 +227,7 @@ export default async function Home() {
           <div className="section-header center">
             <div className="section-label">Products</div>
             <h2 className="section-title">
-              One platform. <span className="accent">Four AI systems.</span>
+              One platform. <span className="accent">Five AI systems.</span>
             </h2>
             <p className="section-desc">
               Purpose-built AI for healthcare and business operations — delivered through
@@ -226,9 +254,20 @@ export default async function Home() {
                       </div>
                     ))}
                   </div>
-                  <Link href={`/products/${product.slug}`} className="product-link">
-                    Learn more <ArrowRight size={15} strokeWidth={2.2} />
-                  </Link>
+                  {getExternalLink(product.slug) ? (
+                    <a
+                      href={getExternalLink(product.slug)}
+                      className="product-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit live app <ExternalLinkIcon size={14} strokeWidth={2.2} />
+                    </a>
+                  ) : (
+                    <Link href={`/products/${product.slug}`} className="product-link">
+                      Learn more <ArrowRight size={15} strokeWidth={2.2} />
+                    </Link>
+                  )}
                 </div>
               </Reveal>
             ))}

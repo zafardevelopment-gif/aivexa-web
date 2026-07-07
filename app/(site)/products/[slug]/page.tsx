@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, ExternalLink } from "lucide-react";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
 import { getProduct, getProducts } from "@/lib/data";
+import { getExternalLink } from "@/lib/external-links";
 
 export const revalidate = 60;
 
@@ -37,6 +38,7 @@ export default async function ProductPage({
   if (!product) notFound();
 
   const others = (await getProducts()).filter((p) => p.slug !== slug);
+  const externalUrl = getExternalLink(slug);
 
   return (
     <main>
@@ -95,9 +97,15 @@ export default async function ProductPage({
             <h2>Try {product.name} for your organization</h2>
             <p>Talk to us and get a personalized walkthrough.</p>
             <div style={{ display: "flex", gap: ".9rem", justifyContent: "center", flexWrap: "wrap", position: "relative" }}>
-              <a href="/#contact" className="btn-primary">
-                Book a Demo <ArrowRight size={16} strokeWidth={2.2} />
-              </a>
+              {externalUrl ? (
+                <a href={externalUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                  Visit {product.name} <ExternalLink size={16} strokeWidth={2.2} />
+                </a>
+              ) : (
+                <a href="/#contact" className="btn-primary">
+                  Book a Demo <ArrowRight size={16} strokeWidth={2.2} />
+                </a>
+              )}
               {others.length > 0 && (
                 <Link href={`/products/${others[0].slug}`} className="btn-secondary">
                   Next: {others[0].name}

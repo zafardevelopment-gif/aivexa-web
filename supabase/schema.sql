@@ -75,7 +75,11 @@ insert into public.aivexa_products (slug, name, tagline, badge, description, ico
 ('ai-camp', 'AI Camp', 'Events managed end-to-end.', '',
  'A WhatsApp-based registration and tracking system for camps and events. Manage attendees, payments and communications seamlessly.',
  'camp',
- '["Family Registration","Duplicate Mobile Detection","Payment Tracking","Confirmation Messaging","Real-time Status Search"]', 4)
+ '["Family Registration","Duplicate Mobile Detection","Payment Tracking","Confirmation Messaging","Real-time Status Search"]', 4),
+('saferide-qr', 'SafeRide QR', 'Your vehicle speaks. You stay safe.', 'Live',
+ 'A smart QR sticker system for bikes, cars and scooters. When someone scans the sticker, the owner gets an instant SMS and WhatsApp alert — without ever sharing their phone number. Built for parking conflicts, forgotten lights and roadside emergencies across India. Live at saferide.aivexallp.com.',
+ 'shield',
+ '["Instant SMS & WhatsApp Alerts","Number Stays 100% Private","Emergency Mode with Location & Medical Info","Wrong-Parking Notifications","No App Needed to Scan","Weatherproof QR Stickers"]', 5)
 on conflict (slug) do nothing;
 
 -- ------------------------------------------------------------

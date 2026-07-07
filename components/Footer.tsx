@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import Image from "next/image";
 import type { Settings } from "@/lib/types";
 
 export default function Footer({ settings }: { settings: Settings }) {
@@ -8,12 +8,13 @@ export default function Footer({ settings }: { settings: Settings }) {
       <div className="footer-inner">
         <div className="footer-brand">
           <Link href="/" className="nav-logo">
-            <span className="logo-mark">
-              <Sparkles size={20} strokeWidth={2} />
-            </span>
-            <span className="logo-word">
-              AIVE<span className="accent">XA</span>
-            </span>
+            <Image
+              src="/aivexa-logo.svg"
+              alt="AIVEXA LLP — AI. Vision. Automation. Excellence."
+              width={170}
+              height={50}
+              className="brand-logo"
+            />
           </Link>
           <p>{settings.footer_about}</p>
         </div>
@@ -24,6 +25,7 @@ export default function Footer({ settings }: { settings: Settings }) {
             <Link href="/products/clinic-voice">Clinic Voice</Link>
             <Link href="/products/ai-hospital">AI Hospital</Link>
             <Link href="/products/ai-camp">AI Camp</Link>
+            <Link href="/products/saferide-qr">SafeRide QR</Link>
           </div>
         </div>
         <div>

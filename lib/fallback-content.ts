@@ -9,7 +9,7 @@ import type { Page, Product, Settings, Stat, Step, Testimonial, WhyCard } from "
 
 export const fallbackSettings: Settings = {
   site_name: "AIVEXA",
-  site_tagline: "AI That Runs Your Business",
+  site_tagline: "AI. Vision. Automation. Excellence.",
   hero_badge: "Enterprise-grade AI for healthcare & business",
   hero_title: "AI that runs your clinic and business operations",
   hero_subtitle:
@@ -99,6 +99,24 @@ export const fallbackProducts: Product[] = [
       "Real-time Status Search",
     ],
     sort_order: 4,
+  },
+  {
+    slug: "saferide-qr",
+    name: "SafeRide QR",
+    tagline: "Your vehicle speaks. You stay safe.",
+    badge: "Live",
+    description:
+      "A smart QR sticker system for bikes, cars and scooters. When someone scans the sticker, the owner gets an instant SMS and WhatsApp alert — without ever sharing their phone number. Built for parking conflicts, forgotten lights and roadside emergencies across India.",
+    icon: "shield",
+    features: [
+      "Instant SMS & WhatsApp Alerts",
+      "Number Stays 100% Private",
+      "Emergency Mode with Location & Medical Info",
+      "Wrong-Parking Notifications",
+      "No App Needed to Scan",
+      "Weatherproof QR Stickers",
+    ],
+    sort_order: 5,
   },
 ];
 
