@@ -1,0 +1,17 @@
+export const TYPING_PARAGRAPHS: string[] = [
+  "The quick brown fox jumps over the lazy dog. This simple sentence has been used for decades to test typewriters and keyboards because it contains every letter of the alphabet at least once.",
+  "Technology has transformed the way we communicate, work, and live. From smartphones to smart homes, innovation continues to reshape daily life at a pace few could have predicted just twenty years ago.",
+  "A balanced diet, regular exercise, and sufficient sleep are three pillars of good health. Small, consistent habits often matter more than occasional bursts of intense effort.",
+  "The Himalayas stretch across five countries and are home to some of the tallest peaks on Earth, including Mount Everest, which continues to attract climbers from every corner of the globe.",
+  "Reading books regularly can improve vocabulary, focus, and empathy. Even a few pages a day, read consistently, can build a habit that lasts a lifetime.",
+  "Space exploration has entered a new era, with private companies now launching rockets alongside national space agencies, making access to orbit more frequent and, in some cases, more affordable.",
+  "Coffee is one of the most widely consumed beverages in the world, grown primarily in tropical regions and enjoyed in countless forms, from simple black coffee to elaborate specialty drinks.",
+  "Learning a new language opens doors to different cultures and ways of thinking. It also strengthens memory and problem-solving skills, benefits that extend well beyond conversation alone.",
+  "The stock market can be unpredictable in the short term, but historically it has rewarded patient, long-term investors who avoid making decisions based purely on fear or excitement.",
+  "Rainforests are often called the lungs of the planet because they produce a significant portion of the world's oxygen while also housing an extraordinary diversity of plant and animal life.",
+  "Good communication is not just about speaking clearly; it also involves listening carefully, asking thoughtful questions, and being willing to understand a different point of view.",
+  "The invention of the printing press dramatically changed the spread of information, making books more affordable and accessible to ordinary people rather than only the wealthy elite.",
+  "Cooking at home, even simple meals, can be a rewarding way to save money, eat healthier, and experiment with new flavors and ingredients from different cuisines around the world.",
+  "Artificial intelligence is increasingly used in everyday tools, from voice assistants to recommendation systems, quietly shaping decisions we make without us always realizing it.",
+  "A well-organized daily routine can reduce stress and increase productivity, giving structure to tasks that might otherwise feel overwhelming or easy to postpone indefinitely.",
+];
