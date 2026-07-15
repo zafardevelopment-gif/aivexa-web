@@ -64,7 +64,7 @@ export default function ToolSearch() {
     return Array.from(map.entries());
   }, [results]);
 
-  const showDropdown = open && (query.trim() !== "" || categoryFilter !== "all");
+  const showDropdown = open;
 
   return (
     <div
@@ -131,6 +131,7 @@ export default function ToolSearch() {
 
         <select
           value={categoryFilter}
+          onFocus={() => setOpen(true)}
           onChange={(e) => {
             setCategoryFilter(e.target.value);
             setOpen(true);
@@ -166,12 +167,27 @@ export default function ToolSearch() {
             border: "1px solid var(--border)",
             borderRadius: 14,
             boxShadow: "var(--shadow-lg)",
-            maxHeight: 420,
+            maxHeight: 480,
             overflowY: "auto",
             zIndex: 30,
             padding: ".6rem",
           }}
         >
+          <div
+            style={{
+              fontSize: ".78rem",
+              color: "var(--muted-2)",
+              padding: ".2rem .6rem .5rem",
+              borderBottom: "1px solid var(--border)",
+              marginBottom: ".4rem",
+            }}
+          >
+            {results.length} tool{results.length !== 1 ? "s" : ""}
+            {query.trim() ? ` matching "${query.trim()}"` : ""}
+            {categoryFilter !== "all"
+              ? ` in ${toolCategories.find((c) => c.slug === categoryFilter)?.name}`
+              : ""}
+          </div>
           {results.length === 0 ? (
             <p style={{ padding: "1rem", color: "var(--muted)", fontSize: ".9rem", margin: 0 }}>
               No tools match &quot;{query}&quot;.

@@ -163,7 +163,7 @@ button{font-family:inherit}
 
 /* ===== TOOLS HUB ===== */
 .tool-search-item:hover{background:var(--indigo-light)}
-.tools-hero-title .accent-lg{color:var(--indigo);font-size:1.28em;font-weight:800;letter-spacing:-.02em}
+.tools-hero-title .accent-lg{color:var(--indigo);font-size:1.55em;font-weight:800;letter-spacing:-.02em;display:inline-block}
 .tools-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 .tools-grid-3 .product-card{padding:1.6rem}
 @media(max-width:860px){.tools-grid-3{grid-template-columns:repeat(2,1fr)}}
