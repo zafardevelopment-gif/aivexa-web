@@ -16,9 +16,24 @@ export async function generateMetadata({
   const { category } = await params;
   const cat = getCategory(category);
   if (!cat) return { title: "Tools — AIVEXA" };
+  const path = `/tools/${cat.slug}`;
   return {
     title: `${cat.name} — Free Online Tools — AIVEXA`,
     description: cat.description,
+    alternates: { canonical: path },
+    openGraph: {
+      title: `${cat.name} — Free Online Tools — AIVEXA`,
+      description: cat.description,
+      url: path,
+      type: "website",
+      siteName: "AIVEXA",
+      images: [{ url: "/aivexa-logo.png", width: 512, height: 512, alt: "AIVEXA" }],
+    },
+    twitter: {
+      card: "summary",
+      title: `${cat.name} — Free Online Tools — AIVEXA`,
+      description: cat.description,
+    },
   };
 }
 

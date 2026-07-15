@@ -10,14 +10,32 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Free Online Tools — AIVEXA",
+  title: "89+ Free Online Tools — PDF, Image, Calculators & More — AIVEXA",
   description:
-    "Free browser-based PDF, image, Islamic, daily-use, document and educational tools by AIVEXA. No signup, no file uploads — everything runs in your browser.",
+    "89+ free browser-based PDF, image, Islamic, daily-use, document and educational tools by AIVEXA. No signup, no file uploads — everything runs in your browser.",
+  keywords: [
+    "free online tools",
+    "free PDF tools",
+    "free image tools",
+    "free calculators",
+    "Islamic tools online",
+    "AIVEXA tools",
+  ],
+  alternates: { canonical: "/tools" },
   openGraph: {
-    title: "Free Online Tools — AIVEXA",
+    title: "89+ Free Online Tools — AIVEXA",
     description:
       "Free browser-based PDF, image, Islamic, daily-use, document and educational tools by AIVEXA.",
     type: "website",
+    url: "/tools",
+    siteName: "AIVEXA",
+    images: [{ url: "/aivexa-logo.png", width: 512, height: 512, alt: "AIVEXA" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "89+ Free Online Tools — AIVEXA",
+    description:
+      "Free browser-based PDF, image, calculators, generators and Islamic tools — no signup.",
   },
 };
 

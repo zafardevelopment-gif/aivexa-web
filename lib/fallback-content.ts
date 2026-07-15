@@ -272,7 +272,7 @@ export const fallbackPages: Record<string, Page> = {
   privacy: {
     slug: "privacy",
     title: "Privacy Policy",
-    subtitle: "Last updated: January 2026",
+    subtitle: "Last updated: July 2026",
     content: `<p>AIVEXA ("we," "us," or "our") is committed to protecting the privacy of individuals and businesses that use our automation systems. This Privacy Policy outlines how we collect, use, store, and protect your information.</p>
 <h3>1. Information We Collect</h3>
 <p>We may collect the following types of information when you use our services:</p>
@@ -295,9 +295,14 @@ export const fallbackPages: Record<string, Page> = {
 <p>We retain user data only for as long as necessary to provide our services and comply with legal obligations. Users may request deletion of their data by contacting us at the details provided below. Upon termination of services, user data will be securely deleted within a reasonable timeframe.</p>
 <h3>7. User Rights</h3>
 <p>Users have the right to access their personal data held by us, request corrections to inaccurate data, request deletion of their data (subject to legal requirements), withdraw consent for data processing, and receive information about how their data is used.</p>
-<h3>8. Important Disclaimer</h3>
+<h3>8. Cookies &amp; Third-Party Advertising</h3>
+<p>Our website, including the free tools section, may use cookies and similar technologies to operate correctly, remember your preferences, and measure site usage.</p>
+<p>We may also work with third-party advertising vendors, including Google, to display advertisements on this website. Google and its partners use cookies (such as the Google DoubleClick cookie) to serve ads based on a user's prior visits to this and other websites. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to our site and/or other sites on the internet.</p>
+<p>You may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>, or opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer">www.aboutads.info</a>.</p>
+<p>We may also use analytics services (such as Google Analytics) that use cookies to collect anonymous, aggregated information about how visitors use our site, which helps us improve our tools and content. This data is not used to personally identify individual visitors.</p>
+<h3>9. Important Disclaimer</h3>
 <p>AIVEXA provides digital automation systems and does not directly process financial transactions. All financial data entered by users is managed within the user's own account and is the responsibility of the user. AIVEXA acts solely as a technology service provider.</p>
-<h3>9. Contact for Privacy Matters</h3>
+<h3>10. Contact for Privacy Matters</h3>
 <div class="legal-highlight"><p>For any privacy-related questions or requests, please contact us at: <a href="mailto:martnest01@gmail.com">martnest01@gmail.com</a></p></div>`,
   },
   terms: {
