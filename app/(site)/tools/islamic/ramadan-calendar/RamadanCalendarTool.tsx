@@ -90,7 +90,7 @@ export default function RamadanCalendarTool() {
         }
       `}</style>
       <Card>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
           <Field label="City">
             <SelectInput value={cityName} onChange={(e) => setCityName(e.target.value)}>
               {GEO_CITIES.map((c) => (

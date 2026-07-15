@@ -106,7 +106,7 @@ export default function TimeZoneConverterTool() {
           />
         </Field>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
           <Field label="From Time Zone">
             <SelectInput value={fromTz} onChange={(e) => setFromTz(e.target.value)}>
               {TIMEZONES.map((tz) => (

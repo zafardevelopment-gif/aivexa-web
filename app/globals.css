@@ -161,6 +161,25 @@ button{font-family:inherit}
 .product-link{margin-top:auto;display:inline-flex;align-items:center;gap:6px;font-size:.88rem;font-weight:600;color:var(--indigo);transition:gap .2s}
 .product-link:hover{gap:10px}
 
+/* ===== TOOLS HUB ===== */
+.tools-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.tools-grid-3 .product-card{padding:1.6rem}
+@media(max-width:860px){.tools-grid-3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tools-grid-3{grid-template-columns:1fr}}
+.tool-form-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.tool-form-actions .btn-primary,.tool-form-actions .btn-secondary{flex:1 1 auto;justify-content:center;text-align:center}
+@media(max-width:480px){
+  .tool-form-actions .btn-primary,.tool-form-actions .btn-secondary{width:100%}
+}
+.tool-cols{display:grid;gap:.8rem}
+@media(max-width:560px){
+  .tool-hero{padding:6.5rem 1.1rem 2rem!important}
+  .tool-card{padding:1.15rem!important}
+  .tool-card table{display:block;overflow-x:auto;white-space:nowrap}
+  .tool-card canvas,.tool-card img{max-width:100%;height:auto}
+  .tool-cols{grid-template-columns:1fr!important}
+}
+
 /* ===== TIMELINE (How It Works) ===== */
 .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;position:relative}
 .timeline::before{content:'';position:absolute;top:26px;left:11%;right:11%;height:2px;background:repeating-linear-gradient(90deg,var(--border-2) 0 8px,transparent 8px 16px);z-index:0}

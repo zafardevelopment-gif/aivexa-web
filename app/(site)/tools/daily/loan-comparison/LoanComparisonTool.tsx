@@ -101,8 +101,8 @@ export default function LoanComparisonTool() {
       />
 
       <div
+        className="tool-cols"
         style={{
-          display: "grid",
           gridTemplateColumns: activeCount === 2 ? "1fr 1fr" : "1fr 1fr 1fr",
           gap: "1rem",
         }}

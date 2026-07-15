@@ -132,7 +132,7 @@ export default function WatermarkTool() {
             <Field label="Watermark text">
               <TextInput value={text} onChange={(e) => setText(e.target.value)} />
             </Field>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 1rem" }}>
+            <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: "0 1rem" }}>
               <Field label="Placement">
                 <SelectInput value={placement} onChange={(e) => setPlacement(e.target.value)}>
                   <option value="center">Center (single)</option>

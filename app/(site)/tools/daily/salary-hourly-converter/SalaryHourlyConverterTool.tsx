@@ -102,7 +102,7 @@ export default function SalaryHourlyConverterTool() {
           </Field>
         )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
           <Field label="Hours per Week">
             <TextInput
               type="number"

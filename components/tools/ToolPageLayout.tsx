@@ -16,7 +16,7 @@ export default function ToolPageLayout({
 }) {
   return (
     <main>
-      <section className="page-hero" style={{ padding: "7.5rem 2rem 2.5rem" }}>
+      <section className="page-hero tool-hero" style={{ padding: "7.5rem 2rem 2.5rem" }}>
         <div className="container">
           <div className="breadcrumb" style={{ justifyContent: "center" }}>
             <Link href="/tools">Free Tools</Link>

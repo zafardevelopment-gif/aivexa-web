@@ -106,7 +106,7 @@ export default function ComparePdfTool() {
       categoryName="PDF Tools"
     >
       <Card>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
           <div>
             <p style={{ fontWeight: 600, fontSize: ".9rem", marginBottom: ".5rem" }}>Original PDF</p>
             <FileDropzone

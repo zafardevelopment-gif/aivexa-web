@@ -78,10 +78,7 @@ export default function ToolsHubPage() {
 
       <section style={{ padding: "3rem 2rem 6rem" }}>
         <div className="container">
-          <div
-            className="products-grid"
-            style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
-          >
+          <div className="tools-grid-3">
             {categories.map((cat) => (
               <Link
                 key={cat.slug}

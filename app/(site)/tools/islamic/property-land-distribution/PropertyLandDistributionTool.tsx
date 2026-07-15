@@ -76,7 +76,7 @@ export default function PropertyLandDistributionTool() {
           />
         </Field>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
           <Field label="Land area (optional)">
             <TextInput
               type="number"

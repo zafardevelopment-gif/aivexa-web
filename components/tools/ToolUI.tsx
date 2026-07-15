@@ -12,12 +12,15 @@ import type {
 export function Card({ children }: { children: ReactNode }) {
   return (
     <div
+      className="tool-card"
       style={{
         background: "#fff",
         border: "1px solid var(--border)",
         borderRadius: "var(--radius, 16px)",
         padding: "1.75rem",
         boxShadow: "var(--shadow-sm)",
+        maxWidth: "100%",
+        overflowX: "hidden",
       }}
     >
       {children}

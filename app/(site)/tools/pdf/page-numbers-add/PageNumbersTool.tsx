@@ -90,7 +90,7 @@ export default function PageNumbersTool() {
             <p style={{ fontSize: ".9rem", marginBottom: "1rem", color: "var(--muted)" }}>
               <strong style={{ color: "var(--text)" }}>{file.name}</strong> — {formatBytes(file.size)}
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 1rem" }}>
+            <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: "0 1rem" }}>
               <Field label="Position">
                 <SelectInput value={position} onChange={(e) => setPosition(e.target.value)}>
                   <option value="bottom-center">Bottom center</option>

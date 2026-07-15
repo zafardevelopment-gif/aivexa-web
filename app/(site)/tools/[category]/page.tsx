@@ -51,10 +51,7 @@ export default async function ToolCategoryPage({
 
       <section style={{ padding: "3rem 2rem 6rem" }}>
         <div className="container">
-          <div
-            className="products-grid"
-            style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
-          >
+          <div className="tools-grid-3">
             {cat.tools.map((tool) =>
               tool.status === "live" ? (
                 <Link

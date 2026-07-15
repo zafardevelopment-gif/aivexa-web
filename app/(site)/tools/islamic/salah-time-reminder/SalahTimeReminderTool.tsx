@@ -169,7 +169,7 @@ export default function SalahTimeReminderTool() {
 
         <LocationPicker value={location} onChange={setLocation} />
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
           <Field label="Calculation method">
             <SelectInput value={method} onChange={(e) => setMethod(e.target.value as MethodKey)}>
               {METHOD_KEYS.map((k) => (

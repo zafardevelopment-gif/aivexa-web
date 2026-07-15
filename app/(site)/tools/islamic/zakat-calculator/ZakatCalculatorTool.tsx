@@ -77,7 +77,7 @@ export default function ZakatCalculatorTool() {
           <TextInput type="number" min={0} placeholder="0" value={cash} onChange={(e) => setCash(e.target.value)} />
         </Field>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
           <Field label="Gold (grams)">
             <TextInput type="number" min={0} placeholder="0" value={goldGrams} onChange={(e) => setGoldGrams(e.target.value)} />
           </Field>
@@ -89,7 +89,7 @@ export default function ZakatCalculatorTool() {
           <TextInput type="number" min={0} placeholder="0" value={goldValueDirect} onChange={(e) => setGoldValueDirect(e.target.value)} />
         </Field>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
+        <div className="tool-cols" style={{ gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
           <Field label="Silver (grams)">
             <TextInput type="number" min={0} placeholder="0" value={silverGrams} onChange={(e) => setSilverGrams(e.target.value)} />
           </Field>
