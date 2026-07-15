@@ -25,9 +25,15 @@ const allTools: FlatTool[] = toolCategories.flatMap((cat) =>
     }))
 );
 
-export default function ToolSearch() {
+export default function ToolSearch({
+  defaultCategory = "all",
+  placeholder,
+}: {
+  defaultCategory?: string;
+  placeholder?: string;
+}) {
   const [query, setQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState(defaultCategory);
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -93,7 +99,7 @@ export default function ToolSearch() {
           <input
             type="text"
             value={query}
-            placeholder="Search 90 tools — e.g. merge pdf, zakat, resize image…"
+            placeholder={placeholder ?? "Search 90 tools — e.g. merge pdf, zakat, resize image…"}
             onFocus={() => setOpen(true)}
             onChange={(e) => {
               setQuery(e.target.value);

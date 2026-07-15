@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowRight, Clock } from "lucide-react";
 import { toolCategories, getCategory } from "@/lib/tools-registry";
+import ToolSearch from "@/components/tools/ToolSearch";
 
 export function generateStaticParams() {
   return toolCategories.map((c) => ({ category: c.slug }));
@@ -61,6 +62,10 @@ export default async function ToolCategoryPage({
           <p className="section-desc" style={{ margin: "0 auto" }}>
             {cat.description}
           </p>
+          <ToolSearch
+            defaultCategory={cat.slug}
+            placeholder={`Search ${cat.name.toLowerCase()}…`}
+          />
         </div>
       </section>
 
