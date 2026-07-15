@@ -8,6 +8,7 @@ import {
   FileSignature,
   Sparkles,
 } from "lucide-react";
+import ToolSearch from "@/components/tools/ToolSearch";
 
 export const metadata: Metadata = {
   title: "89+ Free Online Tools — PDF, Image, Calculators & More — AIVEXA",
@@ -84,13 +85,14 @@ export default function ToolsHubPage() {
       <section className="page-hero">
         <div className="container">
           <span className="section-label">FREE TOOLS</span>
-          <h1 className="section-title">
-            Free tools, <span className="accent">built by AIVEXA</span>
+          <h1 className="section-title tools-hero-title">
+            Free tools, built by <span className="accent-lg">AIVEXA</span>
           </h1>
           <p className="section-desc" style={{ margin: "0 auto" }}>
             Fast, private, browser-based utilities — your files never leave
             your device. No signup required.
           </p>
+          <ToolSearch />
         </div>
       </section>
 
