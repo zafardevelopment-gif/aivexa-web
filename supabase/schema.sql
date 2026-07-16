@@ -331,6 +331,30 @@ create policy "Anyone can submit a message" on public.aivexa_messages
   for insert with check (true);
 
 -- ------------------------------------------------------------
+-- Pageview analytics (anon can insert, only service_role can read)
+-- Logged from components/Analytics.tsx on every route change.
+-- ------------------------------------------------------------
+create table if not exists public.aivexa_pageviews (
+  id          bigint generated always as identity primary key,
+  path        text not null,
+  page_type   text not null default '',
+  page_key    text not null default '',
+  referrer    text not null default '',
+  visitor_id  text not null default '',
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists aivexa_pageviews_created_at_idx on public.aivexa_pageviews (created_at desc);
+create index if not exists aivexa_pageviews_page_type_idx on public.aivexa_pageviews (page_type, page_key);
+
+alter table public.aivexa_pageviews enable row level security;
+drop policy if exists "Anyone can log a pageview" on public.aivexa_pageviews;
+create policy "Anyone can log a pageview" on public.aivexa_pageviews
+  for insert with check (true);
+-- No select policy — pageviews are only readable via the service_role key
+-- (admin analytics page), never exposed to the public anon key.
+
+-- ------------------------------------------------------------
 -- Admin users (simple table-based login)
 -- RLS is enabled with NO policies, so this table is completely
 -- inaccessible with the public anon key. The website checks

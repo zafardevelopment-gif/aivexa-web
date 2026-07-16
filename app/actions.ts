@@ -1,6 +1,7 @@
 "use server";
 
 import { supabase } from "@/lib/supabase";
+import { classifyPath } from "@/lib/analytics";
 
 export interface ContactState {
   ok: boolean;
@@ -39,4 +40,27 @@ export async function submitMessage(
     return { ok: false, error: "Something went wrong — please try again." };
   }
   return { ok: true, error: "" };
+}
+
+/**
+ * Logs one pageview. Called from components/Analytics.tsx on every route
+ * change. Fails silently — analytics must never break page rendering.
+ */
+export async function logPageview(input: {
+  path: string;
+  referrer: string;
+  visitorId: string;
+}): Promise<void> {
+  const db = supabase();
+  if (!db) return;
+
+  const { pageType, pageKey } = classifyPath(input.path);
+
+  await db.from("aivexa_pageviews").insert({
+    path: input.path,
+    page_type: pageType,
+    page_key: pageKey,
+    referrer: input.referrer.slice(0, 500),
+    visitor_id: input.visitorId.slice(0, 100),
+  });
 }

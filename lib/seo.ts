@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getCategory } from "./tools-registry";
+import type { BlogPost } from "./blog-posts";
 
 export const SITE_URL = "https://www.aivexallp.com";
 
@@ -97,6 +98,68 @@ export function buildToolJsonLd(categorySlug: string, toolSlug: string) {
   };
 
   return { webApplication, faqPage };
+}
+
+/**
+ * Builds full page metadata for a blog post: canonical URL, OG/Twitter
+ * card data and article-specific Open Graph fields (published time, tag).
+ */
+export function buildBlogMetadata(post: BlogPost): Metadata {
+  const path = `/blog/${post.slug}`;
+
+  const keywords = Array.from(
+    new Set([post.tag, "AIVEXA blog", "AIVEXA", post.title])
+  );
+
+  return {
+    title: `${post.title} — AIVEXA Blog`,
+    description: post.description,
+    keywords,
+    alternates: { canonical: path },
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      url: path,
+      type: "article",
+      siteName: "AIVEXA",
+      publishedTime: post.date,
+      images: [{ url: "/aivexa-logo.png", width: 512, height: 512, alt: "AIVEXA" }],
+    },
+    twitter: {
+      card: "summary",
+      title: post.title,
+      description: post.description,
+      images: ["/aivexa-logo.png"],
+    },
+  };
+}
+
+export function buildBlogJsonLd(post: BlogPost) {
+  const path = `${SITE_URL}/blog/${post.slug}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    url: path,
+    mainEntityOfPage: path,
+    author: {
+      "@type": "Organization",
+      name: "AIVEXA",
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "AIVEXA",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/aivexa-logo.png`,
+      },
+    },
+  };
 }
 
 export function buildToolFaqs(toolName: string) {

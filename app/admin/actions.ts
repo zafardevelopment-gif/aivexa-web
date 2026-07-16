@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { ADMIN_COOKIE, makeToken, verifyToken } from "@/lib/admin-auth";
+import { PAGE_TYPE_LABELS } from "@/lib/analytics";
 
 // Tables the admin panel is allowed to touch via the generic actions.
 const TABLES = new Set([
@@ -155,4 +156,86 @@ export async function getDashboard(): Promise<{
     .order("created_at", { ascending: false })
     .limit(5);
   return { counts, recent: data ?? [], error: error?.message ?? "" };
+}
+
+interface PageviewRow {
+  path: string;
+  page_type: string;
+  page_key: string;
+  referrer: string;
+  visitor_id: string;
+  created_at: string;
+}
+
+export interface AnalyticsResult {
+  error: string;
+  days: number;
+  totalViews: number;
+  uniqueVisitors: number;
+  byType: { type: string; label: string; count: number }[];
+  topPages: { pageKey: string; pageType: string; count: number }[];
+  recent: PageviewRow[];
+}
+
+const EMPTY_ANALYTICS: Omit<AnalyticsResult, "error" | "days"> = {
+  totalViews: 0,
+  uniqueVisitors: 0,
+  byType: [],
+  topPages: [],
+  recent: [],
+};
+
+export async function getAnalytics(days = 30): Promise<AnalyticsResult> {
+  if (!(await isAdmin())) return { ...EMPTY_ANALYTICS, days, error: "Not signed in." };
+  const db = supabaseAdmin();
+  if (!db) {
+    return {
+      ...EMPTY_ANALYTICS,
+      days,
+      error: "SUPABASE_SERVICE_ROLE_KEY missing in .env.local.",
+    };
+  }
+
+  const since = new Date(Date.now() - days * 86400000).toISOString();
+  const { data, error } = await db
+    .from("aivexa_pageviews")
+    .select("path, page_type, page_key, referrer, visitor_id, created_at")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(5000);
+
+  if (error) return { ...EMPTY_ANALYTICS, days, error: error.message };
+
+  const rows = (data ?? []) as PageviewRow[];
+
+  const uniqueVisitors = new Set(rows.map((r) => r.visitor_id).filter(Boolean)).size;
+
+  const typeCounts = new Map<string, number>();
+  const pageCounts = new Map<string, { pageKey: string; pageType: string; count: number }>();
+
+  for (const row of rows) {
+    typeCounts.set(row.page_type, (typeCounts.get(row.page_type) ?? 0) + 1);
+    const key = `${row.page_type}::${row.page_key}`;
+    const existing = pageCounts.get(key);
+    if (existing) existing.count += 1;
+    else pageCounts.set(key, { pageKey: row.page_key, pageType: row.page_type, count: 1 });
+  }
+
+  const byType = Array.from(typeCounts.entries())
+    .map(([type, count]) => ({ type, label: PAGE_TYPE_LABELS[type] ?? type, count }))
+    .sort((a, b) => b.count - a.count);
+
+  const topPages = Array.from(pageCounts.values())
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 20);
+
+  return {
+    error: "",
+    days,
+    totalViews: rows.length,
+    uniqueVisitors,
+    byType,
+    topPages,
+    recent: rows.slice(0, 60),
+  };
 }
