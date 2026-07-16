@@ -51,7 +51,13 @@ button{font-family:inherit}
 .logo-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--indigo),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff}
 .logo-word{font-weight:700;font-size:1.25rem;letter-spacing:-.01em;color:var(--text)}
 .logo-word .accent{color:var(--indigo)}
-.brand-logo{width:auto;height:40px;display:block}
+.brand-logo{width:auto;height:52px;display:block}
+.brand-lockup{flex-direction:column;align-items:flex-start!important;gap:2px!important}
+.brand-tagline{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);white-space:nowrap}
+@media(max-width:480px){
+  .brand-logo{height:44px}
+  .brand-tagline{font-size:.52rem;letter-spacing:.1em}
+}
 .nav-links{display:flex;gap:1.9rem;align-items:center}
 .nav-links a{font-size:.9rem;font-weight:500;color:var(--muted);transition:color .2s}
 .nav-links a:hover{color:var(--text)}

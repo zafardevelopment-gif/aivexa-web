@@ -27,15 +27,22 @@ export default function Nav({ siteName }: { siteName: string }) {
   return (
     <nav className={`nav${scrolled ? " scrolled" : ""}`}>
       <div className="nav-inner">
-        <Link href="/" className="nav-logo" onClick={() => setOpen(false)}>
+        <Link
+          href="/"
+          className="nav-logo brand-lockup"
+          onClick={() => setOpen(false)}
+        >
           <Image
             src="/aivexa-logo-mark.svg"
             alt="AIVEXA"
-            width={112}
-            height={45}
+            width={145}
+            height={58}
             priority
             className="brand-logo"
           />
+          <span className="brand-tagline">
+            AI. VISION. AUTOMATION. EXCELLENCE.
+          </span>
         </Link>
         <div className={`nav-links${open ? " open" : ""}`}>
           {links.map((l) => (
