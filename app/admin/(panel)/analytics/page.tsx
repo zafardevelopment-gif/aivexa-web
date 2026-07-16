@@ -4,15 +4,26 @@ import { useCallback, useEffect, useState } from "react";
 import { getAnalytics, type AnalyticsResult } from "@/app/admin/actions";
 import { PAGE_TYPE_LABELS } from "@/lib/analytics";
 
-const RANGE_OPTIONS = [7, 30, 90];
+const RANGE_OPTIONS = [
+  { value: 0, label: "Today" },
+  { value: 7, label: "7 days" },
+  { value: 30, label: "30 days" },
+  { value: 90, label: "90 days" },
+];
+
+function rangeLabel(days: number) {
+  return days === 0 ? "today" : `${days}d`;
+}
 
 const EMPTY: AnalyticsResult = {
   error: "",
-  days: 30,
+  days: 0,
   totalViews: 0,
   uniqueVisitors: 0,
   byType: [],
   topPages: [],
+  byDevice: [],
+  byLocation: [],
   recent: [],
 };
 
@@ -22,7 +33,7 @@ function shortVisitor(id: string) {
 }
 
 export default function AdminAnalytics() {
-  const [days, setDays] = useState(30);
+  const [days, setDays] = useState(0);
   const [data, setData] = useState<AnalyticsResult>(EMPTY);
   const [loading, setLoading] = useState(true);
 
@@ -54,19 +65,20 @@ export default function AdminAnalytics() {
         <div style={{ display: "flex", gap: ".5rem" }}>
           {RANGE_OPTIONS.map((r) => (
             <button
-              key={r}
-              onClick={() => setDays(r)}
-              className={days === r ? "btn-primary sm" : "btn-secondary sm"}
+              key={r.value}
+              onClick={() => setDays(r.value)}
+              className={days === r.value ? "btn-primary sm" : "btn-secondary sm"}
               style={{ padding: ".4rem .9rem", fontSize: ".8rem" }}
             >
-              {r} days
+              {r.label}
             </button>
           ))}
         </div>
       </div>
       <p className="admin-muted">
-        Who's visiting which page or product — logged automatically from every
-        page on the site (admin pages excluded).
+        Who&apos;s visiting which page or product, from which device and
+        location — logged automatically from every page on the site (admin
+        pages excluded).
       </p>
 
       {data.error && <div className="form-alert err">{data.error}</div>}
@@ -78,11 +90,11 @@ export default function AdminAnalytics() {
           <div className="admin-cards">
             <div className="admin-card">
               <b>{data.totalViews.toLocaleString("en-IN")}</b>
-              <span>Total pageviews ({data.days}d)</span>
+              <span>Total pageviews ({rangeLabel(data.days)})</span>
             </div>
             <div className="admin-card">
               <b>{data.uniqueVisitors.toLocaleString("en-IN")}</b>
-              <span>Unique visitors ({data.days}d)</span>
+              <span>Unique visitors ({rangeLabel(data.days)})</span>
             </div>
             <div className="admin-card">
               <b>{data.byType[0]?.label ?? "—"}</b>
@@ -143,22 +155,75 @@ export default function AdminAnalytics() {
             </table>
           )}
 
+          <h2 className="editor-title">Devices & browsers</h2>
+          {data.byDevice.length === 0 ? (
+            <p className="admin-muted">Nothing to show yet.</p>
+          ) : (
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Device · OS · Browser</th>
+                  <th>Views</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.byDevice.map((d) => (
+                  <tr key={d.label}>
+                    <td>{d.label}</td>
+                    <td>{d.count.toLocaleString("en-IN")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          <h2 className="editor-title">Locations</h2>
+          {data.byLocation.length === 0 ? (
+            <p className="admin-muted">
+              Nothing to show yet — location is only detected on the live
+              Vercel deployment, not on localhost.
+            </p>
+          ) : (
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>City / Region / Country</th>
+                  <th>Views</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.byLocation.map((l) => (
+                  <tr key={l.label}>
+                    <td>{l.label}</td>
+                    <td>{l.count.toLocaleString("en-IN")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
           <h2 className="editor-title">Recent activity</h2>
           {data.recent.length === 0 ? (
             <p className="admin-muted">No recent visits logged yet.</p>
           ) : (
-            data.recent.map((r, i) => (
-              <div className="message-card" key={i}>
-                <div className="message-head">
-                  <b>{r.path}</b>
-                  <span>{new Date(r.created_at).toLocaleString("en-IN")}</span>
+            data.recent.map((r, i) => {
+              const device = [r.device_type, r.os, r.browser].filter(Boolean).join(" · ");
+              const location = [r.city, r.region, r.country].filter(Boolean).join(", ");
+              return (
+                <div className="message-card" key={i}>
+                  <div className="message-head">
+                    <b>{r.path}</b>
+                    <span>{new Date(r.created_at).toLocaleString("en-IN")}</span>
+                  </div>
+                  <div className="message-meta">
+                    Visitor {shortVisitor(r.visitor_id)}
+                    {device && <span> · {device}</span>}
+                    {location && <span> · {location}</span>}
+                    {r.referrer && <span> · from {r.referrer}</span>}
+                  </div>
                 </div>
-                <div className="message-meta">
-                  Visitor {shortVisitor(r.visitor_id)}
-                  {r.referrer && <span> · from {r.referrer}</span>}
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </>
       )}

@@ -344,6 +344,17 @@ create table if not exists public.aivexa_pageviews (
   created_at  timestamptz not null default now()
 );
 
+-- Added later: device/browser/OS (parsed from user agent) and coarse
+-- location (from Vercel's geo headers). Kept as separate ALTERs so
+-- re-running this file also upgrades a table created before these
+-- columns existed.
+alter table public.aivexa_pageviews add column if not exists device_type text not null default '';
+alter table public.aivexa_pageviews add column if not exists browser     text not null default '';
+alter table public.aivexa_pageviews add column if not exists os         text not null default '';
+alter table public.aivexa_pageviews add column if not exists country    text not null default '';
+alter table public.aivexa_pageviews add column if not exists region     text not null default '';
+alter table public.aivexa_pageviews add column if not exists city       text not null default '';
+
 create index if not exists aivexa_pageviews_created_at_idx on public.aivexa_pageviews (created_at desc);
 create index if not exists aivexa_pageviews_page_type_idx on public.aivexa_pageviews (page_type, page_key);
 

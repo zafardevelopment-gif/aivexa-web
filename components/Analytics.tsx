@@ -38,8 +38,9 @@ export default function Analytics() {
 
     const visitorId = getVisitorId();
     const referrer = document.referrer || "";
+    const userAgent = navigator.userAgent || "";
 
-    logPageview({ path: pathname, referrer, visitorId }).catch(() => {
+    logPageview({ path: pathname, referrer, visitorId, userAgent }).catch(() => {
       // Analytics must never surface an error to the user.
     });
   }, [pathname]);

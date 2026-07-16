@@ -165,6 +165,12 @@ interface PageviewRow {
   referrer: string;
   visitor_id: string;
   created_at: string;
+  device_type: string;
+  browser: string;
+  os: string;
+  country: string;
+  region: string;
+  city: string;
 }
 
 export interface AnalyticsResult {
@@ -174,6 +180,8 @@ export interface AnalyticsResult {
   uniqueVisitors: number;
   byType: { type: string; label: string; count: number }[];
   topPages: { pageKey: string; pageType: string; count: number }[];
+  byDevice: { label: string; count: number }[];
+  byLocation: { label: string; count: number }[];
   recent: PageviewRow[];
 }
 
@@ -182,10 +190,13 @@ const EMPTY_ANALYTICS: Omit<AnalyticsResult, "error" | "days"> = {
   uniqueVisitors: 0,
   byType: [],
   topPages: [],
+  byDevice: [],
+  byLocation: [],
   recent: [],
 };
 
-export async function getAnalytics(days = 30): Promise<AnalyticsResult> {
+// days = 0 means "Today" — see the since-date logic below.
+export async function getAnalytics(days = 0): Promise<AnalyticsResult> {
   if (!(await isAdmin())) return { ...EMPTY_ANALYTICS, days, error: "Not signed in." };
   const db = supabaseAdmin();
   if (!db) {
@@ -196,10 +207,16 @@ export async function getAnalytics(days = 30): Promise<AnalyticsResult> {
     };
   }
 
-  const since = new Date(Date.now() - days * 86400000).toISOString();
+  // days === 0 means "Today" — since midnight, rather than a rolling 24h window.
+  const since =
+    days === 0
+      ? new Date(new Date().setHours(0, 0, 0, 0)).toISOString()
+      : new Date(Date.now() - days * 86400000).toISOString();
   const { data, error } = await db
     .from("aivexa_pageviews")
-    .select("path, page_type, page_key, referrer, visitor_id, created_at")
+    .select(
+      "path, page_type, page_key, referrer, visitor_id, created_at, device_type, browser, os, country, region, city"
+    )
     .gte("created_at", since)
     .order("created_at", { ascending: false })
     .limit(5000);
@@ -212,6 +229,8 @@ export async function getAnalytics(days = 30): Promise<AnalyticsResult> {
 
   const typeCounts = new Map<string, number>();
   const pageCounts = new Map<string, { pageKey: string; pageType: string; count: number }>();
+  const deviceCounts = new Map<string, number>();
+  const locationCounts = new Map<string, number>();
 
   for (const row of rows) {
     typeCounts.set(row.page_type, (typeCounts.get(row.page_type) ?? 0) + 1);
@@ -219,6 +238,12 @@ export async function getAnalytics(days = 30): Promise<AnalyticsResult> {
     const existing = pageCounts.get(key);
     if (existing) existing.count += 1;
     else pageCounts.set(key, { pageKey: row.page_key, pageType: row.page_type, count: 1 });
+
+    const deviceLabel = [row.device_type, row.os, row.browser].filter(Boolean).join(" · ") || "Unknown";
+    deviceCounts.set(deviceLabel, (deviceCounts.get(deviceLabel) ?? 0) + 1);
+
+    const locationLabel = [row.city, row.region, row.country].filter(Boolean).join(", ") || "Unknown";
+    locationCounts.set(locationLabel, (locationCounts.get(locationLabel) ?? 0) + 1);
   }
 
   const byType = Array.from(typeCounts.entries())
@@ -229,6 +254,16 @@ export async function getAnalytics(days = 30): Promise<AnalyticsResult> {
     .sort((a, b) => b.count - a.count)
     .slice(0, 20);
 
+  const byDevice = Array.from(deviceCounts.entries())
+    .map(([label, count]) => ({ label, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 15);
+
+  const byLocation = Array.from(locationCounts.entries())
+    .map(([label, count]) => ({ label, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 15);
+
   return {
     error: "",
     days,
@@ -236,6 +271,8 @@ export async function getAnalytics(days = 30): Promise<AnalyticsResult> {
     uniqueVisitors,
     byType,
     topPages,
+    byDevice,
+    byLocation,
     recent: rows.slice(0, 60),
   };
 }

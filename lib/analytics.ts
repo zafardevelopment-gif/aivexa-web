@@ -50,6 +50,39 @@ export function classifyPath(path: string): PageClass {
   return { pageType: "other", pageKey: clean, label: clean };
 }
 
+export type UAInfo = {
+  deviceType: string; // Mobile | Tablet | Desktop
+  browser: string;
+  os: string;
+};
+
+// Small dependency-free user-agent parser — good enough for analytics
+// labels (not meant to be exhaustive like a full UA-parsing library).
+export function parseUserAgent(ua: string): UAInfo {
+  const s = ua || "";
+
+  let os = "Other";
+  if (/windows/i.test(s)) os = "Windows";
+  else if (/iphone|ipad|ipod/i.test(s)) os = "iOS";
+  else if (/android/i.test(s)) os = "Android";
+  else if (/mac os x|macintosh/i.test(s)) os = "macOS";
+  else if (/linux/i.test(s)) os = "Linux";
+
+  let browser = "Other";
+  if (/edg\//i.test(s)) browser = "Edge";
+  else if (/opr\/|opera/i.test(s)) browser = "Opera";
+  else if (/chrome\//i.test(s) && !/chromium/i.test(s)) browser = "Chrome";
+  else if (/crios\//i.test(s)) browser = "Chrome";
+  else if (/fxios\//i.test(s) || /firefox\//i.test(s)) browser = "Firefox";
+  else if (/safari\//i.test(s) && /version\//i.test(s)) browser = "Safari";
+
+  let deviceType = "Desktop";
+  if (/ipad|tablet/i.test(s)) deviceType = "Tablet";
+  else if (/mobi|iphone|android/i.test(s)) deviceType = "Mobile";
+
+  return { deviceType, browser, os };
+}
+
 export const PAGE_TYPE_LABELS: Record<string, string> = {
   home: "Homepage",
   tools_hub: "Free Tools hub",
