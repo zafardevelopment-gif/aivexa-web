@@ -272,6 +272,83 @@ export const blogPosts: BlogPost[] = [
       <p>Whether it's a free calculator or a paid AI voice agent, the same standard applies: does this actually save someone time today, without asking them to change how they work first? That's the filter everything AIVEXA builds gets run through — from the smallest tool on the <a href="/tools">Free Tools</a> page to the products built for entire businesses.</p>
     `,
   },
+  {
+    slug: "youtube-tags-guide-rank-videos",
+    title: "YouTube Tags in 2026: Do They Still Matter, and How to Pick Them",
+    description:
+      "What YouTube tags actually do for ranking, how many to use, and a free generator that pulls tags from real YouTube search data.",
+    tag: "Creator Tools",
+    date: "2026-07-21",
+    readingMinutes: 4,
+    excerpt:
+      "Tags won't rescue a bad video, but they're a free ranking signal most creators fill carelessly. Here's how to do it right in two minutes.",
+    content: `
+      <p>Every few months someone declares YouTube tags dead. The truth is more boring: tags are a <em>minor</em> ranking signal — far less important than your title, thumbnail and watch time — but they still help YouTube understand what your video is about, catch misspellings of your channel name, and connect your video to related content in Suggested.</p>
+      <h3>How many tags should you use?</h3>
+      <p>YouTube gives you 500 characters. A good structure is: your exact target keyword first, then 10–25 close variations and related phrases. Stuffing 40 barely-related tags dilutes the signal; five lazy ones waste the field.</p>
+      <h3>The fastest way to find good tags</h3>
+      <p>The best tags aren't invented — they're discovered. YouTube's own search autocomplete shows exactly what viewers type. Our free <a href="/tools/misc/youtube-tag-generator">YouTube Tag Generator</a> automates this: enter your topic, choose your region (India, US, UK and more), and it fans your keyword out across dozens of real autocomplete queries — how-to phrasings, "best", "tutorial", "for beginners" and alphabet expansions — then de-duplicates everything into a clean tag list.</p>
+      <h3>A two-minute workflow before every upload</h3>
+      <ul>
+        <li>Generate tags for your main topic and skim the list — the suggestions themselves often reveal better title ideas.</li>
+        <li>Click off anything irrelevant, keep the counter under 500 characters, and copy.</li>
+        <li>Paste into YouTube Studio's tag field, and reuse the strongest phrases naturally in your description.</li>
+      </ul>
+      <p>Tags won't fix a weak thumbnail. But as a free, two-minute step that only helps and never hurts, there's no reason to leave the field empty or guess.</p>
+    `,
+  },
+  {
+    slug: "ctc-vs-in-hand-salary-explained",
+    title: "CTC vs In-Hand Salary: Where Your Money Actually Goes",
+    description:
+      "Why your in-hand salary is much less than CTC ÷ 12 — Basic, HRA, PF, gratuity and tax explained, with free calculators to check any offer.",
+    tag: "Daily Use Tools",
+    date: "2026-07-21",
+    readingMinutes: 5,
+    excerpt:
+      "A ₹12 lakh CTC doesn't mean ₹1 lakh a month in your bank account. Here's the full journey from CTC to in-hand.",
+    content: `
+      <p>The most common salary shock in India: you accept a ₹12 lakh CTC offer expecting ₹1 lakh a month, and the first credit is closer to ₹80,000. Nothing went wrong — CTC just includes money that never reaches your bank account.</p>
+      <h3>What's inside a CTC</h3>
+      <p>A typical structure: <strong>Basic salary</strong> (40–50% of CTC), <strong>HRA</strong> (50% of Basic in metros, 40% elsewhere), a balancing <strong>special allowance</strong>, plus employer-side costs — the employer's 12% <strong>PF</strong> contribution and a <strong>gratuity</strong> provision (~4.81% of Basic). Those last two are part of your CTC but are never paid out monthly.</p>
+      <p>You can see this breakup for any offer with the free <a href="/tools/daily/salary-structure-optimizer">Salary Structure Optimizer</a> — enter the CTC and it shows every component, plus an old vs new tax regime comparison and the approximate monthly in-hand.</p>
+      <h3>Then comes tax — and the regime choice</h3>
+      <p>The new regime (default) has lower rates, a ₹75,000 standard deduction and effectively zero tax up to ₹12 lakh income — but no HRA or 80C benefits. The old regime keeps those deductions with higher slab rates. If you pay significant rent, HRA can swing the decision: check your exact exemption with the <a href="/tools/daily/hra-calculator">HRA Calculator</a>.</p>
+      <h3>If you claim HRA, keep your paperwork ready</h3>
+      <ul>
+        <li>Rent receipts for the year — generate them free with the <a href="/tools/generators/rent-receipt-generator">Rent Receipt Generator</a>.</li>
+        <li>Your landlord's PAN if annual rent exceeds ₹1 lakh.</li>
+        <li>A rent agreement, which some employers ask for.</li>
+      </ul>
+      <p>Ten minutes with these three free tools before accepting an offer — or before your tax-declaration deadline — usually pays for itself many times over.</p>
+    `,
+  },
+  {
+    slug: "rental-yield-india-property-investment",
+    title: "Is That Flat a Good Investment? Rental Yield, Explained for India",
+    description:
+      "How to calculate gross and net rental yield, what returns are realistic in Indian cities, and a free calculator to run the numbers on any property.",
+    tag: "Misc Tools",
+    date: "2026-07-21",
+    readingMinutes: 5,
+    excerpt:
+      "Most Indian flats earn a 2–4% net rental yield — less than a fixed deposit. Here's how to run the honest math before you buy.",
+    content: `
+      <p>"Rent will pay the EMI" is the most repeated — and most wrong — line in Indian property conversations. On most residential flats, rent covers only a fraction of the EMI, because net rental yields in India typically sit at just 2–4%.</p>
+      <h3>Gross yield vs net yield</h3>
+      <p><strong>Gross yield</strong> is annual rent ÷ total property cost. <strong>Net yield</strong> subtracts what ownership really costs: society maintenance, property tax, repairs, brokerage and vacancy months between tenants. A flat with a 3.6% gross yield often nets barely 2.5% — and that gap is where investment decisions go wrong.</p>
+      <p>The free <a href="/tools/misc/rental-roi-calculator">Rental ROI Calculator</a> runs this honestly: purchase price plus registration and interiors, expected rent, vacancy months, maintenance and tax — giving you gross yield, net yield, total ROI including appreciation, and the payback period from rent alone.</p>
+      <h3>What's a realistic number?</h3>
+      <ul>
+        <li>Residential: 2–4% net is typical; 3%+ is decent. Bengaluru and Hyderabad often out-yield Mumbai and Delhi.</li>
+        <li>Commercial (shops, offices): 6–9% is common, with different risk and lock-in dynamics.</li>
+        <li>Compare against alternatives: if an FD pays ~7%, a 2.5% yield property is really a bet on price appreciation, not income.</li>
+      </ul>
+      <h3>Don't forget the recurring costs</h3>
+      <p>Society maintenance alone can eat 15–20% of rent. If you're on a society committee, our <a href="/tools/misc/society-maintenance-calculator">Society Maintenance Split Calculator</a> divides monthly expenses per flat — equally or by square foot. And if you're the tenant's side of this equation, the <a href="/tools/generators/rent-receipt-generator">Rent Receipt Generator</a> handles HRA proof in a minute.</p>
+      <p>Property can absolutely be a good investment — but only after the yield math, not instead of it.</p>
+    `,
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getCategory } from "./tools-registry";
+import { getToolSeoOverride } from "./tool-seo-overrides";
 import type { BlogPost } from "./blog-posts";
 
 export const SITE_URL = "https://www.aivexallp.com";
@@ -87,7 +88,7 @@ export function buildToolJsonLd(categorySlug: string, toolSlug: string) {
   const faqPage = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: buildToolFaqs(tool.name).map((faq) => ({
+    mainEntity: getMergedToolFaqs(categorySlug, toolSlug, tool.name).map((faq) => ({
       "@type": "Question",
       name: faq.q,
       acceptedAnswer: {
@@ -160,6 +161,16 @@ export function buildBlogJsonLd(post: BlogPost) {
       },
     },
   };
+}
+
+/** Tool-specific FAQs (if defined in tool-seo-overrides) followed by generic ones. */
+export function getMergedToolFaqs(
+  categorySlug: string,
+  toolSlug: string,
+  toolName: string
+) {
+  const override = getToolSeoOverride(categorySlug, toolSlug);
+  return [...(override?.faqs ?? []), ...buildToolFaqs(toolName)];
 }
 
 export function buildToolFaqs(toolName: string) {

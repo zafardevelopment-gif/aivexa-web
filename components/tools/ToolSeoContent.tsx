@@ -1,5 +1,6 @@
 import { getCategory } from "@/lib/tools-registry";
-import { buildToolJsonLd, buildToolFaqs } from "@/lib/seo";
+import { buildToolJsonLd, getMergedToolFaqs } from "@/lib/seo";
+import { getToolSeoOverride } from "@/lib/tool-seo-overrides";
 
 /**
  * Renders an "About this tool / FAQ" content block below every free tool,
@@ -20,7 +21,8 @@ export default function ToolSeoContent({
   if (!tool || !categoryDef) return null;
 
   const jsonLd = buildToolJsonLd(category, slug);
-  const faqs = buildToolFaqs(tool.name);
+  const faqs = getMergedToolFaqs(category, slug, tool.name);
+  const override = getToolSeoOverride(category, slug);
 
   return (
     <section style={{ padding: "0 1.25rem 4rem" }}>
@@ -28,6 +30,14 @@ export default function ToolSeoContent({
         <h2 style={{ fontSize: "1.4rem", fontWeight: 700, marginBottom: ".6rem" }}>
           About the {tool.name}
         </h2>
+        {override?.intro.map((para) => (
+          <p
+            key={para.slice(0, 40)}
+            style={{ color: "var(--muted)", lineHeight: 1.75, marginBottom: "1rem" }}
+          >
+            {para}
+          </p>
+        ))}
         <p style={{ color: "var(--muted)", lineHeight: 1.75, marginBottom: "1.75rem" }}>
           {tool.name} is a free, browser-based tool from AIVEXA&apos;s{" "}
           {categoryDef.name.toLowerCase()} collection. {tool.description} It works
