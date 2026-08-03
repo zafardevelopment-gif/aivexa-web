@@ -6,7 +6,7 @@ import { getPage } from "@/lib/data";
 export const revalidate = 60;
 
 // Legal/content pages served from the aivexa_pages table.
-const knownSlugs = ["privacy", "terms", "data-deletion"];
+const knownSlugs = ["privacy", "terms", "data-deletion", "miftah-privacy"];
 
 export function generateStaticParams() {
   return knownSlugs.map((slug) => ({ slug }));

@@ -353,6 +353,48 @@ export const fallbackPages: Record<string, Page> = {
 <h3>13. Contact</h3>
 <div class="legal-highlight"><p>For questions regarding these Terms, contact us at: <a href="mailto:martnest01@gmail.com">martnest01@gmail.com</a></p></div>`,
   },
+  "miftah-privacy": {
+    slug: "miftah-privacy",
+    title: "Miftah — Privacy Policy",
+    subtitle: "Last updated: August 3, 2026",
+    content: `<p>Miftah ("the app", package <code>com.aivexallp.miftah</code>) is built privacy-first. This page explains what the app accesses on your device, what it never accesses, and what &mdash; if anything &mdash; ever leaves your device.</p>
+<h3>What we access, and why</h3>
+<ul>
+<li><strong>Foreground app name only.</strong> To detect when you open an app you've chosen to pause during prayer time, Miftah uses Android's Accessibility Service (or, on iOS, Apple's Screen Time API). On Android this reads only the package name of the app currently on screen &mdash; it cannot read on-screen text or content, by design. On iOS, Apple's Screen Time API never even reveals an app name to Miftah; it only returns opaque tokens from Apple's own picker, which Miftah cannot resolve to a readable app identifier.</li>
+<li><strong>Location.</strong> Used to calculate your local prayer times and qibla direction. This is processed entirely on your device. The one exception: if you open the Nearby (masjid/halal finder) screen, your coordinates and a search radius are sent to the free, public OpenStreetMap Overpass API to find nearby places &mdash; this only happens while that screen is open, and only that screen's data is sent.</li>
+<li><strong>Compass/orientation sensor.</strong> Used only to power the qibla direction view.</li>
+<li><strong>Camera.</strong> Used only while the Qibla AR screen is open, to show a live camera preview with a qibla direction arrow overlaid. No photo or video is ever captured, saved, or transmitted &mdash; the feed is shown live on screen and nothing else. The camera is not accessed anywhere else in the app.</li>
+<li><strong>Installed app list.</strong> Used only to show you a picker of your installed apps so you can choose which ones to pause during prayer time. Only the app id and display name are read &mdash; never usage history or content.</li>
+<li><strong>Notifications &amp; exact alarms.</strong> Used to deliver the adhan (prayer call) notification at the precise calculated prayer time.</li>
+</ul>
+<h3>What we never access</h3>
+<ul>
+<li>Message content, keystrokes, clipboard, or on-screen content of any other app.</li>
+<li>Contacts, call logs, or the microphone.</li>
+<li>Browsing history or in-app activity, beyond the foreground app's package/bundle identifier as described above.</li>
+<li>Photos or video &mdash; the camera is only ever shown live, never recorded.</li>
+</ul>
+<h3>What we never do</h3>
+<ul>
+<li>Sell or share your data with third parties.</li>
+<li>Transmit foreground-app detections off your device.</li>
+<li>Show ads during a pause or prayer moment.</li>
+<li>Use dark patterns to block cancellation, hide settings, or force upgrades.</li>
+</ul>
+<h3>Data storage</h3>
+<p>All core data &mdash; prayer logs, settings, bundled Qur'an/content, family mode profiles &mdash; is stored locally on your device and works fully offline. There is no account system and no server-side sync. If analytics are ever introduced, they will be strictly opt-in and privacy-respecting (no fingerprinting, no ad-tech SDKs); none are enabled today.</p>
+<h3>Third-party services</h3>
+<ul>
+<li><strong>OpenStreetMap Overpass API</strong> &mdash; only when you open the Nearby (masjid/halal finder) screen, your current coordinates and a search radius are sent as a plain request to find nearby places. No account, device identifier, or other app data is included. See <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">OpenStreetMap's own privacy policy</a> for how that service handles request logs.</li>
+<li><strong>Platform app stores</strong> &mdash; in-app purchases go directly through Apple's or Google's own purchase APIs (StoreKit / Play Billing). Miftah does not use any third-party purchase or analytics backend.</li>
+</ul>
+<h3>Children's privacy</h3>
+<p>Miftah's optional Family mode lets a parent add family member profiles and prayer logs, stored locally on the parent's own device only. There is no account system, no data collection about children, and no data leaves the device through this feature.</p>
+<h3>Changes to this policy</h3>
+<p>If Miftah's data practices change, this page will be updated and the "Last updated" date above will reflect the change.</p>
+<h3>Contact</h3>
+<div class="legal-highlight"><p>Questions about this policy can be sent to: <a href="mailto:zafardevelopment@gmail.com">zafardevelopment@gmail.com</a></p></div>`,
+  },
   "data-deletion": {
     slug: "data-deletion",
     title: "Data Deletion",
