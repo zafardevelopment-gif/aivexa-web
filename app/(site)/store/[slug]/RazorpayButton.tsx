@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShoppingCart, Loader2 } from "lucide-react";
+import { ShoppingCart, Loader2, Lock } from "lucide-react";
 import type { DigitalProduct } from "@/lib/types";
 
 interface Props {
@@ -124,6 +124,7 @@ export default function RazorpayButton({ product }: Props) {
 
   return (
     <div className="dp-checkout-form">
+      <p className="dp-checkout-form-title">Enter your details to purchase</p>
       <div className="dp-form-row">
         <label htmlFor="dp-name">Your Name *</label>
         <input
@@ -169,7 +170,7 @@ export default function RazorpayButton({ product }: Props) {
           <><ShoppingCart size={17} strokeWidth={2.2} /> Pay &amp; Download</>
         )}
       </button>
-      <p className="dp-pay-note">Powered by Razorpay · 100% Secure</p>
+      <p className="dp-pay-note"><Lock size={11} strokeWidth={2.5} /> Powered by Razorpay &middot; 100% Secure</p>
     </div>
   );
 }

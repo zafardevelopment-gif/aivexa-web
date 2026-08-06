@@ -29,7 +29,7 @@ import {
 import { getExternalLink } from "@/lib/external-links";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
 import { getFeaturedDigitalProducts, formatPrice } from "@/lib/digital-products";
-import { ShoppingCart, Tag } from "lucide-react";
+import { FileDown, ShoppingCart, Tag } from "lucide-react";
 
 export const revalidate = 60;
 
@@ -242,9 +242,14 @@ export default async function Home() {
               {featuredDigital.map((dp) => (
                 <Reveal key={dp.slug}>
                   <Link href={`/store/${dp.slug}`} className="dp-card">
-                    {dp.preview_image && (
+                    {dp.preview_image ? (
                       <div className="dp-card-img">
                         <img src={dp.preview_image} alt={dp.name} loading="lazy" />
+                      </div>
+                    ) : (
+                      <div className="dp-card-img-placeholder">
+                        <FileDown size={28} strokeWidth={1.5} />
+                        <span>{dp.category || "Digital Product"}</span>
                       </div>
                     )}
                     <div className="dp-card-body">

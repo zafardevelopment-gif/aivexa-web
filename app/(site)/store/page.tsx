@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, ShoppingCart, Tag } from "lucide-react";
+import { ArrowRight, FileDown, ShoppingCart, Tag } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { getDigitalProducts, formatPrice } from "@/lib/digital-products";
 
@@ -19,17 +19,12 @@ export default async function StorePage() {
 
   return (
     <main>
-      <section className="page-hero">
+      <section className="dp-store-hero">
         <div className="container">
           <Reveal>
-            <div className="section-label center">Digital Products</div>
-            <h1 className="page-hero-title center">
-              Download & <span className="accent">grow instantly</span>
-            </h1>
-            <p className="page-hero-desc center">
-              Ready-to-use PDFs, planners and templates — buy once, download instantly.
-              No subscription, no waiting.
-            </p>
+            <div className="section-label">Digital Products</div>
+            <h1>Download & <span style={{opacity:.9}}>grow instantly</span></h1>
+            <p>Ready-to-use PDFs, planners and templates — buy once, download instantly. No subscription, no waiting.</p>
           </Reveal>
         </div>
       </section>
@@ -58,9 +53,14 @@ export default async function StorePage() {
                     {catProducts.map((dp) => (
                       <Reveal key={dp.slug}>
                         <Link href={`/store/${dp.slug}`} className="dp-card">
-                          {dp.preview_image && (
+                          {dp.preview_image ? (
                             <div className="dp-card-img">
                               <img src={dp.preview_image} alt={dp.name} loading="lazy" />
+                            </div>
+                          ) : (
+                            <div className="dp-card-img-placeholder">
+                              <FileDown size={32} strokeWidth={1.5} />
+                              <span>{dp.category || "Digital Product"}</span>
                             </div>
                           )}
                           <div className="dp-card-body">

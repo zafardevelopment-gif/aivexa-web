@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, CheckCircle2, Download, Tag } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Download, FileDown, Shield, Tag, Zap } from "lucide-react";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { getDigitalProduct, getDigitalProducts, formatPrice } from "@/lib/digital-products";
@@ -59,7 +59,8 @@ export default async function StoreProductPage({
                   <img src={product.preview_image} alt={product.name} />
                 ) : (
                   <div className="dp-detail-img-placeholder">
-                    <Download size={48} strokeWidth={1.5} />
+                    <FileDown size={56} strokeWidth={1.2} />
+                    <p>{product.category || "Digital Product"}</p>
                   </div>
                 )}
               </div>
@@ -95,10 +96,10 @@ export default async function StoreProductPage({
                 )}
 
                 <div className="dp-trust-list">
-                  <span><CheckCircle2 size={15} strokeWidth={2.2} /> Instant download after payment</span>
-                  <span><CheckCircle2 size={15} strokeWidth={2.2} /> Secure Razorpay checkout</span>
-                  <span><CheckCircle2 size={15} strokeWidth={2.2} /> UPI, Cards, Net Banking accepted</span>
-                  <span><CheckCircle2 size={15} strokeWidth={2.2} /> One-time purchase — no subscription</span>
+                  <span><Zap size={14} strokeWidth={2.2} /> Instant download after payment</span>
+                  <span><Shield size={14} strokeWidth={2.2} /> Secure Razorpay checkout</span>
+                  <span><CheckCircle2 size={14} strokeWidth={2.2} /> UPI, Cards &amp; Net Banking</span>
+                  <span><CheckCircle2 size={14} strokeWidth={2.2} /> One-time purchase, no subscription</span>
                 </div>
 
                 <RazorpayButton product={product} />
