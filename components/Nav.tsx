@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/cart-context";
 
 const links = [
   { href: "/#products", label: "Products" },
@@ -17,6 +19,7 @@ const links = [
 export default function Nav({ siteName }: { siteName: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { count, openCart } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -55,6 +58,13 @@ export default function Nav({ siteName }: { siteName: string }) {
             Book a Demo
           </a>
         </div>
+
+        {/* Cart icon */}
+        <button className="nav-cart-btn" onClick={openCart} aria-label="Open cart">
+          <ShoppingCart size={20} strokeWidth={2} />
+          {count > 0 && <span className="nav-cart-badge">{count}</span>}
+        </button>
+
         <button
           className={`hamburger${open ? " active" : ""}`}
           aria-label="Menu"

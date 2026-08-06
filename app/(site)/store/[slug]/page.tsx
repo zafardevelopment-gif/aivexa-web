@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, CheckCircle2, Download, FileDown, Shield, Tag, Zap } from "lucide-react";
+import { ArrowLeft, CheckCircle2, FileDown, Shield, Tag, Zap } from "lucide-react";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { getDigitalProduct, getDigitalProducts, formatPrice } from "@/lib/digital-products";
 import RazorpayButton from "./RazorpayButton";
+import AddToCartBtn from "@/components/AddToCartBtn";
 
 export const revalidate = 60;
 
@@ -102,6 +103,8 @@ export default async function StoreProductPage({
                   <span><CheckCircle2 size={14} strokeWidth={2.2} /> One-time purchase, no subscription</span>
                 </div>
 
+                <AddToCartBtn product={{ id: product.id, slug: product.slug, name: product.name, price: product.price, category: product.category, preview_image: product.preview_image }} variant="detail" />
+                <div className="dp-detail-divider"><span>or pay directly</span></div>
                 <RazorpayButton product={product} />
               </div>
             </Reveal>

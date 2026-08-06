@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, FileDown, ShoppingCart, Tag } from "lucide-react";
+import { FileDown, ShoppingCart, Tag } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { getDigitalProducts, formatPrice } from "@/lib/digital-products";
+import AddToCartBtn from "@/components/AddToCartBtn";
 
 export const revalidate = 60;
 
@@ -78,9 +79,12 @@ export default async function StorePage() {
                                   <span className="dp-original-price">{formatPrice(dp.original_price)}</span>
                                 )}
                               </div>
-                              <span className="dp-buy-btn">
-                                <ShoppingCart size={14} strokeWidth={2.2} /> Buy Now
-                              </span>
+                              <div className="dp-card-actions">
+                                <AddToCartBtn product={{ id: dp.id, slug: dp.slug, name: dp.name, price: dp.price, category: dp.category, preview_image: dp.preview_image }} variant="card" />
+                                <span className="dp-buy-btn">
+                                  <ShoppingCart size={14} strokeWidth={2.2} /> Buy Now
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </Link>
