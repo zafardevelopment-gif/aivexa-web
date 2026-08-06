@@ -9,6 +9,7 @@ const links = [
   { href: "/#how-it-works", label: "How It Works" },
   { href: "/#why-us", label: "Why AIVEXA" },
   { href: "/#testimonials", label: "Customers" },
+  { href: "/store", label: "Digital Products" },
   { href: "/tools", label: "Free Tools" },
   { href: "/blog", label: "Blog" },
 ];

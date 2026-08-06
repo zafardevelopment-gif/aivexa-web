@@ -40,6 +40,21 @@ export interface Testimonial {
   sort_order: number;
 }
 
+export interface DigitalProduct {
+  id: number;
+  slug: string;
+  name: string;
+  tagline: string;
+  description: string;
+  price: number;          // in paise
+  original_price: number; // in paise, 0 = no strike-through
+  category: string;
+  preview_image: string;
+  file_url: string;
+  is_featured: boolean;
+  sort_order: number;
+}
+
 export interface Page {
   slug: string;
   title: string;

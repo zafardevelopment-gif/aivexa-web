@@ -11,6 +11,7 @@ import {
   MessageSquareQuote,
   Package,
   Settings,
+  ShoppingBag,
   Sparkles,
 } from "lucide-react";
 import { logout } from "@/app/admin/actions";
@@ -19,6 +20,7 @@ const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/messages", label: "Messages", icon: Inbox },
   { href: "/admin/products", label: "Products", icon: Package },
+  { href: "/admin/store", label: "Digital Store", icon: ShoppingBag },
   { href: "/admin/homepage", label: "Homepage", icon: MessageSquareQuote },
   { href: "/admin/pages", label: "Pages", icon: FileText },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },

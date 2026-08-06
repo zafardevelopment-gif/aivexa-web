@@ -28,6 +28,8 @@ import {
 } from "@/lib/data";
 import { getExternalLink } from "@/lib/external-links";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
+import { getFeaturedDigitalProducts, formatPrice } from "@/lib/digital-products";
+import { ShoppingCart, Tag } from "lucide-react";
 
 export const revalidate = 60;
 
@@ -47,12 +49,13 @@ const complianceBadges = [
 ];
 
 export default async function Home() {
-  const [settings, products, steps, stats, testimonials] = await Promise.all([
+  const [settings, products, steps, stats, testimonials, featuredDigital] = await Promise.all([
     getSettings(),
     getProducts(),
     getSteps(),
     getStats(),
     getTestimonials(),
+    getFeaturedDigitalProducts(),
   ]);
 
   return (
@@ -219,6 +222,65 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ===== DIGITAL PRODUCTS (featured) ===== */}
+      {featuredDigital.length > 0 && (
+        <section className="section dp-home-section" id="digital-products">
+          <div className="container">
+            <Reveal>
+              <div className="section-header center">
+                <div className="section-label">Digital Products</div>
+                <h2 className="section-title">
+                  Download & <span className="accent">grow instantly</span>
+                </h2>
+                <p className="section-desc">
+                  Ready-to-use PDFs, planners and templates — buy once, download instantly.
+                </p>
+              </div>
+            </Reveal>
+            <div className="dp-grid">
+              {featuredDigital.map((dp) => (
+                <Reveal key={dp.slug}>
+                  <Link href={`/store/${dp.slug}`} className="dp-card">
+                    {dp.preview_image && (
+                      <div className="dp-card-img">
+                        <img src={dp.preview_image} alt={dp.name} loading="lazy" />
+                      </div>
+                    )}
+                    <div className="dp-card-body">
+                      {dp.category && (
+                        <span className="dp-category">
+                          <Tag size={11} strokeWidth={2.2} /> {dp.category}
+                        </span>
+                      )}
+                      <h3 className="dp-card-name">{dp.name}</h3>
+                      <p className="dp-card-tagline">{dp.tagline}</p>
+                      <div className="dp-card-footer">
+                        <div className="dp-price-row">
+                          <span className="dp-price">{formatPrice(dp.price)}</span>
+                          {dp.original_price > 0 && (
+                            <span className="dp-original-price">{formatPrice(dp.original_price)}</span>
+                          )}
+                        </div>
+                        <span className="dp-buy-btn">
+                          <ShoppingCart size={14} strokeWidth={2.2} /> Buy Now
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+            <Reveal>
+              <div className="dp-show-all">
+                <Link href="/store" className="btn-secondary">
+                  View All Digital Products <ArrowRight size={16} strokeWidth={2.2} />
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* ===== PRODUCTS ===== */}
       <section className="section" id="products">
