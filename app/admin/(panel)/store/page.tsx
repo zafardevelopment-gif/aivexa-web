@@ -28,7 +28,7 @@ export default function AdminStore() {
           { key: "highlights", label: "Key Highlights", type: "lines", hint: "One highlight per line — e.g. '50 ideas', '300+ pages', 'AI-First'" },
           { key: "pages_count", label: "Pages / Items Count", type: "number", hint: "e.g. 50 ideas or 301 pages — shown as a stat" },
           { key: "file_size", label: "File Size", hint: "e.g. 2.7 MB — displayed on product page" },
-          { key: "file_url", label: "Download File URL", hint: "Secure/signed URL — sent after payment" },
+          { key: "file_url", label: "Download File", type: "file", hint: "Upload ZIP, PDF, DOCX etc. — link sent to buyer after payment" },
           { key: "sort_order", label: "Order", type: "number" },
           { key: "is_featured", label: "Featured (Home)", type: "boolean" },
           { key: "is_active", label: "Active", type: "boolean" },

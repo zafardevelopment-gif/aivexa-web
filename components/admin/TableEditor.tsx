@@ -7,10 +7,11 @@ import { adminDelete, adminList, adminSave } from "@/app/admin/actions";
 export interface ColumnDef {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "boolean" | "lines" | "image" | "images";
+  type?: "text" | "textarea" | "number" | "boolean" | "lines" | "image" | "images" | "file";
   // "lines"  = jsonb string[] edited one-per-line
   // "image"  = single image file upload → Supabase Storage, stores public URL
   // "images" = multiple image file upload → Supabase Storage, stores URL[]
+  // "file"   = any file upload (ZIP, PDF, etc.) → Supabase Storage, stores public URL
   readOnlyOnEdit?: boolean; // e.g. primary keys like slug/setting_key
   hint?: string;
 }
@@ -244,6 +245,70 @@ function MultiImageUploadField({
   );
 }
 
+// ─── FileUploadField ───────────────────────────────────────────────────────
+function FileUploadField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState("");
+
+  const filename = value ? value.split("/").pop()?.split("?")[0] ?? value : "";
+
+  async function handleFile(file: File) {
+    setUploading(true);
+    setErr("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/admin/upload-product-file", { method: "POST", body: fd });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.error ?? "Upload failed"); return; }
+      onChange(json.url);
+    } catch {
+      setErr("Upload failed — check console.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      {/* Current file */}
+      {value && (
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 10px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "6px" }}>
+          <span style={{ fontSize: "13px", fontFamily: "monospace", color: "var(--text-muted)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            📦 {filename}
+          </span>
+          <a href={value} target="_blank" rel="noreferrer" style={{ fontSize: "11px", color: "var(--primary)", textDecoration: "underline", whiteSpace: "nowrap" }}>Preview</a>
+          <button type="button" onClick={() => onChange("")} title="Remove"
+            style={{ background: "#EF4444", color: "#fff", border: "none", borderRadius: "50%", width: "18px", height: "18px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0, flexShrink: 0 }}>
+            <X size={10} strokeWidth={2.5} />
+          </button>
+        </div>
+      )}
+
+      {/* Upload button */}
+      <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <button type="button" className="btn-secondary sm" disabled={uploading} onClick={() => inputRef.current?.click()} style={{ gap: "5px" }}>
+          <Upload size={13} strokeWidth={2.2} />
+          {uploading ? "Uploading…" : value ? "Replace File" : "Upload File"}
+        </button>
+        <input
+          ref={inputRef}
+          type="file"
+          accept=".zip,.pdf,.epub,.xlsx,.xls,.docx,.doc,.txt,.csv,.rar,.7z"
+          style={{ display: "none" }}
+          onChange={(e) => { if (e.target.files?.[0]) handleFile(e.target.files[0]); e.target.value = ""; }}
+        />
+        <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>ZIP, PDF, DOCX, XLSX · max 100MB</span>
+      </div>
+
+      {/* Manual URL fallback */}
+      <input type="text" placeholder="Or paste direct URL" value={value} onChange={(e) => onChange(e.target.value)} style={{ fontSize: "12px" }} />
+      {err && <span style={{ color: "#EF4444", fontSize: "11px" }}>{err}</span>}
+    </div>
+  );
+}
+
 function toInput(value: unknown, type: ColumnDef["type"]): string {
   if (type === "lines") return Array.isArray(value) ? value.join("\n") : "";
   if (value === null || value === undefined) return "";
@@ -393,7 +458,7 @@ export default function TableEditor({
                 <label
                   key={col.key}
                   className={`editor-field${
-                    col.type === "textarea" || col.type === "lines" || col.type === "image" || col.type === "images"
+                    col.type === "textarea" || col.type === "lines" || col.type === "image" || col.type === "images" || col.type === "file"
                       ? " wide"
                       : ""
                   }`}
@@ -406,6 +471,11 @@ export default function TableEditor({
                     <MultiImageUploadField
                       value={toImages(row[col.key])}
                       onChange={(urls) => setImages(i, col.key, urls)}
+                    />
+                  ) : col.type === "file" ? (
+                    <FileUploadField
+                      value={toInput(row[col.key], "text")}
+                      onChange={(url) => setField(i, col.key, url, "text")}
                     />
                   ) : col.type === "image" ? (
                     <ImageUploadField
