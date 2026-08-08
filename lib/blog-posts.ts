@@ -349,8 +349,6 @@ export const blogPosts: BlogPost[] = [
       <p>Property can absolutely be a good investment — but only after the yield math, not instead of it.</p>
     `,
   },
-];
-
   {
     slug: "50-business-ideas-you-can-start-in-2026",
     title: "50 Business Ideas You Can Start in 2026 (AI-First, Low Investment)",
