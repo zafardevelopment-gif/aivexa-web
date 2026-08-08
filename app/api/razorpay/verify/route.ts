@@ -128,50 +128,61 @@ export async function POST(req: NextRequest) {
     if (supabaseUrl && supabaseServiceKey) {
       const sb = createClient(supabaseUrl, supabaseServiceKey);
 
-      // Update order status to paid
-      const { data: updatedOrder } = await sb
+      // STEP 1: Update status to paid — separate from select to avoid
+      // failures if optional columns (items) don't exist yet.
+      await sb
         .from("aivexa_orders")
         .update({ razorpay_payment_id, razorpay_signature, status: "paid" })
+        .eq("razorpay_order_id", razorpay_order_id);
+
+      // STEP 2: Fetch order details separately for email
+      const { data: order } = await sb
+        .from("aivexa_orders")
+        .select("buyer_name, buyer_email, product_slug, amount_paise")
         .eq("razorpay_order_id", razorpay_order_id)
-        .select("buyer_name, buyer_email, product_slug, amount_paise, items")
         .maybeSingle();
 
-      // Send download email (non-blocking)
-      if (updatedOrder?.buyer_email) {
-        const { buyer_name, buyer_email, product_slug, items } = updatedOrder;
-        const isCart = Array.isArray(items) && items.length > 0;
+      // STEP 3: Also try to get items if cart column exists (non-fatal)
+      let items: { slug: string }[] = [];
+      try {
+        const { data: cartRow } = await sb
+          .from("aivexa_orders")
+          .select("items")
+          .eq("razorpay_order_id", razorpay_order_id)
+          .maybeSingle();
+        if (Array.isArray(cartRow?.items)) items = cartRow.items;
+      } catch { /* items column may not exist — skip */ }
+
+      // STEP 4: Send download email (non-blocking)
+      if (order?.buyer_email) {
+        const { buyer_name, buyer_email, product_slug } = order;
+        const isCart = items.length > 0;
+        const siteBase = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aivexallp.com";
 
         if (isCart) {
-          // Cart order — fetch all product file_urls
-          const slugs: string[] = (items as { slug: string }[]).map((it) => it.slug);
+          const slugs = items.map((it) => it.slug);
           const { data: products } = await sb
             .from("aivexa_digital_products")
             .select("name, slug, file_url")
             .in("slug", slugs);
 
-          const successUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://aivexallp.com"}/store/order-success?order=${razorpay_order_id}`;
           const firstProduct = products?.[0];
-
           sendDownloadEmail({
             buyerName: buyer_name ?? "",
             buyerEmail: buyer_email,
-            productName:
-              products && products.length > 1
-                ? `${products[0].name} + ${products.length - 1} more`
-                : firstProduct?.name ?? "Your purchase",
+            productName: products && products.length > 1
+              ? `${products[0].name} + ${products.length - 1} more`
+              : firstProduct?.name ?? "Your purchase",
             fileUrl: firstProduct?.file_url ?? "",
             orderId: razorpay_order_id,
-            successUrl,
+            successUrl: `${siteBase}/store/order-success?order=${razorpay_order_id}`,
           });
         } else if (product_slug) {
-          // Single product
           const { data: product } = await sb
             .from("aivexa_digital_products")
             .select("name, file_url")
             .eq("slug", product_slug)
             .maybeSingle();
-
-          const successUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://aivexallp.com"}/store/${product_slug}/success?order=${razorpay_order_id}`;
 
           sendDownloadEmail({
             buyerName: buyer_name ?? "",
@@ -179,7 +190,7 @@ export async function POST(req: NextRequest) {
             productName: product?.name ?? product_slug,
             fileUrl: product?.file_url ?? "",
             orderId: razorpay_order_id,
-            successUrl,
+            successUrl: `${siteBase}/store/${product_slug}/success?order=${razorpay_order_id}`,
           });
         }
       }
