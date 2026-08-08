@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { CheckCircle2, Download } from "lucide-react";
+import { CheckCircle2, Download, Mail } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { formatPrice } from "@/lib/digital-products";
@@ -67,9 +67,12 @@ export default async function OrderSuccessPage({
               Thank you{orderRecord.buyer_name ? `, ${orderRecord.buyer_name}` : ""}!
               Your purchase of <strong>{formatPrice(orderRecord.amount_paise)}</strong> is confirmed.
             </p>
-            <p className="dp-success-email">
-              Receipt sent to <strong>{orderRecord.buyer_email}</strong>
-            </p>
+            {process.env.RESEND_API_KEY && (
+              <div className="dp-success-email">
+                <Mail size={14} strokeWidth={2} style={{ display: "inline", marginRight: 6 }} />
+                Download links sent to <strong>{orderRecord.buyer_email}</strong>
+              </div>
+            )}
 
             <div className="dp-success-downloads">
               <p className="dp-success-downloads-label">Your Downloads</p>
@@ -87,9 +90,13 @@ export default async function OrderSuccessPage({
                 </a>
               ))}
               {productFiles.length === 0 && (
-                <p className="admin-muted" style={{ textAlign: "center" }}>
-                  Files will be emailed to you shortly.
-                </p>
+                <div className="dp-no-file-notice">
+                  <p>
+                    Your files will be delivered to <strong>{orderRecord.buyer_email}</strong> within
+                    24 hours. For help, email{" "}
+                    <a href="mailto:support@aivexallp.com">support@aivexallp.com</a> with your Order ID.
+                  </p>
+                </div>
               )}
             </div>
 

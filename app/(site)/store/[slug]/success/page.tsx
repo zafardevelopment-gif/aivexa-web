@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { CheckCircle2, Download } from "lucide-react";
+import { CheckCircle2, Download, Mail } from "lucide-react";
 import Link from "next/link";
 import { getDigitalProduct } from "@/lib/digital-products";
 import { createClient } from "@supabase/supabase-js";
@@ -39,44 +39,76 @@ export default async function SuccessPage({
   ]);
 
   if (!product) notFound();
-  // If order not found / not paid → redirect back (prevents direct URL access)
   if (!orderRecord || orderRecord.product_slug !== slug) {
     redirect(`/store/${slug}`);
   }
+
+  const hasFile = !!product.file_url;
+  const emailEnabled = !!process.env.RESEND_API_KEY;
 
   return (
     <main>
       <section className="section" style={{ paddingTop: "7rem" }}>
         <div className="container">
           <div className="dp-success-card">
+
+            {/* Icon */}
             <div className="dp-success-icon">
               <CheckCircle2 size={52} strokeWidth={1.5} />
             </div>
+
             <h1 className="dp-success-title">Payment Successful!</h1>
+
             <p className="dp-success-sub">
-              Thank you{orderRecord.buyer_name ? `, ${orderRecord.buyer_name}` : ""}. Your purchase of{" "}
-              <strong>{product.name}</strong> is confirmed.
-            </p>
-            <p className="dp-success-email">
-              A copy has been sent to <strong>{orderRecord.buyer_email}</strong>.
+              Thank you{orderRecord.buyer_name ? `, ${orderRecord.buyer_name}` : ""}!
+              Your purchase of <strong>{product.name}</strong> is confirmed.
             </p>
 
-            <a
-              href={product.file_url}
-              download
-              className="dp-download-btn"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Download size={18} strokeWidth={2.2} /> Download {product.name}
-            </a>
+            {/* Email notice */}
+            {emailEnabled && (
+              <div className="dp-success-email">
+                <Mail size={14} strokeWidth={2} style={{ display: "inline", marginRight: 6 }} />
+                Download link sent to <strong>{orderRecord.buyer_email}</strong>
+              </div>
+            )}
 
+            {/* Download button */}
+            {hasFile ? (
+              <a
+                href={product.file_url}
+                download
+                className="dp-download-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Download size={18} strokeWidth={2.2} />
+                Download {product.name}
+              </a>
+            ) : (
+              /* File not yet uploaded — show contact message */
+              <div className="dp-no-file-notice">
+                <p>
+                  Your file will be delivered to <strong>{orderRecord.buyer_email}</strong> within
+                  24 hours. If you don&apos;t receive it, contact us at{" "}
+                  <a href="mailto:support@aivexallp.com">support@aivexallp.com</a> with your
+                  Order ID below.
+                </p>
+              </div>
+            )}
+
+            {/* Order note */}
             <div className="dp-success-note">
-              <p>Keep this page URL saved — you can re-download from here for 48 hours.</p>
-              <p>Order ID: <code>{order}</code></p>
+              <p>Save this page URL — you can re-download from here anytime.</p>
+              <p>
+                Order ID: <code>{order}</code>
+              </p>
             </div>
 
-            <Link href="/store" className="dp-back-link" style={{ marginTop: "1.5rem", display: "inline-flex" }}>
+            <Link
+              href="/store"
+              className="dp-back-link"
+              style={{ marginTop: "1.5rem", display: "inline-flex" }}
+            >
               ← Back to Store
             </Link>
           </div>

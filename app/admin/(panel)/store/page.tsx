@@ -22,7 +22,7 @@ export default function AdminStore() {
           { key: "category", label: "Category", hint: "e.g. PDF, Planner, Template" },
           { key: "price", label: "Price (paise)", type: "number", hint: "₹99 → 9900" },
           { key: "original_price", label: "MRP (paise)", type: "number", hint: "Strike-through price, 0 = hide" },
-          { key: "preview_image", label: "Preview Image URL", hint: "Public image URL for product thumbnail" },
+          { key: "preview_image", label: "Preview Image", type: "image", hint: "Upload or paste URL — shown as product thumbnail" },
           { key: "file_url", label: "Download File URL", hint: "Secure/signed URL — sent after payment" },
           { key: "sort_order", label: "Order", type: "number" },
           { key: "is_featured", label: "Featured (Home)", type: "boolean" },

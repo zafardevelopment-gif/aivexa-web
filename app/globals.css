@@ -606,6 +606,11 @@ button{font-family:inherit}
   border-radius:10px;padding:.9rem 1.2rem;text-align:left;width:100%;
 }
 .dp-success-note code{background:var(--border);padding:.1rem .4rem;border-radius:4px;font-size:.74rem}
+.dp-no-file-notice{
+  width:100%;background:#FEF9C3;border:1px solid #FDE68A;border-radius:10px;
+  padding:1rem 1.2rem;font-size:.88rem;color:#92400E;line-height:1.6;text-align:left;
+}
+.dp-no-file-notice a{color:#92400E;font-weight:600;text-decoration:underline}
 
 /* ---- Card actions (Add to Cart + Buy Now row) ---- */
 .dp-card-actions{display:flex;align-items:center;gap:.45rem}

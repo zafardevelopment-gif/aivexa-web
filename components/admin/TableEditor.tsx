@@ -1,18 +1,115 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { Plus, Save, Trash2 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Plus, Save, Trash2, Upload, X } from "lucide-react";
 import { adminDelete, adminList, adminSave } from "@/app/admin/actions";
 
 export interface ColumnDef {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "boolean" | "lines"; // "lines" = jsonb string[] edited one-per-line
+  type?: "text" | "textarea" | "number" | "boolean" | "lines" | "image";
+  // "lines" = jsonb string[] edited one-per-line
+  // "image" = file upload → Supabase Storage, stores public URL
   readOnlyOnEdit?: boolean; // e.g. primary keys like slug/setting_key
   hint?: string;
 }
 
 type Row = Record<string, unknown>;
+
+// ── Image Upload Field ────────────────────────────────────────────────────────
+function ImageUploadField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState("");
+
+  async function handleFile(file: File) {
+    setErr("");
+    setUploading(true);
+    const fd = new FormData();
+    fd.append("file", file);
+    try {
+      const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+      const json = await res.json();
+      if (json.error) { setErr(json.error); }
+      else { onChange(json.url); }
+    } catch {
+      setErr("Upload failed — check your connection.");
+    }
+    setUploading(false);
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      {/* Preview */}
+      {value && (
+        <div style={{ position: "relative", display: "inline-block" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={value}
+            alt="preview"
+            style={{
+              width: "100%", maxWidth: "280px", height: "140px",
+              objectFit: "cover", borderRadius: "8px",
+              border: "1px solid var(--border)", display: "block",
+            }}
+            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+          />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            style={{
+              position: "absolute", top: "4px", right: "4px",
+              background: "#EF4444", color: "#fff", border: "none",
+              borderRadius: "50%", width: "20px", height: "20px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", padding: 0,
+            }}
+          >
+            <X size={12} strokeWidth={2.5} />
+          </button>
+        </div>
+      )}
+
+      {/* Upload button */}
+      <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <button
+          type="button"
+          className="btn-secondary sm"
+          disabled={uploading}
+          onClick={() => inputRef.current?.click()}
+          style={{ gap: "5px" }}
+        >
+          <Upload size={13} strokeWidth={2.2} />
+          {uploading ? "Uploading…" : "Upload Image"}
+        </button>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          style={{ display: "none" }}
+          onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }}
+        />
+        <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>JPG, PNG, WebP · max 5MB</span>
+      </div>
+
+      {/* Manual URL input */}
+      <input
+        type="text"
+        value={value}
+        placeholder="Or paste image URL directly"
+        onChange={(e) => onChange(e.target.value)}
+        style={{ fontSize: "12px" }}
+      />
+      {err && <span style={{ color: "#EF4444", fontSize: "11px" }}>{err}</span>}
+    </div>
+  );
+}
 
 function toInput(value: unknown, type: ColumnDef["type"]): string {
   if (type === "lines") return Array.isArray(value) ? value.join("\n") : "";
@@ -69,7 +166,8 @@ export default function TableEditor({
   function setField(index: number, key: string, value: string, type: ColumnDef["type"]) {
     setRows((prev) => {
       const next = [...prev];
-      next[index] = { ...next[index], [key]: fromInput(value, type) };
+      // For "image" type, value is already the final URL string — no conversion needed
+      next[index] = { ...next[index], [key]: type === "image" ? value : fromInput(value, type) };
       return next;
     });
   }
@@ -145,13 +243,22 @@ export default function TableEditor({
               {columns.map((col) => (
                 <label
                   key={col.key}
-                  className={`editor-field${col.type === "textarea" || col.type === "lines" ? " wide" : ""}`}
+                  className={`editor-field${
+                    col.type === "textarea" || col.type === "lines" || col.type === "image"
+                      ? " wide"
+                      : ""
+                  }`}
                 >
                   <span>
                     {col.label}
                     {col.hint && <em> — {col.hint}</em>}
                   </span>
-                  {col.type === "textarea" || col.type === "lines" ? (
+                  {col.type === "image" ? (
+                    <ImageUploadField
+                      value={toInput(row[col.key], col.type)}
+                      onChange={(url) => setField(i, col.key, url, col.type)}
+                    />
+                  ) : col.type === "textarea" || col.type === "lines" ? (
                     <textarea
                       value={toInput(row[col.key], col.type)}
                       rows={col.type === "lines" ? 4 : 6}
