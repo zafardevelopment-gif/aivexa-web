@@ -499,8 +499,72 @@ button{font-family:inherit}
   border:1px solid var(--border);
   box-shadow:var(--shadow-lg);
   position:relative;
+  display:flex;flex-direction:column;gap:.75rem;
 }
 .dp-detail-img-wrap img{width:100%;display:block}
+
+/* ---- Image Gallery ---- */
+.dp-gallery{display:flex;flex-direction:column;gap:.75rem}
+.dp-gallery-main{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.dp-gallery-main-img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}
+.dp-gallery-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.9);border:1px solid var(--border);
+  border-radius:50%;width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.15s;z-index:2;
+}
+.dp-gallery-arrow:hover{background:#fff;box-shadow:var(--shadow-md)}
+.dp-gallery-arrow--prev{left:10px}
+.dp-gallery-arrow--next{right:10px}
+.dp-gallery-counter{
+  position:absolute;bottom:10px;right:12px;
+  background:rgba(0,0,0,.5);color:#fff;
+  font-size:.75rem;font-weight:600;
+  padding:.2rem .6rem;border-radius:20px;
+}
+.dp-gallery-thumbs{
+  display:flex;gap:.5rem;overflow-x:auto;
+  padding-bottom:4px;scrollbar-width:thin;
+}
+.dp-gallery-thumb{
+  width:70px;height:50px;object-fit:cover;
+  border-radius:8px;border:2px solid transparent;
+  cursor:pointer;flex-shrink:0;transition:.15s;opacity:.7;
+}
+.dp-gallery-thumb:hover{opacity:1}
+.dp-gallery-thumb.active{border-color:var(--indigo);opacity:1}
+
+/* ---- File meta chips ---- */
+.dp-file-meta{display:flex;gap:.5rem;flex-wrap:wrap;padding:.5rem 0 0}
+.dp-file-meta-chip{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.8rem;font-weight:600;color:var(--indigo);
+  background:var(--indigo-light);border-radius:20px;
+  padding:.3rem .8rem;
+}
+
+/* ---- Highlights chips ---- */
+.dp-highlights{display:flex;flex-wrap:wrap;gap:.45rem;margin:-.2rem 0}
+.dp-highlight-chip{
+  font-size:.78rem;font-weight:700;
+  background:linear-gradient(135deg,#f0fdf4,#dcfce7);
+  color:#15803d;border:1px solid #bbf7d0;
+  border-radius:20px;padding:.28rem .75rem;
+}
+
+/* ---- Features / What's included ---- */
+.dp-features-box{
+  background:#f8fafc;border:1px solid var(--border);
+  border-radius:14px;padding:1rem 1.2rem;
+}
+.dp-features-title{font-size:.88rem;font-weight:700;color:var(--text);margin:0 0 .6rem}
+.dp-features-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.45rem}
+.dp-features-list li{
+  display:flex;align-items:flex-start;gap:.5rem;
+  font-size:.87rem;color:var(--muted);line-height:1.5;
+}
+.dp-features-list li svg{flex-shrink:0;margin-top:2px}
 
 .dp-detail-img-placeholder{
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;

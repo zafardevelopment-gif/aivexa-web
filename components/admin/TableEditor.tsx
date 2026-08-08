@@ -7,9 +7,10 @@ import { adminDelete, adminList, adminSave } from "@/app/admin/actions";
 export interface ColumnDef {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "boolean" | "lines" | "image";
-  // "lines" = jsonb string[] edited one-per-line
-  // "image" = file upload → Supabase Storage, stores public URL
+  type?: "text" | "textarea" | "number" | "boolean" | "lines" | "image" | "images";
+  // "lines"  = jsonb string[] edited one-per-line
+  // "image"  = single image file upload → Supabase Storage, stores public URL
+  // "images" = multiple image file upload → Supabase Storage, stores URL[]
   readOnlyOnEdit?: boolean; // e.g. primary keys like slug/setting_key
   hint?: string;
 }
@@ -111,10 +112,150 @@ function ImageUploadField({
   );
 }
 
+// ── Multi Image Upload Field ──────────────────────────────────────────────────
+function MultiImageUploadField({
+  value,
+  onChange,
+}: {
+  value: string[];
+  onChange: (urls: string[]) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState("");
+
+  async function handleFiles(files: FileList) {
+    setErr("");
+    setUploading(true);
+    const newUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      const fd = new FormData();
+      fd.append("file", file);
+      try {
+        const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+        const json = await res.json();
+        if (json.error) setErr(json.error);
+        else newUrls.push(json.url);
+      } catch {
+        setErr("Upload failed — check your connection.");
+      }
+    }
+    if (newUrls.length) onChange([...value, ...newUrls]);
+    setUploading(false);
+  }
+
+  function remove(idx: number) {
+    onChange(value.filter((_, i) => i !== idx));
+  }
+
+  function move(idx: number, dir: -1 | 1) {
+    const next = [...value];
+    const target = idx + dir;
+    if (target < 0 || target >= next.length) return;
+    [next[idx], next[target]] = [next[target], next[idx]];
+    onChange(next);
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      {/* Thumbnails grid */}
+      {value.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+          {value.map((url, idx) => (
+            <div key={idx} style={{ position: "relative", width: "100px" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt={`img-${idx}`}
+                style={{
+                  width: "100px", height: "70px", objectFit: "cover",
+                  borderRadius: "6px", border: "1px solid var(--border)", display: "block",
+                }}
+                onError={(e) => { (e.target as HTMLImageElement).style.opacity = "0.3"; }}
+              />
+              {/* Remove */}
+              <button
+                type="button"
+                onClick={() => remove(idx)}
+                title="Remove"
+                style={{
+                  position: "absolute", top: "2px", right: "2px",
+                  background: "#EF4444", color: "#fff", border: "none",
+                  borderRadius: "50%", width: "18px", height: "18px",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", padding: 0,
+                }}
+              >
+                <X size={10} strokeWidth={2.5} />
+              </button>
+              {/* Order buttons */}
+              <div style={{ display: "flex", justifyContent: "center", gap: "2px", marginTop: "3px" }}>
+                <button type="button" onClick={() => move(idx, -1)} disabled={idx === 0}
+                  style={{ fontSize: "10px", padding: "0 5px", cursor: "pointer", borderRadius: "3px", border: "1px solid var(--border)", background: "var(--surface)", lineHeight: "16px" }}>←</button>
+                <button type="button" onClick={() => move(idx, 1)} disabled={idx === value.length - 1}
+                  style={{ fontSize: "10px", padding: "0 5px", cursor: "pointer", borderRadius: "3px", border: "1px solid var(--border)", background: "var(--surface)", lineHeight: "16px" }}>→</button>
+              </div>
+              {idx === 0 && (
+                <div style={{ textAlign: "center", fontSize: "9px", color: "var(--text-muted)", marginTop: "2px" }}>Main</div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Upload button */}
+      <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <button
+          type="button"
+          className="btn-secondary sm"
+          disabled={uploading}
+          onClick={() => inputRef.current?.click()}
+          style={{ gap: "5px" }}
+        >
+          <Upload size={13} strokeWidth={2.2} />
+          {uploading ? "Uploading…" : `Add Images ${value.length > 0 ? `(${value.length})` : ""}`}
+        </button>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          multiple
+          style={{ display: "none" }}
+          onChange={(e) => { if (e.target.files?.length) handleFiles(e.target.files); e.target.value = ""; }}
+        />
+        <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>JPG, PNG, WebP · select multiple · drag to reorder</span>
+      </div>
+
+      {/* Manual URL input */}
+      <input
+        type="text"
+        placeholder="Or paste image URL and press Enter to add"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            const val = (e.target as HTMLInputElement).value.trim();
+            if (val) { onChange([...value, val]); (e.target as HTMLInputElement).value = ""; }
+            e.preventDefault();
+          }
+        }}
+        style={{ fontSize: "12px" }}
+      />
+      {err && <span style={{ color: "#EF4444", fontSize: "11px" }}>{err}</span>}
+    </div>
+  );
+}
+
 function toInput(value: unknown, type: ColumnDef["type"]): string {
   if (type === "lines") return Array.isArray(value) ? value.join("\n") : "";
   if (value === null || value === undefined) return "";
   return String(value);
+}
+
+function toImages(value: unknown): string[] {
+  if (Array.isArray(value)) return value.filter((v) => typeof v === "string");
+  if (typeof value === "string" && value.startsWith("[")) {
+    try { return JSON.parse(value); } catch { return []; }
+  }
+  return [];
 }
 
 function fromInput(value: string, type: ColumnDef["type"]): unknown {
@@ -172,6 +313,14 @@ export default function TableEditor({
     });
   }
 
+  function setImages(index: number, key: string, urls: string[]) {
+    setRows((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [key]: urls };
+      return next;
+    });
+  }
+
   function setBool(index: number, key: string, value: boolean) {
     setRows((prev) => {
       const next = [...prev];
@@ -224,7 +373,7 @@ export default function TableEditor({
     const blank: Row = {};
     for (const col of columns)
       blank[col.key] =
-        col.type === "lines" ? [] : col.type === "number" ? 0 : col.type === "boolean" ? true : "";
+        col.type === "lines" || col.type === "images" ? [] : col.type === "number" ? 0 : col.type === "boolean" ? true : "";
     setRows((prev) => [...prev, blank]);
   }
 
@@ -244,7 +393,7 @@ export default function TableEditor({
                 <label
                   key={col.key}
                   className={`editor-field${
-                    col.type === "textarea" || col.type === "lines" || col.type === "image"
+                    col.type === "textarea" || col.type === "lines" || col.type === "image" || col.type === "images"
                       ? " wide"
                       : ""
                   }`}
@@ -253,7 +402,12 @@ export default function TableEditor({
                     {col.label}
                     {col.hint && <em> — {col.hint}</em>}
                   </span>
-                  {col.type === "image" ? (
+                  {col.type === "images" ? (
+                    <MultiImageUploadField
+                      value={toImages(row[col.key])}
+                      onChange={(urls) => setImages(i, col.key, urls)}
+                    />
+                  ) : col.type === "image" ? (
                     <ImageUploadField
                       value={toInput(row[col.key], col.type)}
                       onChange={(url) => setField(i, col.key, url, col.type)}

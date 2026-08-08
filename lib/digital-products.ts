@@ -8,7 +8,7 @@ export async function getDigitalProducts(): Promise<DigitalProduct[]> {
   if (db) {
     const { data } = await db
       .from("aivexa_digital_products")
-      .select("id, slug, name, tagline, description, price, original_price, category, preview_image, file_url, is_featured, sort_order")
+      .select("id, slug, name, tagline, description, price, original_price, category, preview_image, preview_images, features, highlights, pages_count, file_size, file_url, is_featured, sort_order")
       .eq("is_active", true)
       .order("sort_order");
     if (data && data.length) return data as DigitalProduct[];
@@ -21,7 +21,7 @@ export async function getFeaturedDigitalProducts(): Promise<DigitalProduct[]> {
   if (db) {
     const { data } = await db
       .from("aivexa_digital_products")
-      .select("id, slug, name, tagline, description, price, original_price, category, preview_image, file_url, is_featured, sort_order")
+      .select("id, slug, name, tagline, description, price, original_price, category, preview_image, preview_images, features, highlights, pages_count, file_size, file_url, is_featured, sort_order")
       .eq("is_active", true)
       .eq("is_featured", true)
       .order("sort_order");
@@ -35,7 +35,7 @@ export async function getDigitalProduct(slug: string): Promise<DigitalProduct | 
   if (db) {
     const { data } = await db
       .from("aivexa_digital_products")
-      .select("id, slug, name, tagline, description, price, original_price, category, preview_image, file_url, is_featured, sort_order")
+      .select("id, slug, name, tagline, description, price, original_price, category, preview_image, preview_images, features, highlights, pages_count, file_size, file_url, is_featured, sort_order")
       .eq("is_active", true)
       .eq("slug", slug)
       .maybeSingle();

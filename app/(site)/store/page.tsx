@@ -8,8 +8,21 @@ import AddToCartBtn from "@/components/AddToCartBtn";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Digital Products — AIVEXA",
-  description: "Ready-to-use PDFs, planners, and templates. Buy once, download instantly.",
+  title: "Digital Products — AIVEXA Store | PDFs, Guides & Templates",
+  description: "Buy AI-curated digital products: business idea books, prompt packs, planners and templates. Instant download. One-time payment. No subscription.",
+  keywords: ["digital products", "AI business ideas", "PDF download", "prompt pack", "business guide", "AIVEXA store"],
+  openGraph: {
+    title: "AIVEXA Digital Store — AI-Powered PDFs & Guides",
+    description: "Buy AI-curated digital products. Instant download after payment.",
+    url: "https://aivexallp.com/store",
+    siteName: "AIVEXA",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AIVEXA Digital Store — AI-Powered PDFs & Guides",
+    description: "Buy AI-curated digital products. Instant download after payment.",
+  },
 };
 
 export default async function StorePage() {
