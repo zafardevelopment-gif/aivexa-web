@@ -167,7 +167,7 @@ export async function POST(req: NextRequest) {
             .in("slug", slugs);
 
           const firstProduct = products?.[0];
-          sendDownloadEmail({
+          await sendDownloadEmail({
             buyerName: buyer_name ?? "",
             buyerEmail: buyer_email,
             productName: products && products.length > 1
@@ -184,7 +184,7 @@ export async function POST(req: NextRequest) {
             .eq("slug", product_slug)
             .maybeSingle();
 
-          sendDownloadEmail({
+          await sendDownloadEmail({
             buyerName: buyer_name ?? "",
             buyerEmail: buyer_email,
             productName: product?.name ?? product_slug,
