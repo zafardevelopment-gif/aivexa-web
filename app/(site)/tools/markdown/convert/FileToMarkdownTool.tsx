@@ -21,9 +21,9 @@ function baseName(name: string) {
 }
 
 // Load a CDN script once, returning a promise that resolves when loaded
-const scriptCache: Record<string, Promise<void>> = {};
+const scriptCache: Record<string, Promise<void> | undefined> = {};
 function loadScript(src: string): Promise<void> {
-  if (scriptCache[src]) return scriptCache[src];
+  if (scriptCache[src] !== undefined) return scriptCache[src]!;
   scriptCache[src] = new Promise((resolve, reject) => {
     const existing = document.querySelector(`script[src="${src}"]`);
     if (existing) { resolve(); return; }
