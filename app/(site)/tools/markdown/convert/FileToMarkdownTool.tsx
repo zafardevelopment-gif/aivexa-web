@@ -49,8 +49,11 @@ async function pdfToMarkdown(file: File): Promise<string> {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
     const lines = content.items
-      .filter((item): item is { str: string; hasEOL: boolean } => "str" in item)
-      .map((item) => (item.hasEOL ? item.str + "\n" : item.str))
+      .filter((item) => "str" in item)
+      .map((item) => {
+        const t = item as { str: string; hasEOL: boolean };
+        return t.hasEOL ? t.str + "\n" : t.str;
+      })
       .join("")
       .trim();
     if (lines) parts.push(`## Page ${i}\n\n${lines}`);
