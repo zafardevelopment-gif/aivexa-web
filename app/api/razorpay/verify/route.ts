@@ -77,7 +77,7 @@ async function sendDownloadEmail(opts: {
 </html>`;
 
   try {
-    await fetch("https://api.resend.com/emails", {
+    const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,9 +90,16 @@ async function sendDownloadEmail(opts: {
         html,
       }),
     });
+    if (!res.ok) {
+      const errBody = await res.text();
+      console.error(`Email send failed [${res.status}]:`, errBody);
+    } else {
+      const data = await res.json();
+      console.log("Email sent successfully, id:", data.id);
+    }
   } catch (err) {
     // Email is non-critical — log but don't fail the payment flow
-    console.error("Email send failed:", err);
+    console.error("Email send failed (network):", err);
   }
 }
 
