@@ -130,6 +130,14 @@ export const toolCategories: ToolCategoryDef[] = [
     ],
   },
   {
+    slug: "markdown",
+    name: "Markdown Converter",
+    description: "Convert PDF, Word, Excel, images, HTML and more to .md files.",
+    tools: [
+      { slug: "convert", name: "File to Markdown Converter", description: "Convert PDF, DOCX, XLSX, CSV, image, HTML or TXT to a .md file — free, browser-only.", status: "live" },
+    ],
+  },
+  {
     slug: "generators",
     name: "Generators & Documents",
     description: "CV, invoices, biodata, certificates and more — as PDF.",

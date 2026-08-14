@@ -7,6 +7,7 @@ import {
   Calculator,
   FileSignature,
   Sparkles,
+  FileCode,
 } from "lucide-react";
 import ToolSearch from "@/components/tools/ToolSearch";
 
@@ -76,6 +77,12 @@ const categories = [
     name: "Misc & Educational",
     icon: Sparkles,
     description: "Fun, educational and everyday utility tools.",
+  },
+  {
+    slug: "markdown",
+    name: "Markdown Converter",
+    icon: FileCode,
+    description: "Convert PDF, Word, Excel, images, HTML & more to .md files.",
   },
 ];
 
