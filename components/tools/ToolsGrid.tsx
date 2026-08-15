@@ -63,41 +63,25 @@ export default function ToolsGrid({ searchQuery = "" }: { searchQuery?: string }
           gap: ".5rem",
           flexWrap: "wrap",
           justifyContent: "center",
-          margin: "2rem 0 2.5rem",
-          padding: "0 1rem",
+          margin: "2rem 0 1.5rem",
         }}
       >
-        <button
-          onClick={() => setActiveCategory("all")}
-          style={{
-            padding: ".45rem 1.1rem",
-            borderRadius: 999,
-            border: "1.5px solid",
-            borderColor: activeCategory === "all" ? "var(--indigo)" : "var(--border-2)",
-            background: activeCategory === "all" ? "var(--indigo)" : "transparent",
-            color: activeCategory === "all" ? "#fff" : "var(--text)",
-            fontWeight: 600,
-            fontSize: ".85rem",
-            cursor: "pointer",
-            transition: "all .15s",
-            fontFamily: "inherit",
-            whiteSpace: "nowrap",
-          }}
-        >
-          All Tools
-        </button>
-        {toolCategories.map((cat) => {
-          const active = activeCategory === cat.slug;
-          const color = CAT_COLORS[cat.slug] ?? "#6366f1";
+        {[{ slug: "all", label: "All Tools", color: "#6366f1" }, ...toolCategories.map((cat) => ({
+          slug: cat.slug,
+          label: cat.name.replace(" Tools", "").replace(" Converter", "").replace(" & Documents", "").replace(" & Educational", ""),
+          color: CAT_COLORS[cat.slug] ?? "#6366f1",
+        }))].map(({ slug, label, color }) => {
+          const active = activeCategory === slug;
           return (
             <button
-              key={cat.slug}
-              onClick={() => setActiveCategory(cat.slug)}
+              key={slug}
+              onClick={() => setActiveCategory(slug)}
               style={{
-                padding: ".45rem 1.1rem",
+                padding: ".45rem 0",
+                minWidth: 100,
                 borderRadius: 999,
                 border: `1.5px solid ${color}`,
-                background: active ? color : color + "12",
+                background: active ? color : color + "15",
                 color: active ? "#fff" : color,
                 fontWeight: 600,
                 fontSize: ".85rem",
@@ -105,9 +89,10 @@ export default function ToolsGrid({ searchQuery = "" }: { searchQuery?: string }
                 transition: "all .15s",
                 fontFamily: "inherit",
                 whiteSpace: "nowrap",
+                textAlign: "center",
               }}
             >
-              {cat.name.replace(" Tools", "").replace(" Converter", "").replace(" & Documents", "").replace(" & Educational", "")}
+              {label}
             </button>
           );
         })}
