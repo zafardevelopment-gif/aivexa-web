@@ -96,9 +96,9 @@ export default function ToolsGrid({ searchQuery = "" }: { searchQuery?: string }
               style={{
                 padding: ".45rem 1.1rem",
                 borderRadius: 999,
-                border: `1.5px solid ${active ? color : "var(--border-2)"}`,
-                background: active ? color : "transparent",
-                color: active ? "#fff" : "var(--text)",
+                border: `1.5px solid ${color}`,
+                background: active ? color : color + "12",
+                color: active ? "#fff" : color,
                 fontWeight: 600,
                 fontSize: ".85rem",
                 cursor: "pointer",
