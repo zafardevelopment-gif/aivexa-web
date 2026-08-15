@@ -159,6 +159,21 @@ export const toolCategories: ToolCategoryDef[] = [
       { slug: "passport-photo-maker", name: "Passport Photo Maker", description: "Crop to passport/visa specs, printable sheet.", status: "live" },
     ],
   },
+  {
+    slug: "json",
+    name: "JSON Tools",
+    description: "Format, convert, validate and transform JSON data — free, browser-only.",
+    tools: [
+      { slug: "formatter", name: "JSON Formatter & Validator", description: "Beautify or minify JSON with syntax highlighting and error detection.", status: "live" },
+      { slug: "json-to-csv", name: "JSON to CSV Converter", description: "Convert JSON arrays to CSV/Excel-ready format.", status: "live" },
+      { slug: "csv-to-json", name: "CSV to JSON Converter", description: "Convert CSV files or text to structured JSON.", status: "live" },
+      { slug: "json-to-xml", name: "JSON to XML Converter", description: "Transform JSON objects to valid XML format.", status: "live" },
+      { slug: "xml-to-json", name: "XML to JSON Converter", description: "Parse XML and convert to clean JSON.", status: "live" },
+      { slug: "json-to-yaml", name: "JSON to YAML Converter", description: "Convert JSON to human-readable YAML format.", status: "soon" },
+      { slug: "json-diff", name: "JSON Diff Viewer", description: "Compare two JSON objects and highlight differences.", status: "soon" },
+      { slug: "json-path-tester", name: "JSONPath Tester", description: "Test JSONPath expressions against your JSON data.", status: "soon" },
+    ],
+  },
 ];
 
 export function getCategory(slug: string) {
