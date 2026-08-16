@@ -64,10 +64,10 @@ const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "AIVEXA",
-  legalName: "MD ZAFAR EQBAL (MART NEST)",
+  legalName: "MD ZAFAR EQBAL",
   url: SITE_URL,
   logo: `${SITE_URL}/aivexa-logo.png`,
-  email: "martnest01@gmail.com",
+  email: "aivexallp@gmail.com",
   address: {
     "@type": "PostalAddress",
     streetAddress:

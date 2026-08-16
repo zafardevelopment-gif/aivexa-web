@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import AdBanner from "@/components/AdBanner";
 
 export default function ToolPageLayout({
   title,
@@ -32,11 +33,25 @@ export default function ToolPageLayout({
         </div>
       </section>
 
-      <section style={{ padding: "1rem 1.25rem 4rem" }}>
+      {/* Ad: below tool header */}
+      <div style={{ padding: "0 1.25rem" }}>
+        <div style={{ maxWidth: 760, margin: "0 auto" }}>
+          <AdBanner format="horizontal" />
+        </div>
+      </div>
+
+      <section style={{ padding: "1rem 1.25rem 2rem" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           {children}
         </div>
       </section>
+
+      {/* Ad: below tool content */}
+      <div style={{ padding: "0 1.25rem" }}>
+        <div style={{ maxWidth: 760, margin: "0 auto" }}>
+          <AdBanner format="rectangle" />
+        </div>
+      </div>
 
       <ToolCTABanner />
     </main>
