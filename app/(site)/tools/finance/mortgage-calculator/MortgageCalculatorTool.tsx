@@ -120,7 +120,7 @@ export default function MortgageCalculatorTool() {
         </Field>
 
         <ResultBox>
-          <ResultRow label="Monthly Payment"       value={fmt(monthlyPayment, sym)} highlight />
+          <ResultRow label="Monthly Payment"       value={fmt(monthlyPayment, sym)}/>
           <ResultRow label="Total Interest Payable" value={fmt(totalInterest, sym)} />
           <ResultRow label="Total Amount Payable"   value={fmt(totalPayment, sym)} />
         </ResultBox>

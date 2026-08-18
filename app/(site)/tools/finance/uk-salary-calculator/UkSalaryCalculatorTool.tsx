@@ -130,7 +130,7 @@ export default function UkSalaryCalculatorTool() {
           <ResultRow label="National Insurance"      value={`-${fmt(result.ni)}`} />
           {result.studentLoanRepayment > 0 &&
             <ResultRow label="Student Loan"          value={`-${fmt(result.studentLoanRepayment)}`} />}
-          <ResultRow label="Annual Take-Home Pay"    value={fmt(result.takeHome)} highlight />
+          <ResultRow label="Annual Take-Home Pay"    value={fmt(result.takeHome)}/>
           <ResultRow label="Monthly Take-Home"       value={fmt(result.takeHomeMonthly)} />
           <ResultRow label="Weekly Take-Home"        value={fmt(result.takeHomeWeekly)} />
           <ResultRow label="Effective Tax Rate"      value={`${result.effectiveRate.toFixed(1)}%`} />

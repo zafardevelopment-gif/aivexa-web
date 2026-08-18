@@ -115,7 +115,7 @@ export default function CompoundInterestCalculatorTool() {
         </Field>
 
         <ResultBox>
-          <ResultRow label="Future Value"            value={fmt(result.futureValue)} highlight />
+          <ResultRow label="Future Value"            value={fmt(result.futureValue)}/>
           <ResultRow label="Total Interest Earned"   value={fmt(result.totalInterest)} />
           <ResultRow label="Total Contributions"     value={fmt(result.totalContributions)} />
         </ResultBox>

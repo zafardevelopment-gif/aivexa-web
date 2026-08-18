@@ -158,7 +158,7 @@ export default function UsSalaryCalculatorTool() {
           <ResultRow label="Social Security (6.2%)"  value={`-${fmt(result.socialSecurity)}`} />
           <ResultRow label="Medicare (1.45%)"        value={`-${fmt(result.medicare)}`} />
           <ResultRow label={`${state} State Tax`}    value={`-${fmt(result.stateTax)}`} />
-          <ResultRow label="Annual Take-Home Pay"    value={fmt(result.takeHome)} highlight />
+          <ResultRow label="Annual Take-Home Pay"    value={fmt(result.takeHome)}/>
           <ResultRow label="Monthly Take-Home"       value={fmt(result.takeHomeMonthly)} />
           <ResultRow label="Bi-weekly Take-Home"     value={fmt(result.takeHomeBiweekly)} />
           <ResultRow label="Effective Tax Rate"      value={`${result.effectiveRate.toFixed(1)}%`} />

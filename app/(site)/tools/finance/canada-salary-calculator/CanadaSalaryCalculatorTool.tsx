@@ -181,7 +181,7 @@ export default function CanadaSalaryCalculatorTool() {
           <ResultRow label={`${province} Provincial Tax`} value={`-${fmt(result.provTax)}`} />
           <ResultRow label="CPP Contributions"          value={`-${fmt(result.cpp)}`} />
           <ResultRow label="EI Premiums"                value={`-${fmt(result.ei)}`} />
-          <ResultRow label="Annual Take-Home Pay"       value={fmt(result.takeHome)} highlight />
+          <ResultRow label="Annual Take-Home Pay"       value={fmt(result.takeHome)}/>
           <ResultRow label="Monthly Take-Home"          value={fmt(result.takeHomeMonthly)} />
           <ResultRow label="Bi-weekly Take-Home"        value={fmt(result.takeHomeBiweekly)} />
           <ResultRow label="Effective Tax Rate"         value={`${result.effectiveRate.toFixed(1)}%`} />

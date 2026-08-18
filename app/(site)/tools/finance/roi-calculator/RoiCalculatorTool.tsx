@@ -47,7 +47,7 @@ export default function RoiCalculatorTool() {
         </Field>
 
         <ResultBox>
-          <ResultRow label="Net Profit / Loss"   value={fmtNum(result.netProfit)} highlight />
+          <ResultRow label="Net Profit / Loss"   value={fmtNum(result.netProfit)}/>
           <ResultRow label="ROI"                 value={fmtPct(result.roi)} />
           <ResultRow label="Annualised ROI"      value={fmtPct(result.annualisedRoi)} />
           <ResultRow label="Payback Period"
