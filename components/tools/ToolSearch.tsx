@@ -99,7 +99,7 @@ export default function ToolSearch({
           <input
             type="text"
             value={query}
-            placeholder={placeholder ?? "Search 90 tools — e.g. merge pdf, zakat, resize image…"}
+            placeholder={placeholder ?? "Search 110+ tools — e.g. merge pdf, zakat, resize image, mortgage…"}
             onFocus={() => setOpen(true)}
             onChange={(e) => {
               setQuery(e.target.value);

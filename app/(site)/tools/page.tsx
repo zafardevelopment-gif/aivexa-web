@@ -3,9 +3,9 @@ import ToolSearch from "@/components/tools/ToolSearch";
 import ToolsGrid from "@/components/tools/ToolsGrid";
 
 export const metadata: Metadata = {
-  title: "90+ Free Online Tools — PDF, Image, JSON, Calculators & More — AIVEXA",
+  title: "110+ Free Online Tools — PDF, Image, JSON, Calculators & More — AIVEXA",
   description:
-    "90+ free browser-based PDF, image, JSON, Islamic, daily-use and document tools by AIVEXA. No signup, no file uploads — everything runs in your browser.",
+    "110+ free browser-based PDF, image, JSON, Islamic, daily-use, finance and document tools by AIVEXA. No signup, no file uploads — everything runs in your browser.",
   keywords: [
     "free online tools",
     "free PDF tools",
@@ -17,9 +17,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools" },
   openGraph: {
-    title: "90+ Free Online Tools — AIVEXA",
+    title: "110+ Free Online Tools — AIVEXA",
     description:
-      "Free browser-based PDF, image, JSON, Islamic, daily-use and document tools by AIVEXA.",
+      "Free browser-based PDF, image, JSON, Islamic, daily-use, finance and document tools by AIVEXA.",
     type: "website",
     url: "/tools",
     siteName: "AIVEXA",
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "90+ Free Online Tools — AIVEXA",
+    title: "110+ Free Online Tools — AIVEXA",
     description:
-      "Free browser-based PDF, image, JSON, calculators and Islamic tools — no signup.",
+      "Free browser-based PDF, image, JSON, finance calculators and Islamic tools — no signup.",
   },
 };
 
