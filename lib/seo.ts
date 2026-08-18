@@ -98,7 +98,32 @@ export function buildToolJsonLd(categorySlug: string, toolSlug: string) {
     })),
   };
 
-  return { webApplication, faqPage };
+  const breadcrumbList = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Free Tools",
+        item: `${SITE_URL}/tools`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: category?.name ?? categorySlug,
+        item: `${SITE_URL}/tools/${categorySlug}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: tool.name,
+        item: path,
+      },
+    ],
+  };
+
+  return { webApplication, faqPage, breadcrumbList };
 }
 
 /**

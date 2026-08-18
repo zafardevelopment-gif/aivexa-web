@@ -174,6 +174,23 @@ export const toolCategories: ToolCategoryDef[] = [
       { slug: "json-path-tester", name: "JSONPath Tester", description: "Test JSONPath expressions against your JSON data.", status: "soon" },
     ],
   },
+  {
+    slug: "finance",
+    name: "Finance & Money Tools",
+    description: "Mortgage, salary, tax and investment calculators for US, UK, Canada, Australia and India.",
+    tools: [
+      { slug: "mortgage-calculator", name: "Mortgage Calculator", description: "Monthly payment, total interest and amortization schedule for a home loan.", status: "live" },
+      { slug: "us-salary-calculator", name: "US Salary Calculator", description: "Federal + state income tax, Social Security and Medicare deductions — net take-home pay.", status: "live" },
+      { slug: "uk-salary-calculator", name: "UK Salary Calculator", description: "Income tax and National Insurance deductions, monthly and annual take-home pay.", status: "live" },
+      { slug: "canada-salary-calculator", name: "Canada Salary Calculator", description: "Federal + provincial income tax and CPP/EI deductions — net take-home pay.", status: "live" },
+      { slug: "australia-salary-calculator", name: "Australia Salary Calculator", description: "Income tax and Medicare levy — fortnightly, monthly and annual take-home pay.", status: "live" },
+      { slug: "compound-interest-calculator", name: "Compound Interest Calculator", description: "Future value with compound interest — daily, monthly or annual compounding.", status: "live" },
+      { slug: "roi-calculator", name: "ROI Calculator", description: "Return on investment — gain, loss, percentage return and annualised ROI.", status: "live" },
+      { slug: "net-worth-calculator", name: "Net Worth Calculator", description: "Total assets minus total liabilities — a snapshot of your financial health.", status: "live" },
+      { slug: "debt-payoff-calculator", name: "Debt Payoff Calculator", description: "Avalanche vs snowball method — payoff date and total interest for multiple debts.", status: "live" },
+      { slug: "retirement-calculator", name: "Retirement Calculator", description: "Estimate your retirement corpus and monthly income from your savings and expected returns.", status: "live" },
+    ],
+  },
 ];
 
 export function getCategory(slug: string) {
