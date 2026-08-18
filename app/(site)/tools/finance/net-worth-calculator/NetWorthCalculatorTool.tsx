@@ -72,7 +72,6 @@ export default function NetWorthCalculatorTool() {
           <ResultRow
             label="Net Worth"
             value={(netWorth >= 0 ? "" : "-") + fmt(Math.abs(netWorth))}
-            highlight
           />
         </ResultBox>
       </Card>
