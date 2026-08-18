@@ -138,7 +138,7 @@ export default function DebtPayoffCalculatorTool() {
         </div>
 
         <ResultBox>
-          <ResultRow label="Debt-Free In"       value={result.months > 0 ? `${years > 0 ? `${years}y ` : ""}${months}m` : "—"} highlight />
+          <ResultRow label="Debt-Free In"       value={result.months > 0 ? `${years > 0 ? `${years}y ` : ""}${months}m` : "—"}/>
           <ResultRow label="Total Interest Paid" value={fmt(result.totalInterest)} />
           {result.payoffOrder.length > 0 &&
             <ResultRow label="Payoff Order" value={result.payoffOrder.join(" → ")} />}

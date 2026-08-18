@@ -110,7 +110,7 @@ export default function RetirementCalculatorTool() {
 
         <ResultBox>
           <ResultRow label="Years to Retirement"         value={`${result.yearsToRetire} years`} />
-          <ResultRow label="Estimated Retirement Corpus" value={`${currency}${fmt(result.corpus)}`} highlight />
+          <ResultRow label="Estimated Retirement Corpus" value={`${currency}${fmt(result.corpus)}`}/>
           <ResultRow label="Monthly Income (real terms)"  value={`${currency}${fmt(result.monthlyIncome)}`} />
         </ResultBox>
       </Card>
