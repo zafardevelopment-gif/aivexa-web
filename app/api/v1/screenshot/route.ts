@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
 
   const mimeType = format === "jpeg" ? "image/jpeg" : "image/png";
 
-  return new Response(result.buffer, {
+  return new Response(new Uint8Array(result.buffer), {
     status: 200,
     headers: {
       "Content-Type": mimeType,
