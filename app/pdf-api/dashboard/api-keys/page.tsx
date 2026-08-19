@@ -33,8 +33,7 @@ export default function ApiKeysPage() {
 
   const getAuthHeader = async () => {
     const { data: { session } } = await supabase.auth.getSession();
-    return session ? { Authorization: `Bearer ${session.access_token}` } : {};
-  };
+return { Authorization: session ? `Bearer ${session.access_token}` : "" } as Record<string, string>;  };
 
   const fetchKeys = async () => {
     setLoading(true);
