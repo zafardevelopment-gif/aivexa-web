@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
     else dayMap[day].failed++;
   }
 
-  const plan = userData?.pdfapi_plans as Record<string, unknown> | null;
+  const plan = (userData?.pdfapi_plans as unknown) as Record<string, unknown> | null;
 
   return NextResponse.json({
     plan: {
