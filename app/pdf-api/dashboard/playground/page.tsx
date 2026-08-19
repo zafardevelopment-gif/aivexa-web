@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 import { Play, Download, Copy, Check, FileText } from "lucide-react";
 
 const DEFAULT_HTML = `<!DOCTYPE html>
@@ -41,6 +42,16 @@ export default function PlaygroundPage() {
   } | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const supabase = useMemo(() => createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
+
+  const getAuthHeader = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return { Authorization: session ? `Bearer ${session.access_token}` : "" };
+  };
+
   const generate = async () => {
     setLoading(true);
     setResult(null);
@@ -52,11 +63,15 @@ export default function PlaygroundPage() {
         ? { html: htmlInput, format, orientation }
         : { url: urlInput, format, orientation };
 
+      const authHeaders = await getAuthHeader();
+
       const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": apiKey ? `Bearer ${apiKey}` : "",
+          ...authHeaders,
+          // Explicit apiKey overrides session token when provided
+          ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
         },
         body: JSON.stringify(body),
       });
@@ -136,7 +151,7 @@ export default function PlaygroundPage() {
 
           {/* API Key */}
           <div>
-            <label className="pdfapi-label">API Key</label>
+            <label className="pdfapi-label">API Key (optional — uses your session if blank)</label>
             <input
               className="pdfapi-input"
               type="password"

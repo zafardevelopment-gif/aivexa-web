@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 import { RefreshCw } from "lucide-react";
 
 type LogRow = {
@@ -21,9 +22,20 @@ export default function LogsPage() {
   const [logs, setLogs] = useState<LogRow[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const supabase = useMemo(() => createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
+
+  const getAuthHeader = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return { Authorization: session ? `Bearer ${session.access_token}` : "" };
+  };
+
   const fetchLogs = async () => {
     setLoading(true);
-    const res = await fetch("/api/v1/logs");
+    const headers = await getAuthHeader();
+    const res = await fetch("/api/v1/logs", { headers });
     const data = await res.json();
     setLogs(data.logs ?? []);
     setLoading(false);

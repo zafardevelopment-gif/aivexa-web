@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 interface DayUsage {
   date: string;
@@ -23,10 +24,21 @@ export default function UsagePage() {
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState(30);
 
+  const supabase = useMemo(() => createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
+
+  const getAuthHeader = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return { Authorization: session ? `Bearer ${session.access_token}` : "" };
+  };
+
   async function load() {
     setLoading(true);
     try {
-      const res = await fetch(`/api/v1/usage?days=${range}`);
+      const headers = await getAuthHeader();
+      const res = await fetch(`/api/v1/usage?days=${range}`, { headers });
       if (res.ok) setData(await res.json());
     } finally {
       setLoading(false);

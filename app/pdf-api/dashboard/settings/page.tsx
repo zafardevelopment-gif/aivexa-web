@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 interface UserProfile {
   email: string;
@@ -15,14 +16,27 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const supabase = useMemo(() => createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
+
+  const getAuthHeader = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return { Authorization: session ? `Bearer ${session.access_token}` : "" };
+  };
+
   useEffect(() => {
-    // Fetch basic profile via usage endpoint (has plan info)
-    fetch("/api/v1/usage?days=1")
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (d) setProfile({ email: "", plan_id: d.plan_name, created_at: "" });
-      })
-      .finally(() => setLoading(false));
+    (async () => {
+      const headers = await getAuthHeader();
+      // Fetch basic profile via usage endpoint (has plan info)
+      fetch("/api/v1/usage?days=1", { headers })
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d) setProfile({ email: "", plan_id: d.plan_name, created_at: "" });
+        })
+        .finally(() => setLoading(false));
+    })();
   }, []);
 
   async function saveWebhook(e: React.FormEvent) {

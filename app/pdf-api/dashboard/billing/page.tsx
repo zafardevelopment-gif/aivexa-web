@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 import { Check, Zap } from "lucide-react";
 
 type Plan = {
@@ -20,18 +21,32 @@ export default function BillingPage() {
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
   const [currentPlan, setCurrentPlan] = useState<string>("free");
 
-  useEffect(() => {
-    // Fetch plans from API
-    fetch("/api/v1/plans")
-      .then(r => r.json())
-      .then(d => setPlans(d.plans ?? []))
-      .catch(() => {});
+  const supabase = useMemo(() => createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
 
-    // Fetch current user plan
-    fetch("/api/v1/usage")
-      .then(r => r.json())
-      .then(d => setCurrentPlan(d.plan?.id ?? "free"))
-      .catch(() => {});
+  const getAuthHeader = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return { Authorization: session ? `Bearer ${session.access_token}` : "" };
+  };
+
+  useEffect(() => {
+    (async () => {
+      const headers = await getAuthHeader();
+
+      // Fetch plans from API
+      fetch("/api/v1/plans", { headers })
+        .then(r => r.json())
+        .then(d => setPlans(d.plans ?? []))
+        .catch(() => {});
+
+      // Fetch current user plan
+      fetch("/api/v1/usage", { headers })
+        .then(r => r.json())
+        .then(d => setCurrentPlan(d.plan?.id ?? "free"))
+        .catch(() => {});
+    })();
   }, []);
 
   const formatPrice = (paise: number) => {
