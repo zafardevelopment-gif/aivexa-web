@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Check, Zap } from "lucide-react";
 
@@ -16,38 +16,128 @@ type Plan = {
   features: string[];
 };
 
+declare global {
+  interface Window {
+    Razorpay: new (options: Record<string, unknown>) => { open(): void };
+  }
+}
+
 export default function BillingPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
   const [currentPlan, setCurrentPlan] = useState<string>("free");
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const supabase = useMemo(() => createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   ), []);
 
-  const getAuthHeader = async (): Promise<Record<string, string>> => {
+  const getAuthHeader = useCallback(async (): Promise<Record<string, string>> => {
     const { data: { session } } = await supabase.auth.getSession();
     return { Authorization: session ? `Bearer ${session.access_token}` : "" };
-  };
+  }, [supabase]);
 
   useEffect(() => {
     (async () => {
       const headers = await getAuthHeader();
-
-      // Fetch plans from API
       fetch("/api/v1/plans", { headers })
         .then(r => r.json())
         .then(d => setPlans(d.plans ?? []))
         .catch(() => {});
-
-      // Fetch current user plan
       fetch("/api/v1/usage", { headers })
         .then(r => r.json())
         .then(d => setCurrentPlan(d.plan?.id ?? "free"))
         .catch(() => {});
     })();
-  }, []);
+  }, [getAuthHeader]);
+
+  // Load Razorpay script dynamically
+  const loadRazorpay = (): Promise<boolean> =>
+    new Promise((resolve) => {
+      if (window.Razorpay) { resolve(true); return; }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+
+  const handleUpgrade = async (plan: Plan) => {
+    if (loadingPlan) return;
+    setLoadingPlan(plan.id);
+    try {
+      const loaded = await loadRazorpay();
+      if (!loaded) {
+        alert("Could not load payment gateway. Please check your internet connection.");
+        return;
+      }
+
+      const headers = await getAuthHeader();
+      const price = cycle === "monthly" ? plan.price_monthly : plan.price_yearly;
+
+      const res = await fetch("/api/payments/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...headers },
+        body: JSON.stringify({ planId: plan.id, cycle, amount: price }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(err.error ?? "Failed to create order. Please try again.");
+        return;
+      }
+
+      const { orderId, amount, currency, keyId, userEmail, userName } = await res.json();
+
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const rzp = new window.Razorpay({
+        key: keyId,
+        amount,
+        currency,
+        name: "AIVEXA PDF API",
+        description: `${plan.name} Plan — ${cycle}`,
+        order_id: orderId,
+        prefill: {
+          email: userEmail ?? session?.user?.email ?? "",
+          name: userName ?? session?.user?.user_metadata?.full_name ?? "",
+        },
+        theme: { color: "#6366f1" },
+        handler: async (response: Record<string, string>) => {
+          // Verify payment
+          const verifyHeaders = await getAuthHeader();
+          const verifyRes = await fetch("/api/payments/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", ...verifyHeaders },
+            body: JSON.stringify({
+              orderId: response.razorpay_order_id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+              planId: plan.id,
+              cycle,
+            }),
+          });
+          if (verifyRes.ok) {
+            setCurrentPlan(plan.id);
+            alert(`🎉 Successfully upgraded to ${plan.name}! Your credits have been updated.`);
+          } else {
+            alert("Payment received but verification failed. Please contact support.");
+          }
+        },
+        modal: {
+          ondismiss: () => setLoadingPlan(null),
+        },
+      });
+
+      rzp.open();
+    } catch (e) {
+      console.error(e);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   const formatPrice = (paise: number) => {
     if (paise === 0) return "₹0";
@@ -99,7 +189,9 @@ export default function BillingPage() {
         {plans.map((plan) => {
           const isCurrent = plan.id === currentPlan;
           const isPro = plan.id === "pro";
+          const isFree = plan.price_monthly === 0;
           const price = cycle === "monthly" ? plan.price_monthly : plan.price_yearly;
+          const isLoading = loadingPlan === plan.id;
 
           return (
             <div
@@ -167,9 +259,10 @@ export default function BillingPage() {
               <button
                 className={`pdfapi-btn ${isCurrent ? "pdfapi-btn-secondary" : isPro ? "pdfapi-btn-primary" : "pdfapi-btn-secondary"}`}
                 style={{ width: "100%", justifyContent: "center" }}
-                disabled={isCurrent}
+                disabled={isCurrent || isFree || isLoading}
+                onClick={() => !isCurrent && !isFree && handleUpgrade(plan)}
               >
-                {isCurrent ? "Current Plan" : plan.price_monthly === 0 ? "Get Started" : `Upgrade to ${plan.name}`}
+                {isLoading ? "Opening..." : isCurrent ? "Current Plan" : isFree ? "Get Started" : `Upgrade to ${plan.name}`}
               </button>
             </div>
           );
