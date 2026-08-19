@@ -10,7 +10,12 @@ import { createClient } from "@supabase/supabase-js";
 async function getSessionUser(req: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const accessToken = req.cookies.get("sb-access-token")?.value ?? null;
+  // Accept token from Authorization header OR cookie
+  const authHeader = req.headers.get("authorization");
+  const accessToken =
+    (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null) ??
+    req.cookies.get("sb-access-token")?.value ??
+    null;
   if (!accessToken) return null;
 
   const client = createClient(supabaseUrl, supabaseAnonKey, {

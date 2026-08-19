@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { FileText, CheckCircle, XCircle, Clock, Zap } from "lucide-react";
+import { createClient } from "@supabase/supabase-js";
 
 type UsageData = {
   plan: {
@@ -16,16 +17,25 @@ type UsageData = {
 export default function DashboardOverview() {
   const [usage, setUsage] = useState<UsageData | null>(null);
   const [authError, setAuthError] = useState(false);
+  const supabase = useMemo(() => createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
 
   useEffect(() => {
-    fetch("/api/v1/usage?days=30")
-      .then((r) => {
-        if (r.status === 401) { setAuthError(true); return null; }
-        return r.json();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) { setAuthError(true); return; }
+      fetch("/api/v1/usage?days=30", {
+        headers: { Authorization: `Bearer ${session.access_token}` },
       })
-      .then((d) => { if (d && d.plan) setUsage(d); })
-      .catch(() => {});
-  }, []);
+        .then((r) => {
+          if (r.status === 401) { setAuthError(true); return null; }
+          return r.json();
+        })
+        .then((d) => { if (d && d.plan) setUsage(d); })
+        .catch(() => {});
+    });
+  }, [supabase]);
 
   if (authError) {
     if (typeof window !== "undefined") window.location.href = "/pdf-api/login";
