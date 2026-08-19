@@ -63,6 +63,17 @@ button{font-family:inherit}
 .nav-links a:hover{color:var(--text)}
 .nav-cta{background:var(--indigo);color:#fff!important;padding:.58rem 1.35rem;border-radius:10px;font-weight:600;font-size:.88rem;transition:all .2s;box-shadow:var(--shadow-sm)}
 .nav-cta:hover{background:var(--indigo-dark);box-shadow:var(--shadow-md)}
+/* PDF API nav badge — distinct but not a full button */
+.nav-links a[href="/pdf-api"]{
+  color:var(--indigo)!important;font-weight:600;font-size:.82rem;
+  padding:.28rem .7rem;border-radius:20px;
+  background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);
+  transition:background .18s,border-color .18s;letter-spacing:.01em;
+  outline:none;
+}
+.nav-links a[href="/pdf-api"]:hover{
+  background:rgba(99,102,241,.16);border-color:rgba(99,102,241,.5);
+}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
 .hamburger span{width:24px;height:2px;background:var(--text);transition:all .3s;border-radius:2px}
 .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}

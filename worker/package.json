@@ -1,0 +1,25 @@
+{
+  "name": "aivexa-pdf-worker",
+  "version": "1.0.0",
+  "description": "AIVEXA PDF API — Chromium PDF generation worker",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "bull": "^4.16.5",
+    "ioredis": "^5.4.2",
+    "puppeteer-core": "^22.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

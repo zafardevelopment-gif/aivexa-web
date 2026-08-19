@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
-const links = [
+const links: { href: string; label: string; newTab?: boolean }[] = [
   { href: "/#products", label: "Products" },
   { href: "/#how-it-works", label: "How It Works" },
   { href: "/#why-us", label: "Why AIVEXA" },
@@ -14,6 +14,7 @@ const links = [
   { href: "/store", label: "Digital Products" },
   { href: "/tools", label: "Free Tools" },
   { href: "/blog", label: "Blog" },
+  { href: "/pdf-api", label: "PDF API", newTab: true },
 ];
 
 export default function Nav({ siteName }: { siteName: string }) {
@@ -50,7 +51,12 @@ export default function Nav({ siteName }: { siteName: string }) {
         </Link>
         <div className={`nav-links${open ? " open" : ""}`}>
           {links.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)}>
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              {...(l.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
               {l.label}
             </a>
           ))}
