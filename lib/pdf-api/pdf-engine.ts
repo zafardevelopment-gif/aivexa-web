@@ -187,7 +187,7 @@ async function loadContent(
         return { ok: false, error: "URL_INACCESSIBLE", detail: `HTTP ${response?.status()}` };
       }
     } else if (opts.html) {
-      await page.setContent(opts.html, { waitUntil, timeout });
+      await page.setContent(opts.html, { waitUntil: waitUntil as 'load' | 'domcontentloaded', timeout });
     }
 
     // Optional: wait for a selector
