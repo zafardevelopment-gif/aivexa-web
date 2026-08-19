@@ -99,10 +99,10 @@ export async function validateApiKey(
   if (error || !keyRow) return { ok: false, error: "KEY_NOT_FOUND" };
   if (!keyRow.is_active) return { ok: false, error: "KEY_REVOKED" };
 
-  const user = keyRow.pdfapi_users as Record<string, unknown>;
+  const user = (keyRow.pdfapi_users as unknown) as Record<string, unknown>;
   if (!user.is_active) return { ok: false, error: "ACCOUNT_SUSPENDED" };
 
-  const plan = user.pdfapi_plans as Record<string, unknown>;
+  const plan = (user.pdfapi_plans as unknown) as Record<string, unknown>;
   const creditsUsed = user.credits_used as number;
   const credits = plan.credits as number;
 
