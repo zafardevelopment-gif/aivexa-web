@@ -13,8 +13,11 @@ import { createClient } from "@supabase/supabase-js";
 async function getSessionUser(req: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const accessToken = req.cookies.get("sb-access-token")?.value
-    ?? req.headers.get("x-supabase-auth") ?? null;
+  const authHeader = req.headers.get("authorization");
+  const accessToken =
+    (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null) ??
+    req.cookies.get("sb-access-token")?.value ??
+    req.headers.get("x-supabase-auth") ?? null;
 
   if (!accessToken) return null;
 

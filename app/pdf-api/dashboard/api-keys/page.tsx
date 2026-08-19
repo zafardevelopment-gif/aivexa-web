@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Plus, Eye, EyeOff, Copy, Trash2, RefreshCw, Check } from "lucide-react";
+import { createClient } from "@supabase/supabase-js";
 
 type ApiKey = {
   id: number;
@@ -25,10 +26,20 @@ export default function ApiKeysPage() {
   const [justCreated, setJustCreated] = useState<ApiKey | null>(null);
   const [revealed, setRevealed] = useState<Record<number, boolean>>({});
   const [copied, setCopied] = useState<number | "new" | null>(null);
+  const supabase = useMemo(() => createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
+
+  const getAuthHeader = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session ? { Authorization: `Bearer ${session.access_token}` } : {};
+  };
 
   const fetchKeys = async () => {
     setLoading(true);
-    const res = await fetch("/api/v1/keys");
+    const headers = await getAuthHeader();
+    const res = await fetch("/api/v1/keys", { headers });
     const data = await res.json();
     setKeys(data.keys ?? []);
     setLoading(false);
@@ -38,9 +49,10 @@ export default function ApiKeysPage() {
 
   const createKey = async () => {
     setCreating(true);
+    const headers = await getAuthHeader();
     const res = await fetch("/api/v1/keys", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...headers },
       body: JSON.stringify({ name: newKeyName || undefined, isTest }),
     });
     const data = await res.json();
@@ -55,7 +67,8 @@ export default function ApiKeysPage() {
 
   const revokeKey = async (id: number) => {
     if (!confirm("Revoke this API key? It will stop working immediately.")) return;
-    await fetch(`/api/v1/keys?id=${id}`, { method: "DELETE" });
+    const headers = await getAuthHeader();
+    await fetch(`/api/v1/keys?id=${id}`, { method: "DELETE", headers });
     await fetchKeys();
   };
 
