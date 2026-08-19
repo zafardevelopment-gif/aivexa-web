@@ -45,9 +45,6 @@ export default function Nav({ siteName }: { siteName: string }) {
             priority
             className="brand-logo"
           />
-          <span className="brand-tagline">
-            AI. VISION. AUTOMATION. EXCELLENCE.
-          </span>
         </Link>
         <div className={`nav-links${open ? " open" : ""}`}>
           {links.map((l) => (
