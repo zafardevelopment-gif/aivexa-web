@@ -38,11 +38,19 @@ async function getBrowser(): Promise<Browser> {
   isLaunching = true;
   try {
     // Use local Chromium in dev, @sparticuz/chromium in production (Vercel/serverless)
-    const executablePath =
-      process.env.PUPPETEER_EXEC_PATH ||
-      (process.env.NODE_ENV === "production"
-        ? await chromium.executablePath()
-        : "/usr/bin/google-chrome-stable");
+    let executablePath: string | undefined;
+
+    if (process.env.PUPPETEER_EXEC_PATH) {
+      executablePath = process.env.PUPPETEER_EXEC_PATH;
+      console.log("[pdf-engine] Using PUPPETEER_EXEC_PATH:", executablePath);
+    } else if (process.env.NODE_ENV === "production") {
+      executablePath = await chromium.executablePath();
+      console.log("[pdf-engine] @sparticuz/chromium executablePath:", executablePath);
+    } else {
+      executablePath = undefined; // let puppeteer-core fail gracefully in dev
+    }
+
+    console.log("[pdf-engine] Launching browser with args:", chromium.args.slice(0, 3));
 
     browser = await puppeteer.launch({
       headless: chromium.headless,
@@ -50,6 +58,8 @@ async function getBrowser(): Promise<Browser> {
       executablePath,
       defaultViewport: chromium.defaultViewport,
     });
+
+    console.log("[pdf-engine] Browser launched successfully");
 
     browser.on("disconnected", () => {
       console.error("[pdf-engine] Browser disconnected — will restart on next request");
