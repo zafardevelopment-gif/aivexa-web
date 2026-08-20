@@ -1,35 +1,21 @@
 /**
  * AIVEXA PDF API — Puppeteer PDF Engine
  *
- * Wraps Puppeteer with:
- *  - Isolated browser context per request (no cross-request data leak)
- *  - Configurable timeout and viewport
- *  - All standard PDF options (format, margins, headers, footers, etc.)
- *  - Screenshot support (PNG/JPEG)
- *  - Graceful browser restart on crash
- *
- * Decision: Puppeteer over Playwright because:
- *  - Mature, battle-tested Chromium integration
- *  - Simpler browser reuse pattern
- *  - Smaller Docker image (chromium-only)
- *  - Official @puppeteer/browsers for reliable Chromium management
+ * Uses puppeteer-core + @sparticuz/chromium for Vercel serverless compatibility.
+ * In production: @sparticuz/chromium provides a Lambda-compatible Chromium binary.
+ * In development: falls back to local Chromium via PUPPETEER_EXEC_PATH env var.
  */
 
-import puppeteer, { Browser, Page, PDFOptions, ScreenshotOptions } from "puppeteer";
+import puppeteer, { Browser, Page, PDFOptions, ScreenshotOptions } from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
 // ── Browser singleton ──────────────────────────────────────────
 
 let browser: Browser | null = null;
 let isLaunching = false;
 
-const BROWSER_ARGS = [
-  "--no-sandbox",
-  "--disable-setuid-sandbox",
-  "--disable-dev-shm-usage",
+const EXTRA_ARGS = [
   "--disable-accelerated-2d-canvas",
-  "--disable-gpu",
-  "--no-first-run",
-  "--no-zygote",
   "--disable-extensions",
   "--disable-background-networking",
   "--disable-default-apps",
@@ -45,17 +31,24 @@ async function getBrowser(): Promise<Browser> {
   if (browser?.connected) return browser;
 
   if (isLaunching) {
-    // Wait for the in-flight launch
     await new Promise((r) => setTimeout(r, 500));
     return getBrowser();
   }
 
   isLaunching = true;
   try {
+    // Use local Chromium in dev, @sparticuz/chromium in production (Vercel/serverless)
+    const executablePath =
+      process.env.PUPPETEER_EXEC_PATH ||
+      (process.env.NODE_ENV === "production"
+        ? await chromium.executablePath()
+        : "/usr/bin/google-chrome-stable");
+
     browser = await puppeteer.launch({
-      headless: true,
-      args: BROWSER_ARGS,
-      executablePath: process.env.PUPPETEER_EXEC_PATH || undefined,
+      headless: chromium.headless,
+      args: [...chromium.args, ...EXTRA_ARGS],
+      executablePath,
+      defaultViewport: chromium.defaultViewport,
     });
 
     browser.on("disconnected", () => {
@@ -85,42 +78,25 @@ export type MarginOptions = {
 };
 
 export type PdfRequestOptions = {
-  // Input (one of these required)
   html?: string;
   url?: string;
-
-  // Page format
   format?: PdfFormat;
   orientation?: PdfOrientation;
   width?: string;
   height?: string;
-
-  // Margins
   margin?: MarginOptions;
-
-  // Rendering
   printBackground?: boolean;
   scale?: number;
   mediaType?: "print" | "screen";
-
-  // JS wait options
   waitForSelector?: string;
   waitUntil?: "load" | "domcontentloaded" | "networkidle0" | "networkidle2";
-  delay?: number;  // ms
-
-  // Headers / footers
+  delay?: number;
   displayHeaderFooter?: boolean;
   headerTemplate?: string;
   footerTemplate?: string;
-
-  // PDF metadata
   title?: string;
-
-  // Viewport
   viewportWidth?: number;
   viewportHeight?: number;
-
-  // Timeout (ms, default 30s)
   timeout?: number;
 };
 
@@ -131,7 +107,7 @@ export type ScreenshotRequestOptions = {
   fullPage?: boolean;
   viewportWidth?: number;
   viewportHeight?: number;
-  quality?: number;  // JPEG only, 0-100
+  quality?: number;
   waitUntil?: "load" | "domcontentloaded" | "networkidle0" | "networkidle2";
   delay?: number;
   waitForSelector?: string;
@@ -156,7 +132,6 @@ async function createPage(
     height: opts.viewportHeight ?? 800,
   });
 
-  // Block unnecessary resource types to speed up rendering
   await page.setRequestInterception(true);
   page.on("request", (req) => {
     const type = req.resourceType();
@@ -179,10 +154,7 @@ async function loadContent(
 
   try {
     if (opts.url) {
-      const response = await page.goto(opts.url, {
-        waitUntil,
-        timeout,
-      });
+      const response = await page.goto(opts.url, { waitUntil, timeout });
       if (!response || response.status() >= 400) {
         return { ok: false, error: "URL_INACCESSIBLE", detail: `HTTP ${response?.status()}` };
       }
@@ -190,12 +162,10 @@ async function loadContent(
       await page.setContent(opts.html, { waitUntil: waitUntil as 'load' | 'domcontentloaded', timeout });
     }
 
-    // Optional: wait for a selector
     if (opts.waitForSelector) {
       await page.waitForSelector(opts.waitForSelector, { timeout: 10_000 });
     }
 
-    // Optional: artificial delay
     if (opts.delay && opts.delay > 0 && opts.delay <= 10_000) {
       await new Promise((r) => setTimeout(r, opts.delay));
     }
@@ -222,7 +192,6 @@ export async function generatePdf(opts: PdfRequestOptions): Promise<EngineResult
       viewportHeight: opts.viewportHeight,
     });
 
-    // Set media type
     if (opts.mediaType) {
       await page.emulateMediaType(opts.mediaType);
     }
@@ -230,7 +199,6 @@ export async function generatePdf(opts: PdfRequestOptions): Promise<EngineResult
     const loadResult = await loadContent(page, opts, timeout);
     if (!loadResult.ok) return loadResult;
 
-    // Build PDF options
     const pdfOpts: PDFOptions = {
       format: (opts.format ?? "A4") as PDFOptions["format"],
       landscape: opts.orientation === "landscape",
@@ -242,7 +210,6 @@ export async function generatePdf(opts: PdfRequestOptions): Promise<EngineResult
       footerTemplate: opts.footerTemplate ?? "<span></span>",
     };
 
-    // Custom dimensions override format
     if (opts.width && opts.height) {
       delete pdfOpts.format;
       pdfOpts.width = opts.width;
@@ -254,7 +221,6 @@ export async function generatePdf(opts: PdfRequestOptions): Promise<EngineResult
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[pdf-engine] PDF generation error:", msg);
-
     if (msg.includes("timeout") || msg.includes("Timeout")) {
       return { ok: false, error: "RENDERING_TIMEOUT", detail: msg };
     }
