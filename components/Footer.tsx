@@ -57,9 +57,6 @@ export default function Footer({ settings }: { settings: Settings }) {
       </div>
       <div className="footer-bottom">
         <p>Copyright &copy; {new Date().getFullYear()} {settings.site_name}. All Rights Reserved.</p>
-        <p>
-          Legal Name: {settings.legal_name} | GST: {settings.gst_number}
-        </p>
       </div>
     </footer>
   );

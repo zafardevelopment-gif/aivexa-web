@@ -501,8 +501,7 @@ export default async function Home() {
                       Legal Name: {settings.legal_name}
                       <br />
                       Trade Name: {settings.trade_name} ({settings.business_type})
-                      <br />
-                      GST: {settings.gst_number}
+                      
                     </p>
                   </div>
                 </div>

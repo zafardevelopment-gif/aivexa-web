@@ -70,11 +70,6 @@ const organizationJsonLd = {
   email: "aivexallp@gmail.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress:
-      "2nd Floor, Gehumi Shivdhara Road, Light Pink Building, Front of Dr. Abu Zafar Clinic",
-    addressLocality: "Darbhanga",
-    addressRegion: "Bihar",
-    postalCode: "846004",
     addressCountry: "IN",
   },
 };
