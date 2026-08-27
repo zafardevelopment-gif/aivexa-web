@@ -64,7 +64,7 @@ const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "AIVEXA",
-  legalName: "MD ZAFAR EQBAL",
+  legalName: "AIVEXA",
   url: SITE_URL,
   logo: `${SITE_URL}/aivexa-logo.png`,
   email: "aivexallp@gmail.com",

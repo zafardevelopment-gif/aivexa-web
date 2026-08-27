@@ -14,15 +14,15 @@ export const fallbackSettings: Settings = {
   hero_title: "One AI platform for real-world operations",
   hero_subtitle:
     "AIVEXA builds AI systems that answer your calls, manage your books, schedule your appointments, collect your rent, run your events and protect your vehicle — on WhatsApp, Voice and smart QR, in your language.",
-  legal_name: "MD ZAFAR EQBAL",
-  trade_name: "MART NEST",
-  gst_number: "10AAKPE8885H1ZL",
+  legal_name: "AIVEXA",
+  trade_name: "AIVEXA (Proprietorship)",
+  gst_number: "",
   business_type: "Proprietorship",
-  contact_email: "martnest01@gmail.com",
+  contact_email: "aivexallp@gmail.com",
   contact_phone: "+91-XXXXXXXXXX",
   address:
     "2nd Floor, Gehumi Shivdhara Road, Light Pink Building, Front of Dr. Abu Zafar Clinic, Darbhanga, Bihar - 846004, India",
-  city: "Darbhanga, Bihar 846004",
+  city: "",
   country: "India",
   footer_about:
     "AI-powered automation across WhatsApp, Voice and smart QR. Secure, scalable and intelligent systems built for real-world operations.",
@@ -303,7 +303,7 @@ export const fallbackPages: Record<string, Page> = {
 <h3>9. Important Disclaimer</h3>
 <p>AIVEXA provides digital automation systems and does not directly process financial transactions. All financial data entered by users is managed within the user's own account and is the responsibility of the user. AIVEXA acts solely as a technology service provider.</p>
 <h3>10. Contact for Privacy Matters</h3>
-<div class="legal-highlight"><p>For any privacy-related questions or requests, please contact us at: <a href="mailto:martnest01@gmail.com">martnest01@gmail.com</a></p></div>`,
+<div class="legal-highlight"><p>For any privacy-related questions or requests, please contact us at: <a href="mailto:aivexallp@gmail.com">aivexallp@gmail.com</a></p></div>`,
   },
   terms: {
     slug: "terms",
@@ -351,7 +351,7 @@ export const fallbackPages: Record<string, Page> = {
 <h3>12. Governing Law</h3>
 <p>These Terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts of Darbhanga, Bihar, India.</p>
 <h3>13. Contact</h3>
-<div class="legal-highlight"><p>For questions regarding these Terms, contact us at: <a href="mailto:martnest01@gmail.com">martnest01@gmail.com</a></p></div>`,
+<div class="legal-highlight"><p>For questions regarding these Terms, contact us at: <a href="mailto:aivexallp@gmail.com">aivexallp@gmail.com</a></p></div>`,
   },
   "miftah-privacy": {
     slug: "miftah-privacy",
@@ -401,7 +401,7 @@ export const fallbackPages: Record<string, Page> = {
     subtitle: "Request removal of your personal or business data",
     content: `<div class="legal-highlight" style="text-align:center">
 <h3 style="margin-top:0">Request Data Deletion</h3>
-<p>If you would like to request deletion of your personal or business data, please email us at <a href="mailto:martnest01@gmail.com"><strong>martnest01@gmail.com</strong></a>.</p>
+<p>If you would like to request deletion of your personal or business data, please email us at <a href="mailto:aivexallp@gmail.com"><strong>aivexallp@gmail.com</strong></a>.</p>
 <p>We will process and complete your request within <strong>7 working days</strong>.</p>
 </div>
 <h3>How It Works</h3>
