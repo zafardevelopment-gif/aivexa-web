@@ -11,65 +11,56 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="max-w-3xl mx-auto px-6 py-16">
-      <nav className="text-sm text-gray-500 mb-6">
-        <Link href="/" className="hover:underline">
-          Home
-        </Link>{" "}
-        › Contact
-      </nav>
-
-      <h1 className="text-3xl font-bold mb-2">Contact Us</h1>
-      <p className="text-gray-600 mb-10">
-        We&rsquo;d love to hear from you — whether you&rsquo;re exploring our AI products,
-        need help with a free tool, or just want to say hello.
-      </p>
-
-      <div className="grid gap-10 md:grid-cols-2">
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-lg font-semibold mb-1">Email</h2>
-            <a href="mailto:aivexallp@gmail.com" className="text-blue-600 hover:underline">
-              aivexallp@gmail.com
-            </a>
+    <main>
+      <section className="page-hero">
+        <div className="container">
+          <div className="section-label" style={{ justifyContent: "center" }}>
+            Get in Touch
           </div>
-
-          <div>
-            <h2 className="text-lg font-semibold mb-1">WhatsApp</h2>
-            <a
-              href="https://wa.me/919204298771"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              +91-9204298771
-            </a>
+          <h1 className="section-title">Contact Us</h1>
+          <p className="section-subtitle">
+            We&rsquo;d love to hear from you — whether you&rsquo;re exploring our AI products,
+            need help with a free tool, or just want to say hello.
+          </p>
+          <div className="breadcrumb">
+            <Link href="/">Home</Link>
+            <span>›</span>
+            <span>Contact</span>
           </div>
+        </div>
+      </section>
 
+      <section className="legal-page-content">
+        <div style={{ display: "grid", gap: "3rem", gridTemplateColumns: "1fr 1fr" }}>
           <div>
-            <h2 className="text-lg font-semibold mb-1">Location</h2>
-            <p className="text-gray-600">India</p>
-          </div>
-
-          <div>
-            <h2 className="text-lg font-semibold mb-1">Book a Demo</h2>
-            <p className="text-gray-600 mb-2">
-              Interested in AI Munim, Clinic Voice, or any other AIVEXA product?
+            <h3>Email</h3>
+            <p>
+              <a href="mailto:aivexallp@gmail.com">aivexallp@gmail.com</a>
             </p>
-            <Link
-              href="/#contact"
-              className="inline-block bg-black text-white text-sm px-4 py-2 rounded hover:bg-gray-800 transition-colors"
-            >
+
+            <h3>WhatsApp</h3>
+            <p>
+              <a href="https://wa.me/919204298771" target="_blank" rel="noopener noreferrer">
+                +91-9204298771
+              </a>
+            </p>
+
+            <h3>Location</h3>
+            <p>India</p>
+
+            <h3>Book a Demo</h3>
+            <p>Interested in AI Munim, Clinic Voice, or any other AIVEXA product?</p>
+            <Link href="/#contact" className="btn btn-primary" style={{ display: "inline-block", marginTop: "0.5rem" }}>
               Book a free demo →
             </Link>
           </div>
-        </div>
 
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Send us a message</h2>
-          <ContactForm />
+          <div>
+            <h3>Send us a message</h3>
+            <ContactForm />
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
