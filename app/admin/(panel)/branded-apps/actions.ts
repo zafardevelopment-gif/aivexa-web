@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase-admin";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { revalidatePath } from "next/cache";
 
 export type BrandedApp = {
@@ -16,6 +16,13 @@ export type BrandedApp = {
   short_description: string;
   full_description: string;
   release_track: string;
+  category: string;
+  content_rating: string;
+  default_language: string;
+  website_url: string | null;
+  email: string | null;
+  phone: string | null;
+  privacy_policy_url: string | null;
   created_at: string;
   updated_at: string;
   publishing_jobs?: PublishingJob[];
@@ -32,7 +39,7 @@ export type PublishingJob = {
 };
 
 export async function getBrandedApps(): Promise<{ apps: BrandedApp[]; error: string | null }> {
-  const supabase = createClient();
+  const supabase = supabaseAdmin()!;
   const { data, error } = await supabase
     .from("branded_apps")
     .select("*, publishing_jobs(id, status, current_step, created_at, updated_at)")
@@ -43,7 +50,7 @@ export async function getBrandedApps(): Promise<{ apps: BrandedApp[]; error: str
 }
 
 export async function getBrandedApp(id: string): Promise<{ app: BrandedApp | null; error: string | null }> {
-  const supabase = createClient();
+  const supabase = supabaseAdmin()!;
   const { data, error } = await supabase
     .from("branded_apps")
     .select("*, publishing_jobs(*)")
@@ -55,7 +62,7 @@ export async function getBrandedApp(id: string): Promise<{ app: BrandedApp | nul
 }
 
 export async function createBrandedApp(formData: FormData): Promise<{ id: string | null; error: string | null }> {
-  const supabase = createClient();
+  const supabase = supabaseAdmin()!;
 
   const payload = {
     tenant_name: formData.get("tenant_name") as string,
@@ -105,7 +112,7 @@ export async function updateBrandedApp(
   id: string,
   updates: Partial<BrandedApp>
 ): Promise<{ error: string | null }> {
-  const supabase = createClient();
+  const supabase = supabaseAdmin()!;
   const { error } = await supabase
     .from("branded_apps")
     .update({ ...updates, updated_at: new Date().toISOString() })
@@ -118,7 +125,7 @@ export async function updateBrandedApp(
 }
 
 export async function deleteBrandedApp(id: string): Promise<{ error: string | null }> {
-  const supabase = createClient();
+  const supabase = supabaseAdmin()!;
   const { error } = await supabase.from("branded_apps").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/admin/branded-apps");
@@ -126,7 +133,7 @@ export async function deleteBrandedApp(id: string): Promise<{ error: string | nu
 }
 
 export async function createPublishingJob(brandedAppId: string): Promise<{ jobId: string | null; error: string | null }> {
-  const supabase = createClient();
+  const supabase = supabaseAdmin()!;
 
   // Check no active job exists
   const { data: existing } = await supabase
