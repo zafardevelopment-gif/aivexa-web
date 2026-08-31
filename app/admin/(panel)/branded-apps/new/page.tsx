@@ -387,7 +387,7 @@ export default function NewBrandedAppPage() {
               {form.release_track === "production" && "🌍 Production — available to all users worldwide. Full review required."}
             </div>
 
-            <InfoBox style={{ marginTop: "1rem" }}>
+            <InfoBox>
               Country targeting is configured per-track in the Play Console. By default, your app will be available in all countries permitted under your developer account.
             </InfoBox>
           </div>
