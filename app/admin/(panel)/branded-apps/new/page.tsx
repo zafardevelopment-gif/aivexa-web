@@ -149,6 +149,8 @@ export default function NewBrandedAppPage() {
   const [form, setForm] = useState<FormState>(DEFAULT);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [draftSaved, setDraftSaved] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const set = (key: keyof FormState) => (val: string) => setForm(f => ({ ...f, [key]: val }));
@@ -182,6 +184,18 @@ export default function NewBrandedAppPage() {
   };
 
   const back = () => { setErrors({}); setStep(s => Math.max(s - 1, 1)); };
+  const saveDraft = async () => {
+    setSavingDraft(true);
+    setDraftSaved(false);
+    const fd = new FormData();
+    Object.entries(form).forEach(([k, v]) => fd.set(k, v));
+    fd.set("status", "draft");
+    const { error } = await createBrandedApp(fd);
+    setSavingDraft(false);
+    if (!error) { setDraftSaved(true); setTimeout(() => setDraftSaved(false), 3000); }
+    else { setSubmitError(error); }
+  };
+
 
   const handleSubmit = async () => {
     const allErrors = { ...validate(1), ...validate(3), ...validate(5) };
@@ -490,15 +504,20 @@ export default function NewBrandedAppPage() {
             <ArrowLeft size={15} /> Back
           </button>
 
-          {step < 6 ? (
-            <button type="button" onClick={next} className="btn-primary" style={{ fontSize: ".88rem", padding: ".6rem 1.4rem" }}>
-              Next <ArrowRight size={15} />
+           <div style={{ display: "flex", gap: ".6rem", alignItems: "center" }}>
+            <button type="button" onClick={saveDraft} disabled={savingDraft} className="btn-secondary" style={{ fontSize: ".88rem", padding: ".6rem 1.2rem", display: "flex", alignItems: "center", gap: ".35rem" }}>
+              {savingDraft ? <><Loader2 size={14} className="spin" /> Saving…</> : draftSaved ? <><Check size={14} /> Saved!</> : <>Save Draft</>}
             </button>
-          ) : (
-            <button type="button" onClick={handleSubmit} className="btn-primary" disabled={submitting} style={{ fontSize: ".88rem", padding: ".6rem 1.4rem" }}>
-              {submitting ? <><Loader2 size={15} className="spin" /> Creating…</> : <><Check size={15} /> Create App</>}
-            </button>
-          )}
+            {step < 6 ? (
+              <button type="button" onClick={next} className="btn-primary" style={{ fontSize: ".88rem", padding: ".6rem 1.4rem" }}>
+                Next <ArrowRight size={15} />
+              </button>
+            ) : (
+              <button type="button" onClick={handleSubmit} className="btn-primary" disabled={submitting} style={{ fontSize: ".88rem", padding: ".6rem 1.4rem" }}>
+                {submitting ? <><Loader2 size={15} className="spin" /> Creating…</> : <><Check size={15} /> Create App</>}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
