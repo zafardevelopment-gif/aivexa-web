@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import Analytics from "@/components/Analytics";
 import "./globals.css";
 
@@ -21,63 +20,36 @@ export const metadata: Metadata = {
   description:
     "AIVEXA builds enterprise-grade AI systems that answer calls, manage accounts and schedule appointments — on WhatsApp and Voice, in your language. Also home to 89+ free online tools: PDF, image, calculators, generators and Islamic tools.",
   keywords: [
-    "AIVEXA",
-    "AI Munim",
-    "Clinic Voice",
-    "WhatsApp Automation",
-    "AI Voice Agent",
-    "AI Hospital",
-    "AI Camp",
-    "SafeRide QR",
-    "Healthcare AI",
-    "free online tools",
-    "free PDF tools",
-    "free image tools",
+    "AIVEXA", "AI Munim", "Clinic Voice", "WhatsApp Automation",
+    "AI Voice Agent", "AI Hospital", "AI Camp", "SafeRide QR",
+    "Healthcare AI", "free online tools", "free PDF tools", "free image tools",
   ],
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     title: "AIVEXA LLP — AI. Vision. Automation. Excellence.",
-    description:
-      "Enterprise-grade AI automation for clinics, hospitals and businesses — delivered on WhatsApp and Voice. Plus 89+ free online tools.",
-    type: "website",
-    url: SITE_URL,
-    siteName: "AIVEXA",
-    locale: "en_IN",
+    description: "Enterprise-grade AI automation for clinics, hospitals and businesses — delivered on WhatsApp and Voice. Plus 89+ free online tools.",
+    type: "website", url: SITE_URL, siteName: "AIVEXA", locale: "en_IN",
     images: [{ url: "/aivexa-logo.png", width: 512, height: 512, alt: "AIVEXA" }],
   },
   twitter: {
     card: "summary",
     title: "AIVEXA LLP — AI. Vision. Automation. Excellence.",
-    description:
-      "Enterprise-grade AI automation, plus 89+ free online tools — PDF, image, calculators, generators & Islamic tools.",
+    description: "Enterprise-grade AI automation, plus 89+ free online tools — PDF, image, calculators, generators & Islamic tools.",
     images: ["/aivexa-logo.png"],
   },
-  icons: {
-    icon: "/aivexa-logo-mark.svg",
-  },
+  icons: { icon: "/aivexa-logo-mark.svg" },
 };
 
 const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "AIVEXA",
-  legalName: "AIVEXA",
-  url: SITE_URL,
-  logo: `${SITE_URL}/aivexa-logo.png`,
-  email: "aivexallp@gmail.com",
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "IN",
-  },
+  "@context": "https://schema.org", "@type": "Organization",
+  name: "AIVEXA", legalName: "AIVEXA", url: SITE_URL,
+  logo: `${SITE_URL}/aivexa-logo.png`, email: "aivexallp@gmail.com",
+  address: { "@type": "PostalAddress", addressCountry: "IN" },
 };
 
 const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "AIVEXA",
-  url: SITE_URL,
+  "@context": "https://schema.org", "@type": "WebSite",
+  name: "AIVEXA", url: SITE_URL,
   potentialAction: {
     "@type": "SearchAction",
     target: `${SITE_URL}/tools?q={search_term_string}`,
@@ -90,6 +62,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5989066360111436"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={inter.variable}>
         <script
           type="application/ld+json"
@@ -98,12 +77,6 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5989066360111436"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
         <Analytics />
         {children}
