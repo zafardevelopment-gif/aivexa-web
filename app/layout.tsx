@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Analytics from "@/components/Analytics";
+import { siteConfig, SITE_URL } from "@/lib/seo/config";
 import "./globals.css";
 
 const inter = Inter({
@@ -9,47 +10,89 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL = "https://www.aivexallp.com";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "AIVEXA LLP — AI. Vision. Automation. Excellence.",
-    template: "%s | AIVEXA",
+    default: `${siteConfig.legalName} — ${siteConfig.tagline}`,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "AIVEXA builds enterprise-grade AI systems that answer calls, manage accounts and schedule appointments — on WhatsApp and Voice, in your language. Also home to 89+ free online tools: PDF, image, calculators, generators and Islamic tools.",
-  keywords: [
-    "AIVEXA", "AI Munim", "Clinic Voice", "WhatsApp Automation",
-    "AI Voice Agent", "AI Hospital", "AI Camp", "SafeRide QR",
-    "Healthcare AI", "free online tools", "free PDF tools", "free image tools",
-  ],
+  description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
+  applicationName: siteConfig.name,
+  authors: [{ name: siteConfig.legalName }],
+  creator: siteConfig.legalName,
+  publisher: siteConfig.legalName,
   alternates: { canonical: "/" },
+  manifest: "/manifest.webmanifest",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  verification: {
+    google: siteConfig.verification.google,
+    other: siteConfig.verification.bing
+      ? { "msvalidate.01": siteConfig.verification.bing }
+      : undefined,
+  },
   openGraph: {
-    title: "AIVEXA LLP — AI. Vision. Automation. Excellence.",
-    description: "Enterprise-grade AI automation for clinics, hospitals and businesses — delivered on WhatsApp and Voice. Plus 89+ free online tools.",
-    type: "website", url: SITE_URL, siteName: "AIVEXA", locale: "en_IN",
-    images: [{ url: "/aivexa-logo.png", width: 512, height: 512, alt: "AIVEXA" }],
+    title: `${siteConfig.legalName} — ${siteConfig.tagline}`,
+    description: siteConfig.description,
+    type: "website",
+    url: SITE_URL,
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
+    // Dynamic OG image (app/opengraph-image.tsx) is picked up automatically;
+    // this explicit entry keeps the absolute URL correct for shares.
   },
   twitter: {
-    card: "summary",
-    title: "AIVEXA LLP — AI. Vision. Automation. Excellence.",
-    description: "Enterprise-grade AI automation, plus 89+ free online tools — PDF, image, calculators, generators & Islamic tools.",
-    images: ["/aivexa-logo.png"],
+    card: "summary_large_image",
+    title: `${siteConfig.legalName} — ${siteConfig.tagline}`,
+    description: siteConfig.description,
+    creator: siteConfig.twitterHandle,
   },
-  icons: { icon: "/aivexa-logo-mark.svg" },
+  icons: {
+    icon: [
+      { url: "/aivexa-logo-mark.svg", type: "image/svg+xml" },
+      { url: "/aivexa-logo.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/aivexa-logo.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: siteConfig.themeColor,
+  width: "device-width",
+  initialScale: 1,
 };
 
 const organizationJsonLd = {
-  "@context": "https://schema.org", "@type": "Organization",
-  name: "AIVEXA", legalName: "AIVEXA", url: SITE_URL,
-  logo: `${SITE_URL}/aivexa-logo.png`, email: "aivexallp@gmail.com",
-  address: { "@type": "PostalAddress", addressCountry: "IN" },
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  legalName: siteConfig.entity.legalName,
+  url: SITE_URL,
+  logo: `${SITE_URL}${siteConfig.logoPath}`,
+  email: siteConfig.entity.email,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: siteConfig.entity.address.locality,
+    addressRegion: siteConfig.entity.address.region,
+    addressCountry: siteConfig.entity.address.country,
+  },
 };
 
 const websiteJsonLd = {
-  "@context": "https://schema.org", "@type": "WebSite",
-  name: "AIVEXA", url: SITE_URL,
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: SITE_URL,
   potentialAction: {
     "@type": "SearchAction",
     target: `${SITE_URL}/tools?q={search_term_string}`,
@@ -61,7 +104,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang={siteConfig.htmlLang}>
       <head>
         <script
           async

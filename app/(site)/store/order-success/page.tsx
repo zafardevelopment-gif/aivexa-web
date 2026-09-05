@@ -6,6 +6,8 @@ import { formatPrice } from "@/lib/digital-products";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = { robots: { index: false, follow: false } };
+
 async function getOrder(orderId: string) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;

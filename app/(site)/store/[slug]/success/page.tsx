@@ -6,6 +6,8 @@ import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = { robots: { index: false, follow: false } };
+
 async function getOrderByRazorpayId(orderId: string) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;

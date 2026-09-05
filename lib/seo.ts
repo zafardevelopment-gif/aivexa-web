@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { getCategory } from "./tools-registry";
 import { getToolSeoOverride } from "./tool-seo-overrides";
 import type { BlogPost } from "./blog-posts";
+import { SITE_URL } from "./seo/config";
 
-export const SITE_URL = "https://www.aivexallp.com";
+export { SITE_URL };
 
 /**
  * Builds full page metadata for a tool page: keeps the page's own

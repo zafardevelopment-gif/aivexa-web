@@ -111,3 +111,16 @@ export async function getPage(slug: string): Promise<Page | null> {
   }
   return fallbackPages[slug] ?? null;
 }
+
+/**
+ * List every content-page slug for the sitemap. Supabase-first, with a
+ * fallback to the built-in legal pages so the sitemap is never empty.
+ */
+export async function getAllPageSlugs(): Promise<string[]> {
+  const db = supabase();
+  if (db) {
+    const { data } = await db.from("aivexa_pages").select("slug");
+    if (data && data.length) return data.map((r) => r.slug as string);
+  }
+  return Object.keys(fallbackPages);
+}
