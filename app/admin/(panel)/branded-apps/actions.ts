@@ -23,6 +23,8 @@ export type BrandedApp = {
   email: string | null;
   phone: string | null;
   privacy_policy_url: string | null;
+  aab_path?: string | null;
+  aab_version_code?: number | null;
   created_at: string;
   updated_at: string;
   publishing_jobs?: PublishingJob[];
@@ -161,4 +163,16 @@ export async function createPublishingJob(brandedAppId: string): Promise<{ jobId
   revalidatePath("/admin/branded-apps");
   revalidatePath(`/admin/branded-apps/${brandedAppId}`);
   return { jobId: data.id, error: null };
+}
+
+export async function registerAab(appId: string, path: string): Promise<{ error: string | null }> {
+  const db = supabaseAdmin();
+  if (!db) return { error: "Server not configured." };
+  const { error } = await db
+    .from("branded_apps")
+    .update({ aab_path: path })
+    .eq("id", appId);
+  if (error) return { error: error.message };
+  revalidatePath(`/admin/branded-apps/${appId}`);
+  return { error: null };
 }

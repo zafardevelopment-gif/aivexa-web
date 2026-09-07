@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { getBrandedApp, createPublishingJob, type BrandedApp, type PublishingJob } from "../actions";
+import { getBrandedApp, createPublishingJob, registerAab, type BrandedApp, type PublishingJob } from "../actions";
 import {
   ArrowLeft, Send, RefreshCw, CheckCircle2, Clock, AlertCircle,
   Loader2, Package, Edit2, Globe, Palette, FileText, ShieldCheck,
@@ -79,13 +79,48 @@ export default function BrandedAppDetailPage() {
 
   useEffect(() => { load(); }, [id]);
 
+  const [uploadingAab, setUploadingAab] = useState(false);
+
+  const handleAabUpload = async (file: File) => {
+    setUploadingAab(true);
+    setMsg(null);
+    try {
+      const res = await fetch("/api/admin/branded-apps/aab-upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ appId: id }),
+      });
+      const { signedUrl, path, error } = await res.json();
+      if (!res.ok || !signedUrl) throw new Error(error || "Could not get upload URL");
+      const up = await fetch(signedUrl, { method: "PUT", headers: { "Content-Type": "application/octet-stream" }, body: file });
+      if (!up.ok) throw new Error("Upload to storage failed");
+      const reg = await registerAab(id, path);
+      if (reg.error) throw new Error(reg.error);
+      setMsg({ text: "AAB uploaded successfully.", ok: true });
+      load();
+    } catch (e) {
+      setMsg({ text: e instanceof Error ? e.message : "AAB upload failed", ok: false });
+    }
+    setUploadingAab(false);
+  };
+
   const handlePublish = async () => {
     if (!confirm("Start a new publishing job for this app?")) return;
     setPublishing(true);
-    const { error } = await createPublishingJob(id);
+    const { jobId, error } = await createPublishingJob(id);
+    if (error || !jobId) { setPublishing(false); setMsg({ text: error || "Could not create job", ok: false }); return; }
+    setMsg({ text: "Job created — uploading to Google Play…", ok: true });
+    load();
+    const res = await fetch("/api/admin/branded-apps/run-job", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jobId }),
+    });
+    const data = await res.json().catch(() => ({}));
     setPublishing(false);
-    if (error) setMsg({ text: error, ok: false });
-    else { setMsg({ text: "Publishing job created! The build pipeline will start shortly.", ok: true }); load(); }
+    if (res.ok) setMsg({ text: `Submitted to Google Play (version code ${data.versionCode}).`, ok: true });
+    else setMsg({ text: data.error || "Publishing failed. Check the job log.", ok: false });
+    load();
   };
 
   if (loading) return (
@@ -119,6 +154,12 @@ export default function BrandedAppDetailPage() {
           </div>
         </div>
         <Badge label={statusCfg.label} color={statusCfg.color} />
+        <label className="btn-secondary" style={{ fontSize: ".84rem", padding: ".5rem .9rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}>
+          {uploadingAab ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : null}
+          {uploadingAab ? "Uploading…" : app.aab_path ? "Replace AAB" : "Upload AAB"}
+          <input type="file" accept=".aab" style={{ display: "none" }} disabled={uploadingAab}
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleAabUpload(f); e.target.value = ""; }} />
+        </label>
         {canPublish && (
           <button className="btn-primary" onClick={handlePublish} disabled={publishing} style={{ fontSize: ".86rem", padding: ".55rem 1.2rem", gap: 7 }}>
             {publishing ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Send size={14} />}
