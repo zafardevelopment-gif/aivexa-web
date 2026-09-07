@@ -26,7 +26,8 @@
     "qrcode": "^1.5.4",
     "razorpay": "^2.9.6",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "@vercel/blob": "^2.0.0"
   },
   "devDependencies": {
     "@types/jsbarcode": "^3.11.4",

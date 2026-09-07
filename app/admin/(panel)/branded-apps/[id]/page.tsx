@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { upload } from "@vercel/blob/client";
 import { getBrandedApp, createPublishingJob, registerAab, type BrandedApp, type PublishingJob } from "../actions";
 import {
   ArrowLeft, Send, RefreshCw, CheckCircle2, Clock, AlertCircle,
@@ -85,16 +86,12 @@ export default function BrandedAppDetailPage() {
     setUploadingAab(true);
     setMsg(null);
     try {
-      const res = await fetch("/api/admin/branded-apps/aab-upload-url", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ appId: id }),
+      const blob = await upload(`branded-apps/${id}.aab`, file, {
+        access: "public",
+        handleUploadUrl: "/api/admin/branded-apps/aab-upload-url",
+        contentType: "application/octet-stream",
       });
-      const { signedUrl, path, error } = await res.json();
-      if (!res.ok || !signedUrl) throw new Error(error || "Could not get upload URL");
-      const up = await fetch(signedUrl, { method: "PUT", headers: { "Content-Type": "application/octet-stream" }, body: file });
-      if (!up.ok) throw new Error("Upload to storage failed");
-      const reg = await registerAab(id, path);
+      const reg = await registerAab(id, blob.url);
       if (reg.error) throw new Error(reg.error);
       setMsg({ text: "AAB uploaded successfully.", ok: true });
       load();

@@ -70,6 +70,11 @@ export async function POST(req: NextRequest) {
     });
 
     const aab = await step(jobId, "download_aab", async () => {
+      if (String(app.aab_path).startsWith("http")) {
+        const res = await fetch(app.aab_path);
+        if (!res.ok) throw new Error(`AAB fetch failed: ${res.status}`);
+        return Buffer.from(await res.arrayBuffer());
+      }
       const { data, error } = await db.storage.from("branded-apps").download(app.aab_path);
       if (error || !data) throw new Error(`AAB download failed: ${error?.message}`);
       return Buffer.from(await data.arrayBuffer());
