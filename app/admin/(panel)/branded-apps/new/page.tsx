@@ -135,6 +135,55 @@ function Select({ name, value, onChange, options }: {
   );
 }
 
+const STEP_GUIDES: Record<number, { title: string; items: string[] }> = {
+  1: { title: "What to do on this step", items: [
+    "Tenant: who owns this app (usually AIVEXA LLP, or the client's name).",
+    "App Display Name: the name users see on Google Play and on their phone.",
+    "Package Name: must be EXACTLY the applicationId from android/app/build.gradle (pattern com.aivexallp.<appname>). It can never be changed after publishing — wait for the \u201c\u2713 Valid package name\u201d check.",
+  ]},
+  2: { title: "What to do on this step", items: [
+    "Pick the app's brand colors — the preview card below updates live.",
+    "Default Language: keep en-US unless the store listing is written in another language.",
+    "App icon and feature graphic are uploaded later from the app detail page.",
+  ]},
+  3: { title: "What to do on this step", items: [
+    "Short Description (max 80 chars): shown in Play search results — make it count.",
+    "Full Description (max 4000 chars): features, benefits, what data stays on-device.",
+    "Category and Content Rating here are references — the official rating comes from the IARC questionnaire in Play Console.",
+  ]},
+  4: { title: "What to do on this step", items: [
+    "Always start on the Internal track: up to 100 testers, no Google review, instant availability.",
+    "Promote to production from Play Console later, once testing looks good.",
+  ]},
+  5: { title: "What to do on this step", items: [
+    "Developer Email: public support email shown on the store listing (aivexallp@gmail.com).",
+    "Website: https://www.aivexallp.com",
+    "Privacy Policy URL: click \u201cAuto-generate\u201d to use the system-hosted policy page for this app — it is created automatically from this form's data. Or paste your own URL if the app has a custom policy.",
+  ]},
+  6: { title: "After you click Create App — do these in Play Console", items: [
+    "1. Create the app shell: play.google.com/console \u2192 Create app \u2192 same app name + EXACTLY this package name \u2192 App \u2713 Free \u2713 both declarations \u2713 \u2192 Create app. (Google's API cannot create apps — only this step is manual.)",
+    "2. App content \u2192 Privacy policy: paste the same Privacy Policy URL from the Contact step. The auto-generated page is already live — nothing else to host.",
+    "3. App content \u2192 Content rating: complete the IARC questionnaire (category: Utility/Productivity, answer No to violence/sexuality questions).",
+    "4. App content \u2192 Data safety: if all data stays on-device, answer \u201cNo\u201d to data collection.",
+    "5. Store listing: upload the 512\u00d7512 icon, 1024\u00d7500 feature graphic and at least 2 phone screenshots.",
+    "6. Accept Play App Signing (Google-generated key) on the first upload.",
+    "7. Then return to the app detail page here \u2192 Upload AAB \u2192 Publish Now. The pipeline does the rest automatically.",
+  ]},
+};
+
+function StepGuide({ n }: { n: number }) {
+  const g = STEP_GUIDES[n];
+  if (!g) return null;
+  return (
+    <details open={n === 6} style={{ background: "#fbf6e9", border: "1px solid #e3ce9c", borderRadius: 10, padding: ".65rem .9rem", marginBottom: "1.1rem", fontSize: ".86rem" }}>
+      <summary style={{ cursor: "pointer", fontWeight: 700, color: "#8a6d1f" }}>\ud83d\udcd6 {g.title}</summary>
+      <ul style={{ margin: ".5rem 0 .2rem", paddingLeft: "1.1rem", lineHeight: 1.65 }}>
+        {g.items.map((it, i) => <li key={i} style={{ margin: ".25rem 0" }}>{it}</li>)}
+      </ul>
+    </details>
+  );
+}
+
 function InfoBox({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ background: "#fef3c7", border: "1px solid #fcd34d", borderRadius: 10, padding: ".8rem 1rem", display: "flex", gap: 8, fontSize: ".82rem", color: "#92400e", lineHeight: 1.6 }}>
@@ -260,6 +309,7 @@ export default function NewBrandedAppPage() {
         {step === 1 && (
           <div>
             <h2 style={{ fontWeight: 700, marginBottom: ".3rem" }}>App Identity</h2>
+            <StepGuide n={1} />
             <p style={{ color: "var(--muted)", fontSize: ".88rem", marginBottom: "1.5rem" }}>Basic details that identify this branded app.</p>
 
             <Field label="Tenant / Client Name" required hint="Internal label — who this app belongs to.">
@@ -290,6 +340,7 @@ export default function NewBrandedAppPage() {
         {step === 2 && (
           <div>
             <h2 style={{ fontWeight: 700, marginBottom: ".3rem" }}>Branding</h2>
+            <StepGuide n={2} />
             <p style={{ color: "var(--muted)", fontSize: ".88rem", marginBottom: "1.5rem" }}>Colors and default language for the app.</p>
 
             <div className="color-row">
@@ -341,6 +392,7 @@ export default function NewBrandedAppPage() {
         {step === 3 && (
           <div>
             <h2 style={{ fontWeight: 700, marginBottom: ".3rem" }}>Store Listing</h2>
+            <StepGuide n={3} />
             <p style={{ color: "var(--muted)", fontSize: ".88rem", marginBottom: "1.5rem" }}>What users see on the Google Play Store page.</p>
 
             <Field label="Short Description" required hint="Max 80 characters — shown in search results.">
@@ -377,6 +429,7 @@ export default function NewBrandedAppPage() {
         {step === 4 && (
           <div>
             <h2 style={{ fontWeight: 700, marginBottom: ".3rem" }}>Distribution</h2>
+            <StepGuide n={4} />
             <p style={{ color: "var(--muted)", fontSize: ".88rem", marginBottom: "1.5rem" }}>Control who can access this app and on which track.</p>
 
             <Field label="Release Track" hint="Start with 'internal' for testing. Promote to production when ready.">
@@ -411,6 +464,7 @@ export default function NewBrandedAppPage() {
         {step === 5 && (
           <div>
             <h2 style={{ fontWeight: 700, marginBottom: ".3rem" }}>Contact & Legal</h2>
+            <StepGuide n={5} />
             <p style={{ color: "var(--muted)", fontSize: ".88rem", marginBottom: "1.5rem" }}>Required by Google Play for all published apps.</p>
 
             <Field label="Developer Email" required hint="Public support email shown on the store listing.">
@@ -427,7 +481,18 @@ export default function NewBrandedAppPage() {
             </Field>
 
             <Field label="Privacy Policy URL" required hint="Required by Google Play — must be publicly accessible.">
-              <Input name="privacy_policy_url" value={form.privacy_policy_url} onChange={set("privacy_policy_url")} placeholder="https://acme.com/privacy" />
+              <div style={{ display: "flex", gap: ".5rem", alignItems: "center" }}>
+                <div style={{ flex: 1 }}>
+                  <Input name="privacy_policy_url" value={form.privacy_policy_url} onChange={set("privacy_policy_url")} placeholder="https://acme.com/privacy" />
+                </div>
+                <button type="button" className="btn-secondary" style={{ fontSize: ".8rem", padding: ".55rem .9rem", whiteSpace: "nowrap" }}
+                  onClick={() => {
+                    const slug = (form.package_name.split(".").pop() || "app").toLowerCase();
+                    setForm(f => ({ ...f, privacy_policy_url: `https://www.aivexallp.com/apps/${slug}/privacy-policy` }));
+                  }}>
+                  Auto-generate
+                </button>
+              </div>
               {errors.privacy_policy_url && <p className="field-error">{errors.privacy_policy_url}</p>}
             </Field>
 
@@ -441,6 +506,7 @@ export default function NewBrandedAppPage() {
         {step === 6 && (
           <div>
             <h2 style={{ fontWeight: 700, marginBottom: ".3rem" }}>Review & Create</h2>
+            <StepGuide n={6} />
             <p style={{ color: "var(--muted)", fontSize: ".88rem", marginBottom: "1.5rem" }}>Confirm the details before creating the app record.</p>
 
             {submitError && <div className="form-alert err" style={{ marginBottom: "1rem" }}>{submitError}</div>}

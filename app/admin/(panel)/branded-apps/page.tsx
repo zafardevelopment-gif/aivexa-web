@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getBrandedApps, deleteBrandedApp, createPublishingJob, type BrandedApp } from "./actions";
 import {
   Smartphone, Plus, Trash2, Send, Eye, RefreshCw,
-  CheckCircle2, Clock, AlertCircle, Loader2, Package
+  CheckCircle2, Clock, AlertCircle, Loader2, Package, BookOpen
 } from "lucide-react";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
@@ -101,9 +101,14 @@ export default function BrandedAppsPage() {
             Manage and publish white-label Android apps for your clients.
           </p>
         </div>
-        <Link href="/admin/branded-apps/new" className="btn-primary" style={{ gap: 7, fontSize: ".88rem", padding: ".65rem 1.3rem" }}>
-          <Plus size={16} /> New App
-        </Link>
+        <div style={{ display: "flex", gap: ".6rem" }}>
+          <Link href="/admin/branded-apps/guide" className="btn-secondary" style={{ gap: 7, fontSize: ".88rem", padding: ".65rem 1.1rem", display: "inline-flex", alignItems: "center" }}>
+            <BookOpen size={16} /> Guide
+          </Link>
+          <Link href="/admin/branded-apps/new" className="btn-primary" style={{ gap: 7, fontSize: ".88rem", padding: ".65rem 1.3rem" }}>
+            <Plus size={16} /> New App
+          </Link>
+        </div>
       </div>
 
       {msg && (
