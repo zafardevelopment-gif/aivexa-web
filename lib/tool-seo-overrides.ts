@@ -1043,6 +1043,183 @@ export const toolSeoOverrides: Record<string, ToolSeoOverride> = {
       { q: "Can I print multiple passport photos on one sheet to save money?", a: "Yes, this tool can arrange multiple copies of your cropped photo onto a single 4x6 inch or similar print sheet, which is the standard approach photo studios use to print several copies economically on one piece of photo paper." },
     ],
   },
+  "markdown/convert": {
+    intro: [
+      "The File to Markdown Converter turns PDF, Word, Excel, CSV, HTML and image files into clean .md (Markdown) text — the plain-text formatting syntax used by GitHub READMEs, static site generators like Hugo and Jekyll, note-taking apps like Obsidian and Notion, and increasingly as the preferred input format for feeding documents to AI tools and LLMs.",
+      "Unlike a PDF or DOCX, a Markdown file is lightweight plain text that renders consistently everywhere, is easy to version-control in Git, and strips away proprietary formatting cruft while preserving headings, lists, bold/italic text and links. Upload your file and the converter extracts the structure automatically — entirely in your browser, so the original file never leaves your device.",
+    ],
+    faqs: [
+      { q: "Will converting to Markdown lose my original formatting?", a: "Markdown supports headings, bold/italic text, lists, links and basic tables, so most document structure carries over cleanly. Complex formatting like custom fonts, colors, multi-column layouts or embedded charts doesn't have a Markdown equivalent and will be simplified to plain text." },
+      { q: "Why convert documents to Markdown instead of keeping them as PDF or Word?", a: "Markdown is the standard format for GitHub documentation, static site generators and most note-taking apps, and it's also the cleanest plain-text format for pasting content into AI chat tools, since it preserves structure (headings, lists) without the extra binary formatting a PDF or DOCX carries." },
+      { q: "Is my uploaded file sent to a server for conversion?", a: "No — this tool parses and converts your file entirely in your browser using JavaScript. Your document is never uploaded anywhere, which matters if the file contains sensitive or confidential content." },
+    ],
+  },
+
+  "json/formatter": {
+    intro: [
+      "The JSON Formatter & Validator takes minified or messy JSON — the kind APIs return as one unreadable line — and pretty-prints it with proper indentation, while also checking for syntax errors like missing commas, unmatched brackets, trailing commas, or unquoted keys, which are the most common reasons a JSON payload fails to parse.",
+      "This is a everyday tool for developers debugging an API response, inspecting a config file, or checking that hand-written JSON is valid before using it in code. When the JSON is invalid, the validator points to roughly where the syntax broke, rather than leaving you to scan hundreds of characters manually.",
+    ],
+    faqs: [
+      { q: "What's the most common reason JSON fails to validate?", a: "Trailing commas (a comma after the last item in an array or object) and unquoted or single-quoted keys are the two most frequent errors — valid JSON requires double quotes around all keys and no comma after the final element." },
+      { q: "Does formatting JSON change its actual data or values?", a: "No, formatting only adds or removes whitespace and line breaks for readability — the underlying keys, values, arrays and objects are unchanged. Minifying (removing whitespace) is the same operation in reverse, useful for reducing payload size before sending over a network." },
+      { q: "Can this tool validate against a specific JSON Schema?", a: "This tool checks that your JSON is syntactically valid (correctly formed JSON), not that it matches a custom JSON Schema definition — schema validation checks specific field types and required properties, which is a separate, more specialized kind of validation." },
+    ],
+  },
+
+  "json/json-to-csv": {
+    intro: [
+      "The JSON to CSV Converter flattens a JSON array of objects into rows and columns — the format Excel, Google Sheets and most data-analysis tools expect — so you can take an API response or exported dataset in JSON and open it directly as a spreadsheet.",
+      "Each object in the array becomes one row, and the union of all keys across objects becomes the column headers. This is a common step when working with data pulled from a REST API, since most APIs return JSON but most business teams work in spreadsheets.",
+    ],
+    faqs: [
+      { q: "What happens to nested objects or arrays inside my JSON when converting to CSV?", a: "CSV is a flat, two-dimensional format, so nested objects are typically flattened into dot-notation columns (e.g. address.city) or serialized as a JSON string within a single cell, depending on the nesting depth — deeply nested structures may need manual cleanup after conversion." },
+      { q: "Will the CSV output open correctly in Excel?", a: "Yes, the output uses standard comma-separated formatting with proper quoting for values containing commas or line breaks, so it opens directly in Excel, Google Sheets, or any spreadsheet tool without extra steps." },
+    ],
+  },
+
+  "json/csv-to-json": {
+    intro: [
+      "The CSV to JSON Converter turns spreadsheet-style comma-separated data into a structured JSON array of objects, using your CSV's header row as the object keys for every row below it — the format most APIs, JavaScript applications and NoSQL databases expect instead of flat tabular data.",
+      "This is the reverse of exporting API data to a spreadsheet: you start with a CSV export (from Excel, Google Sheets, or a database) and need it as JSON to import into an application, send to an API, or use as test/seed data in code.",
+    ],
+    faqs: [
+      { q: "How does the converter know which CSV column becomes which JSON key?", a: "The first row of your CSV is treated as the header row, and each column header becomes a key in every resulting JSON object — make sure your CSV has a proper header row before converting." },
+      { q: "Are numbers and true/false values converted to the correct JSON data types?", a: "The converter attempts to detect numeric and boolean-looking values and convert them to actual JSON numbers and booleans rather than leaving everything as text strings, since CSV itself has no concept of data types — everything in a CSV file is plain text until interpreted." },
+    ],
+  },
+
+  "json/json-to-xml": {
+    intro: [
+      "The JSON to XML Converter transforms JSON objects into valid XML markup — still required by many legacy enterprise systems, SOAP-based APIs, RSS/Atom feeds, and older systems that were built before JSON became the dominant data format for web APIs.",
+      "Since there's no single official standard for mapping JSON structures to XML, this tool follows common conventions: object keys become element tags, arrays become repeated sibling elements, and primitive values become element text content — producing XML that's valid and predictable even though the two formats don't map perfectly one-to-one.",
+    ],
+    faqs: [
+      { q: "Is there an official standard for converting JSON to XML?", a: "No — unlike JSON itself (which has a strict, universally agreed specification), there's no single official JSON-to-XML mapping standard. Different tools may structure arrays or attributes slightly differently, so always check the output matches what your receiving system expects." },
+      { q: "Why would I need XML instead of JSON in 2026?", a: "Most modern web APIs use JSON, but XML is still required for SOAP web services, many government and banking integration systems, RSS/Atom feeds, and older enterprise software (ERP, EDI systems) that predates the shift to JSON." },
+    ],
+  },
+
+  "json/xml-to-json": {
+    intro: [
+      "The XML to JSON Converter parses XML markup — including tags, nested elements and attributes — into a structured JSON object, making it easier to work with in modern JavaScript applications, JSON-based APIs and NoSQL databases that don't natively understand XML.",
+      "This matters when integrating with an older system, a SOAP API, or an RSS feed that returns XML, but your application logic is written to consume JSON. XML attributes (values inside a tag like <item id=\"1\">) are typically mapped to a distinct key convention in the resulting JSON, separate from the element's own text content.",
+    ],
+    faqs: [
+      { q: "How are XML attributes represented in the converted JSON?", a: "XML attributes (the id=\"1\" style values inside a tag) are typically converted into their own keys, often prefixed (like @id) to distinguish them from child elements and text content — this convention keeps attribute data from being confused with the element's actual content." },
+      { q: "Does this handle XML namespaces correctly?", a: "Basic namespace prefixes are generally preserved as part of the element name, but deeply namespaced XML (common in SOAP or enterprise XML schemas) can produce complex JSON keys — review the output structure against your target system's expectations for namespace-heavy documents." },
+    ],
+  },
+
+  "finance/mortgage-calculator": {
+    intro: [
+      "The Mortgage Calculator computes your monthly principal-and-interest payment on a home loan from the loan amount, interest rate and term, and generates a full amortization schedule showing how much of each payment goes toward interest versus principal over the life of the loan.",
+      "In the early years of a mortgage, the majority of each payment goes toward interest rather than principal — this calculator makes that split visible month by month, and lets you see the total interest paid over the full loan term, which is often several times the original loan amount on a 30-year mortgage.",
+    ],
+    faqs: [
+      { q: "Does this calculator include property tax and insurance (PITI)?", a: "This calculator focuses on principal and interest (P&I), the core loan payment. Property tax, homeowners insurance and any PMI (private mortgage insurance) are additional costs lenders often bundle into a monthly escrow payment, which will make your actual total payment higher than the P&I figure shown here." },
+      { q: "Why does a 30-year mortgage cost so much more in total interest than a 15-year one?", a: "A longer loan term spreads payments out, lowering the monthly amount, but you pay interest for twice as long — on a typical mortgage, total interest paid over 30 years can be more than double what you'd pay on the same loan amount over 15 years, even though the interest rate may be similar." },
+    ],
+  },
+
+  "finance/us-salary-calculator": {
+    intro: [
+      "The US Salary Calculator estimates your net take-home pay after federal income tax, Social Security (6.2%) and Medicare (1.45%) deductions — collectively known as FICA taxes — based on your gross salary and filing status.",
+      "Federal income tax in the US is progressive, meaning different portions of your income are taxed at increasing marginal rates rather than your entire salary being taxed at one flat rate. This tool applies current federal brackets, but state income tax varies widely (some states like Texas and Florida have none, while others like California have high rates), so treat the result as a federal-level estimate rather than your exact paycheck figure.",
+    ],
+    faqs: [
+      { q: "Does this calculator include state income tax?", a: "No — this calculator estimates federal tax and FICA (Social Security + Medicare) deductions only. State income tax rates vary enormously (from 0% in states like Texas and Florida to over 10% in states like California), so your actual take-home pay will differ based on where you live and work." },
+      { q: "What's the difference between gross pay and net pay?", a: "Gross pay is your salary before any deductions. Net (take-home) pay is what's left after federal tax, FICA, state tax (if applicable), and any pre-tax deductions like 401(k) contributions or health insurance premiums are subtracted." },
+    ],
+  },
+
+  "finance/uk-salary-calculator": {
+    intro: [
+      "The UK Salary Calculator estimates your take-home pay after Income Tax and National Insurance contributions, based on the current Personal Allowance (the amount you can earn tax-free) and the standard basic, higher and additional rate tax bands.",
+      "Most UK employees pay tax through PAYE (Pay As You Earn), where your employer deducts Income Tax and National Insurance automatically before you're paid — this calculator lets you verify that deduction and see your monthly and annual take-home figures without waiting for a payslip.",
+    ],
+    faqs: [
+      { q: "What is the Personal Allowance and how does it affect my take-home pay?", a: "The Personal Allowance is the amount of income you can earn each tax year before paying any Income Tax. Earnings above this threshold are taxed at the basic rate, then higher and additional rates apply as income rises further — the allowance itself also reduces for very high earners." },
+      { q: "Is National Insurance the same as Income Tax?", a: "No, they're separate deductions calculated differently. National Insurance contributions count toward your entitlement to certain state benefits and the State Pension, while Income Tax is a general tax on earnings — both are usually deducted together under PAYE, which is why take-home pay is lower than gross salary." },
+    ],
+  },
+
+  "finance/canada-salary-calculator": {
+    intro: [
+      "The Canada Salary Calculator estimates your net take-home pay after federal and provincial income tax, plus CPP (Canada Pension Plan) and EI (Employment Insurance) contributions, based on your gross salary and province of residence.",
+      "Canada uses a combined federal-plus-provincial tax system, meaning your total income tax rate depends on both the federal brackets and your specific province's own tax brackets, which vary — a salary that nets a certain take-home amount in one province can differ in another purely due to provincial tax rate differences.",
+    ],
+    faqs: [
+      { q: "Why does my province affect my take-home pay?", a: "Each Canadian province sets its own income tax brackets and rates on top of federal tax, so two people earning identical salaries in different provinces (for example Alberta versus Quebec) can have noticeably different take-home pay due to provincial tax rate differences alone." },
+      { q: "What are CPP and EI deductions for?", a: "CPP (Canada Pension Plan) contributions fund your future retirement pension, and EI (Employment Insurance) contributions fund benefits if you become unemployed or need parental/sickness leave — both are mandatory payroll deductions separate from income tax, up to annual maximum contribution limits." },
+    ],
+  },
+
+  "finance/australia-salary-calculator": {
+    intro: [
+      "The Australia Salary Calculator estimates your take-home pay after income tax and the Medicare levy (2% of taxable income for most taxpayers), showing fortnightly, monthly and annual net pay from your gross annual salary.",
+      "Australian income tax uses progressive tax brackets similar to other countries, but salaries in Australia are commonly quoted and paid fortnightly rather than monthly — this calculator gives you all three views so you can compare against however your payslip or job offer is expressed.",
+    ],
+    faqs: [
+      { q: "What is the Medicare levy and does everyone pay it?", a: "The Medicare levy is an additional 2% charge on taxable income that funds Australia's public healthcare system. Most taxpayers pay it, though low-income earners below a certain threshold may be exempt or pay a reduced rate." },
+      { q: "Does this include superannuation contributions?", a: "This calculator focuses on income tax and Medicare levy deductions from your salary. Superannuation (compulsory retirement savings, currently a percentage on top of salary under the Superannuation Guarantee) is typically paid by your employer in addition to your gross salary, not deducted from your take-home pay." },
+    ],
+  },
+
+  "finance/compound-interest-calculator": {
+    intro: [
+      "The Compound Interest Calculator projects how an investment or savings amount grows over time using the formula A = P(1 + r/n)^(nt), where interest earns interest on itself in every compounding period — as opposed to simple interest, which only ever calculates interest on the original principal.",
+      "The compounding frequency matters: daily or monthly compounding grows an investment faster than annual compounding at the same nominal interest rate, because each compounding period adds accumulated interest back into the base amount that earns interest next. This is why compound interest is often described as growing exponentially rather than linearly over long time horizons.",
+    ],
+    faqs: [
+      { q: "What's the real difference between simple and compound interest?", a: "Simple interest is calculated only on the original principal for the entire term, so growth is linear. Compound interest is recalculated on the principal plus all previously earned interest, so growth accelerates over time — the difference becomes dramatic over periods of 10+ years." },
+      { q: "Does more frequent compounding always mean significantly more money?", a: "More frequent compounding (daily vs monthly vs annually) does increase returns, but the difference between compounding frequencies is usually modest compared to the impact of the interest rate itself and the length of time invested — time in the market and the rate matter more than compounding frequency alone." },
+    ],
+  },
+
+  "finance/roi-calculator": {
+    intro: [
+      "The ROI Calculator computes Return on Investment as (Gain − Cost) / Cost, expressed as a percentage, from your initial investment amount and its final value — a quick way to compare how profitable different investments, business decisions or purchases have been relative to what they cost.",
+      "Basic ROI doesn't account for how long the investment took to generate that return, which is why this calculator also shows an annualized ROI figure — turning a return over an arbitrary time period into an equivalent yearly rate, making it possible to fairly compare a 2-year investment against a 5-year one.",
+    ],
+    faqs: [
+      { q: "What's the difference between ROI and annualized ROI?", a: "Plain ROI tells you the total percentage gain or loss regardless of how long it took. Annualized ROI converts that total return into an equivalent yearly rate, which is essential for comparing investments held for different lengths of time — a 50% return over 5 years is very different from a 50% return over 1 year." },
+      { q: "Does ROI account for risk?", a: "No, ROI is purely a profitability measure based on gain versus cost — it says nothing about how risky the investment was to achieve that return. Two investments with identical ROI can carry very different levels of risk, which ROI alone doesn't capture." },
+    ],
+  },
+
+  "finance/net-worth-calculator": {
+    intro: [
+      "The Net Worth Calculator adds up everything you own (assets — cash, investments, property, vehicles) and subtracts everything you owe (liabilities — loans, credit card debt, mortgages) to give a single snapshot figure of your overall financial position at a point in time.",
+      "Net worth by itself is just one number, but tracking it every few months reveals the trend that actually matters — whether your financial position is improving or declining over time, which is a more useful signal than any single month's income or spending in isolation.",
+    ],
+    faqs: [
+      { q: "What counts as an asset versus a liability?", a: "Assets are things you own that have value — cash, bank balances, investments, property, vehicles. Liabilities are debts you owe — outstanding loans, credit card balances, mortgage principal remaining. Net worth is simply total assets minus total liabilities." },
+      { q: "Is a negative net worth a bad sign?", a: "A negative net worth is common early in life (for example, right after taking a student loan or a mortgage) and isn't necessarily alarming on its own — what matters more is the trend over time: whether your net worth is moving upward as you pay down debt and build assets." },
+    ],
+  },
+
+  "finance/debt-payoff-calculator": {
+    intro: [
+      "The Debt Payoff Calculator compares two popular strategies for paying off multiple debts — the avalanche method (paying extra toward the highest-interest debt first, which minimizes total interest paid) and the snowball method (paying extra toward the smallest balance first, which builds psychological momentum through quicker wins) — showing the payoff date and total interest for each approach.",
+      "Mathematically, the avalanche method almost always saves more money in total interest since it targets the most expensive debt first. The snowball method can save less in pure interest terms but is popular because clearing a small debt entirely, quickly, tends to keep people motivated to stick with a payoff plan rather than giving up partway through.",
+    ],
+    faqs: [
+      { q: "Which method saves more money, avalanche or snowball?", a: "The avalanche method (highest interest rate first) almost always results in less total interest paid, since it eliminates your most expensive debt fastest. The snowball method (smallest balance first) can cost slightly more in interest but is often easier to stick with due to faster visible progress." },
+      { q: "Should I pay off debt or invest extra money instead?", a: "This is a personal finance trade-off that generally depends on the interest rate of the debt versus expected investment returns — high-interest debt (like credit cards) is usually worth paying off first, since guaranteed interest savings often exceed typical investment returns, but this calculator focuses on payoff strategy, not that broader decision." },
+    ],
+  },
+
+  "finance/retirement-calculator": {
+    intro: [
+      "The Retirement Calculator projects the retirement corpus you'll accumulate based on your current savings, monthly contributions, expected investment return and years until retirement, then estimates the monthly income that corpus could sustainably provide.",
+      "A common reference point in retirement planning is the \"4% rule\" — the idea that withdrawing about 4% of your retirement corpus annually has historically had a good chance of lasting 30+ years without running out, though this is a general guideline based on historical market data, not a guarantee, and actual safe withdrawal rates depend on market conditions, inflation and how long retirement lasts.",
+    ],
+    faqs: [
+      { q: "How accurate are long-term retirement projections?", a: "Projections over 20-30+ years are estimates based on assumed average returns — actual investment returns vary year to year and rarely match a smooth average, so treat the projected corpus as a planning estimate to revisit periodically, not a guaranteed outcome." },
+      { q: "Is this financial advice on how much I should save?", a: "No — this tool is a planning calculator to help you visualize how savings, contributions and time affect a projected retirement corpus. It isn't personalized financial advice; for decisions specific to your situation, consider speaking with a licensed financial advisor." },
+    ],
+  },
 };
 
 export function getToolSeoOverride(category: string, slug: string) {

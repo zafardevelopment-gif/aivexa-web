@@ -202,20 +202,12 @@ export function getMergedToolFaqs(
 export function buildToolFaqs(toolName: string) {
   return [
     {
-      q: `Is ${toolName} free to use?`,
-      a: `Yes, ${toolName} on AIVEXA is completely free to use with no signup, no watermark and no hidden limits.`,
-    },
-    {
-      q: `Do I need to create an account?`,
-      a: `No account or login is required. Just open the tool and use it directly in your browser.`,
-    },
-    {
-      q: `Is my data safe when I use this tool?`,
+      q: `Is my data safe when I use ${toolName}?`,
       a: `Most AIVEXA tools run entirely in your browser (client-side), which means your files and inputs are processed on your own device and are not uploaded to a server.`,
     },
     {
-      q: `Can I use this tool on mobile?`,
-      a: `Yes, this tool works on any modern browser — desktop, Android or iOS — without installing an app.`,
+      q: `Can I use ${toolName} on mobile, and is it free?`,
+      a: `Yes — it works on any modern browser (desktop, Android or iOS) without installing an app, and it's free to use with no signup or watermark.`,
     },
   ];
 }

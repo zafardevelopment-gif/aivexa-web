@@ -47,13 +47,15 @@ export default function ToolSeoContent({
             {para}
           </p>
         ))}
-        <p style={{ color: "var(--muted)", lineHeight: 1.75, marginBottom: "1.75rem" }}>
-          {tool.name} is a free, browser-based tool from AIVEXA&apos;s{" "}
-          {categoryDef.name.toLowerCase()} collection. {tool.description} It works
-          instantly in your browser — no signup, no installation and no watermark —
-          and is one of 100+ free tools available on AIVEXA, covering PDF editing,
-          image editing, everyday calculators, document generators and Islamic tools.
-        </p>
+        {!override && (
+          <p style={{ color: "var(--muted)", lineHeight: 1.75, marginBottom: "1.75rem" }}>
+            {tool.name} is a free, browser-based tool from AIVEXA&apos;s{" "}
+            {categoryDef.name.toLowerCase()} collection. {tool.description} It works
+            instantly in your browser — no signup, no installation and no watermark —
+            and is one of 100+ free tools available on AIVEXA, covering PDF editing,
+            image editing, everyday calculators, document generators and Islamic tools.
+          </p>
+        )}
 
         {/* ── FAQ section ── */}
         <h2 style={{ fontSize: "1.4rem", fontWeight: 700, marginBottom: ".6rem" }}>
