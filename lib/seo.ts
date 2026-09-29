@@ -135,7 +135,7 @@ export function buildBlogMetadata(post: BlogPost): Metadata {
   const path = `/blog/${post.slug}`;
 
   const keywords = Array.from(
-    new Set([post.tag, "AIVEXA blog", "AIVEXA", post.title])
+    new Set([post.category, "AIVEXA blog", "AIVEXA", post.title])
   );
 
   return {
