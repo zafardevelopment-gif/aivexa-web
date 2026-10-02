@@ -356,7 +356,7 @@ export const fallbackPages: Record<string, Page> = {
   "miftah-privacy": {
     slug: "miftah-privacy",
     title: "Miftah — Privacy Policy",
-    subtitle: "Last updated: August 3, 2026",
+    subtitle: "Last updated: October 2, 2026",
     content: `<p>Miftah ("the app", package <code>com.aivexallp.miftah</code>) is built privacy-first. This page explains what the app accesses on your device, what it never accesses, and what &mdash; if anything &mdash; ever leaves your device.</p>
 <h3>What we access, and why</h3>
 <ul>
@@ -365,12 +365,13 @@ export const fallbackPages: Record<string, Page> = {
 <li><strong>Compass/orientation sensor.</strong> Used only to power the qibla direction view.</li>
 <li><strong>Camera.</strong> Used only while the Qibla AR screen is open, to show a live camera preview with a qibla direction arrow overlaid. No photo or video is ever captured, saved, or transmitted &mdash; the feed is shown live on screen and nothing else. The camera is not accessed anywhere else in the app.</li>
 <li><strong>Installed app list.</strong> Used only to show you a picker of your installed apps so you can choose which ones to pause during prayer time. Only the app id and display name are read &mdash; never usage history or content.</li>
-<li><strong>Notifications &amp; exact alarms.</strong> Used to deliver the adhan (prayer call) notification at the precise calculated prayer time.</li>
+<li><strong>Notifications &amp; exact alarms.</strong> Used to deliver the before-prayer reminder, the adhan (prayer call) notification and the iqamah reminder at the precise calculated times.</li>
+<li><strong>Microphone (Premium recitation check only).</strong> Used only while you tap the mic on the Quran recitation check screen. Your voice is converted to text by your phone&rsquo;s speech recognition service (on most Android phones, Google) so Miftah can compare it with the ayah. Miftah does not record, store or upload your voice.</li>
 </ul>
 <h3>What we never access</h3>
 <ul>
 <li>Message content, keystrokes, clipboard, or on-screen content of any other app.</li>
-<li>Contacts, call logs, or the microphone.</li>
+<li>Contacts or call logs. The microphone is never used outside the recitation check screen.</li>
 <li>Browsing history or in-app activity, beyond the foreground app's package/bundle identifier as described above.</li>
 <li>Photos or video &mdash; the camera is only ever shown live, never recorded.</li>
 </ul>

@@ -11,6 +11,7 @@ import { useCart } from "@/lib/cart-context";
 const links: { href: string; label: string; newTab?: boolean; badge?: string }[] = [
   { href: "/#products", label: "Products" },
   { href: "/calivo-ai", label: "CALIVO AI", badge: "New" },
+  { href: "/miftah", label: "Miftah" },
   { href: "/store", label: "Digital Products" },
   { href: "/tools", label: "Free Tools" },
   { href: "/blog", label: "Blog" },
