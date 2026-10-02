@@ -8,6 +8,7 @@ import { useCart } from "@/lib/cart-context";
 
 const links: { href: string; label: string; newTab?: boolean }[] = [
   { href: "/#products", label: "Products" },
+  { href: "/calivo-ai", label: "CALIVO AI App" },
   { href: "/#how-it-works", label: "How It Works" },
   { href: "/#why-us", label: "Why AIVEXA" },
   { href: "/#testimonials", label: "Customers" },

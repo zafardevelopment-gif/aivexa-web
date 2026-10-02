@@ -6,7 +6,11 @@ export interface BlogPost {
   category: string;
   readTime: string;
   content: string;
+  /** Optional product CTA shown at the end of the article (e.g. CALIVO AI download box). */
+  cta?: "calivo";
 }
+
+import { calivoPosts } from "./calivo-blog-posts";
 
 export const blogPosts: BlogPost[] = [
   {
@@ -1266,6 +1270,7 @@ AIVEXA's products — AI Munim, Clinic Voice, AI Hospital, AI Camp, and SafeRide
 If you are evaluating AI automation for your Indian business and want to understand which of AIVEXA's products fits your situation, contact us at aivexallp.com for a no-pressure conversation.
     `.trim(),
   },
+  ...calivoPosts,
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {

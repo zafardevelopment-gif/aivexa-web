@@ -25,6 +25,7 @@ function formatDate(dateStr: string) {
 
 const categoryColors: Record<string, string> = {
   "Healthcare AI": "bg-blue-100 text-blue-800",
+  "Health & Nutrition": "bg-emerald-100 text-emerald-800",
   "WhatsApp Automation": "bg-green-100 text-green-800",
   "AI Products": "bg-purple-100 text-purple-800",
   "Free Tools": "bg-orange-100 text-orange-800",

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts, getPostBySlug, getAllSlugs } from "@/lib/blog-posts";
+import { calivoPlayUrl, PLAY_BADGE_IMG } from "@/lib/calivo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -64,7 +65,12 @@ function renderMarkdown(md: string): string {
     s
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*(.+?)\*/g, "<em>$1</em>")
-      .replace(/`(.+?)`/g, "<code>$1</code>");
+      .replace(/`(.+?)`/g, "<code>$1</code>")
+      // [text](url) — internal links stay same-tab; external open in a new tab.
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, text, href) =>
+        href.startsWith("/")
+          ? `<a href="${href}" class="text-blue-700 underline font-medium">${text}</a>`
+          : `<a href="${href}" target="_blank" rel="noopener" class="text-blue-700 underline font-medium">${text}</a>`);
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -150,6 +156,7 @@ const categoryColors: Record<string, string> = {
   "Free Tools": "bg-orange-100 text-orange-800",
   "Islamic Tools": "bg-teal-100 text-teal-800",
   Business: "bg-yellow-100 text-yellow-800",
+  "Health & Nutrition": "bg-emerald-100 text-emerald-800",
 };
 
 export default async function BlogPostPage({ params }: Props) {
@@ -222,8 +229,30 @@ export default async function BlogPostPage({ params }: Props) {
           />
         </article>
 
+        {/* CALIVO AI app CTA (health & nutrition posts) */}
+        {post.cta === "calivo" && (
+          <section className="max-w-3xl mx-auto px-6 pb-12">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 md:p-8 text-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/calivo/calivo-icon.png" alt="CALIVO AI app icon" width={64} height={64} className="mx-auto mb-3 rounded-2xl" />
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Count calories in Indian food with one photo</h2>
+              <p className="text-slate-700 mb-5 max-w-xl mx-auto">
+                CALIVO AI is a free AI calorie counter &amp; diet coach for Indian meals — photo scanning, AI diet plans
+                for weight loss, PCOS and diabetes, protein tracking and fasting timer. English, Hindi, Urdu &amp; Arabic.
+              </p>
+              <a href={calivoPlayUrl(`blog_${post.slug}`)} target="_blank" rel="noopener" aria-label="Get CALIVO AI on Google Play" className="inline-block">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={PLAY_BADGE_IMG} alt="Get it on Google Play" height={60} style={{ height: 60, width: "auto" }} />
+              </a>
+              <p className="mt-3 text-sm">
+                <Link href="/calivo-ai" className="text-emerald-800 underline">Learn more about CALIVO AI →</Link>
+              </p>
+            </div>
+          </section>
+        )}
+
         {/* CTA */}
-        <section className="bg-slate-50 py-12 px-6 text-center border-t border-slate-200">
+        {post.cta !== "calivo" && <section className="bg-slate-50 py-12 px-6 text-center border-t border-slate-200">
           <h2 className="text-2xl font-bold text-slate-900 mb-2">
             Ready to automate your business?
           </h2>
@@ -244,7 +273,7 @@ export default async function BlogPostPage({ params }: Props) {
               Try Free Tools
             </Link>
           </div>
-        </section>
+        </section>}
 
         {/* Related posts */}
         {otherPosts.length > 0 && (
