@@ -8,9 +8,12 @@ export interface BlogPost {
   content: string;
   /** Optional product CTA shown at the end of the article (e.g. CALIVO AI download box). */
   cta?: "calivo";
+  /** Optional AIVEXA Store product slug — renders a product box at the end of the article. */
+  storeSlug?: string;
 }
 
 import { calivoPosts } from "./calivo-blog-posts";
+import { storePosts } from "./store-blog-posts";
 
 export const blogPosts: BlogPost[] = [
   {
@@ -1271,6 +1274,7 @@ If you are evaluating AI automation for your Indian business and want to underst
     `.trim(),
   },
   ...calivoPosts,
+  ...storePosts,
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {

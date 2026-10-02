@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts, getPostBySlug, getAllSlugs } from "@/lib/blog-posts";
 import { calivoPlayUrl, PLAY_BADGE_IMG } from "@/lib/calivo";
+import { getDigitalProduct, formatPrice } from "@/lib/digital-products";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -163,6 +164,7 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
+  const storeProduct = post.storeSlug ? await getDigitalProduct(post.storeSlug).catch(() => null) : null;
 
   const otherPosts = blogPosts
     .filter((p) => p.slug !== post.slug)
@@ -247,6 +249,32 @@ export default async function BlogPostPage({ params }: Props) {
               <p className="mt-3 text-sm">
                 <Link href="/calivo-ai" className="text-emerald-800 underline">Learn more about CALIVO AI →</Link>
               </p>
+            </div>
+          </section>
+        )}
+
+        {/* AIVEXA Store product box */}
+        {storeProduct && (
+          <section className="max-w-3xl mx-auto px-6 pb-12">
+            <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center">
+              {storeProduct.preview_image && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={storeProduct.preview_image} alt={storeProduct.name} className="w-40 h-auto rounded-xl shadow" loading="lazy" />
+              )}
+              <div className="flex-1 text-center md:text-left">
+                <span className="text-xs font-semibold uppercase tracking-wide text-indigo-700">AIVEXA Store · Instant download</span>
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900 mt-1 mb-2">{storeProduct.name}</h2>
+                {storeProduct.tagline && <p className="text-slate-700 mb-4">{storeProduct.tagline}</p>}
+                <div className="flex items-center gap-3 justify-center md:justify-start flex-wrap">
+                  <span className="text-2xl font-bold text-slate-900">{formatPrice(storeProduct.price)}</span>
+                  {storeProduct.original_price > 0 && (
+                    <span className="text-slate-500 line-through">{formatPrice(storeProduct.original_price)}</span>
+                  )}
+                  <Link href={`/store/${storeProduct.slug}`} className="inline-block bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition-colors">
+                    View &amp; buy →
+                  </Link>
+                </div>
+              </div>
             </div>
           </section>
         )}

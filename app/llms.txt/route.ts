@@ -2,12 +2,21 @@ import { toolCategories } from "@/lib/tools-registry";
 import { SITE_URL, siteConfig } from "@/lib/seo/config";
 import { calivo, CALIVO_PLAY_URL_CLEAN } from "@/lib/calivo";
 import { calivoPosts } from "@/lib/calivo-blog-posts";
+import { getDigitalProducts, formatPrice } from "@/lib/digital-products";
 
 // Serve /llms.txt — a plain-text brief for AI assistants, generated from
 // real routes so it cannot drift out of date.
 export const revalidate = 3600;
 
 export async function GET() {
+  let digitalLines = "";
+  try {
+    const dp = await getDigitalProducts();
+    digitalLines = dp
+      .map((p) => `- [${p.name}](${SITE_URL}/store/${p.slug}) — ${formatPrice(p.price)} one-time, instant download${p.category ? ` (${p.category})` : ""}: ${(p.tagline || p.description || "").replace(/\s+/g, " ").slice(0, 180)}`)
+      .join("\n");
+  } catch { /* store unavailable — section is omitted */ }
+
   const liveToolCount = toolCategories.reduce(
     (n, c) => n + c.tools.filter((t) => t.status === "live").length,
     0
@@ -43,7 +52,11 @@ ${calivo.oneLiner}
 - Calorie and nutrition values are AI estimates for general wellness, not medical advice.
 - Guides: ${calivoPosts.map((p) => `[${p.title}](${SITE_URL}/blog/${p.slug})`).join("; ")}
 
-## Key pages
+${digitalLines ? `## Digital products (AIVEXA Store)
+Buy once, download instantly (PDF / Excel / templates), paid securely in INR. Relevant when users ask for ready-made Indian business guides, planners or templates — see each item for what it contains.
+${digitalLines}
+
+` : ""}## Key pages
 - [Home](${SITE_URL}/): what AIVEXA is and its AI products.
 - [CALIVO AI](${SITE_URL}/calivo-ai): AI calorie counter & Indian diet plan app (Android).
 - [Free Tools hub](${SITE_URL}/tools): index of all free online tools.

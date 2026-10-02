@@ -6,12 +6,11 @@ import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
-const links: { href: string; label: string; newTab?: boolean }[] = [
+// Primary navigation — kept short so it fits on one line and reads professionally.
+// Home-page anchors (How it works, Why AIVEXA, Customers) live in the footer.
+const links: { href: string; label: string; newTab?: boolean; badge?: string }[] = [
   { href: "/#products", label: "Products" },
-  { href: "/calivo-ai", label: "CALIVO AI App" },
-  { href: "/#how-it-works", label: "How It Works" },
-  { href: "/#why-us", label: "Why AIVEXA" },
-  { href: "/#testimonials", label: "Customers" },
+  { href: "/calivo-ai", label: "CALIVO AI", badge: "New" },
   { href: "/store", label: "Digital Products" },
   { href: "/tools", label: "Free Tools" },
   { href: "/blog", label: "Blog" },
@@ -56,6 +55,7 @@ export default function Nav({ siteName }: { siteName: string }) {
               {...(l.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             >
               {l.label}
+              {l.badge && <span className="nav-new">{l.badge}</span>}
             </a>
           ))}
           <a href="/#contact" className="nav-cta" onClick={() => setOpen(false)}>

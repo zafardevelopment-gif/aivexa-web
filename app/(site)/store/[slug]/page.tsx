@@ -7,6 +7,7 @@ import { getDigitalProduct, getDigitalProducts, formatPrice } from "@/lib/digita
 import RazorpayButton from "./RazorpayButton";
 import AddToCartBtn from "@/components/AddToCartBtn";
 import ImageGallery from "./ImageGallery";
+import { SITE_URL, siteConfig } from "@/lib/seo/config";
 
 export const revalidate = 60;
 
@@ -23,9 +24,19 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = await getDigitalProduct(slug);
   if (!product) return { title: "Product — AIVEXA Store" };
+  const path = `/store/${slug}`;
+  const price = formatPrice(product.price);
+  const desc = (
+    `${product.tagline || product.description} Instant download · ${price} one-time · by AIVEXA.`
+  ).slice(0, 300);
+  const img = product.preview_image || "/aivexa-logo.png";
   return {
-    title: `${product.name} — AIVEXA Store`,
-    description: product.tagline || product.description,
+    title: `${product.name} — ${price} Instant Download | AIVEXA Store`,
+    description: desc,
+    keywords: [product.name, product.category, "digital download", "PDF", "India", "AIVEXA"].filter(Boolean) as string[],
+    alternates: { canonical: path },
+    openGraph: { title: product.name, description: desc, url: path, type: "website", siteName: siteConfig.name, images: [{ url: img, alt: product.name }] },
+    twitter: { card: "summary_large_image", title: product.name, description: desc, images: [img] },
   };
 }
 
@@ -52,8 +63,55 @@ export default async function StoreProductPage({
   const features   = product.features   ?? [];
   const highlights = product.highlights ?? [];
 
+  const url = `${SITE_URL}/store/${product.slug}`;
+  const abs = (u: string) => (u.startsWith("http") ? u : `${SITE_URL}${u}`);
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.name,
+      description: product.description || product.tagline,
+      image: allImages.length ? allImages.map(abs) : [`${SITE_URL}/aivexa-logo.png`],
+      sku: `AIVEXA-DP-${product.id}`,
+      category: product.category || "Digital Product",
+      brand: { "@type": "Brand", name: siteConfig.name },
+      url,
+      offers: {
+        "@type": "Offer",
+        url,
+        price: (product.price / 100).toFixed(2),
+        priceCurrency: "INR",
+        availability: "https://schema.org/InStock",
+        itemCondition: "https://schema.org/NewCondition",
+        seller: { "@type": "Organization", name: siteConfig.legalName },
+        shippingDetails: {
+          "@type": "OfferShippingDetails",
+          shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "INR" },
+          shippingDestination: { "@type": "DefinedRegion", addressCountry: "IN" },
+          deliveryTime: {
+            "@type": "ShippingDeliveryTime",
+            handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 0, unitCode: "DAY" },
+            transitTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 0, unitCode: "DAY" },
+          },
+        },
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Digital Products", item: `${SITE_URL}/store` },
+        { "@type": "ListItem", position: 3, name: product.name, item: url },
+      ],
+    },
+  ];
+
   return (
     <main>
+      {jsonLd.map((o, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(o) }} />
+      ))}
       <section className="section" style={{ paddingTop: "7rem" }}>
         <div className="container">
           <Reveal>

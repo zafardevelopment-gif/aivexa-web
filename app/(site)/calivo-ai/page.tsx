@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
-import Reveal from "@/components/Reveal";
+import "./calivo.css";
 import { calivo, calivoPlayUrl, CALIVO_PLAY_URL_CLEAN, PLAY_BADGE_IMG } from "@/lib/calivo";
 import { blogPosts } from "@/lib/blog-posts";
 import { SITE_URL, siteConfig } from "@/lib/seo/config";
@@ -95,42 +95,53 @@ export default function CalivoAiPage() {
   ];
 
   return (
-    <main>
+    <main className="cv">
       {jsonLd.map((obj, i) => (
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(obj) }} />
       ))}
 
       {/* HERO */}
-      <section className="page-hero">
-        <div className="container">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/calivo/calivo-icon.png" alt="CALIVO AI app icon" width={96} height={96} style={{ borderRadius: 22, margin: "0 auto 1rem", boxShadow: "0 8px 24px rgba(0,0,0,.12)" }} />
-          <div className="section-label" style={{ justifyContent: "center" }}>Free Android app · by AIVEXA</div>
-          <h1 className="section-title">
-            <span className="accent">CALIVO AI</span> — AI Calorie Counter &amp; Diet Coach for Indian Food
-          </h1>
-          <p className="section-desc" style={{ margin: "0 auto" }}>
-            Click a photo of your thali and know the calories in seconds. Get dietitian-style Indian diet plans for
-            weight loss, PCOS or diabetes — in English, हिंदी, اردو and العربية.
-          </p>
-          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", alignItems: "center", flexWrap: "wrap", marginTop: "1.6rem" }}>
-            <PlayBadge source="hero" height={68} />
+      <section className="cv-hero">
+        <div className="cv-wrap cv-hero-grid">
+          <div>
+            <div className="cv-brand">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/calivo/calivo-icon.png" alt="CALIVO AI app icon" width={56} height={56} />
+              <span>Free Android app · by AIVEXA</span>
+            </div>
+            <h1 className="cv-h1">
+              <em>CALIVO AI</em> — AI Calorie Counter &amp; Diet Coach for Indian Food
+            </h1>
+            <p className="cv-sub">
+              Click a photo of your thali and know the calories in seconds. Get dietitian-style Indian diet plans for
+              weight loss, PCOS or diabetes — in English, हिंदी, اردو and العربية.
+            </p>
+            <div className="cv-cta-row">
+              <PlayBadge source="hero" height={60} />
+              <a href="#features" className="cv-link-btn">See features ↓</a>
+            </div>
+            <div className="cv-trust">
+              <span>✅ <b>Free</b> download</span>
+              <span>🍛 Built for <b>Indian food</b></span>
+              <span>🌐 <b>4</b> languages</span>
+            </div>
+            <div className="cv-crumb"><Link href="/">Home</Link> › CALIVO AI</div>
           </div>
-          <p style={{ fontSize: ".85rem", opacity: 0.75, marginTop: ".6rem" }}>Free download · No credit card · Android</p>
-          <div className="breadcrumb">
-            <Link href="/">Home</Link>
-            <span>›</span>
-            <span>CALIVO AI</span>
+          <div className="cv-phones" aria-hidden="true">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={calivo.screenshots[1].src} alt="" width={250} height={444} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={calivo.screenshots[0].src} alt="" width={250} height={444} />
           </div>
         </div>
       </section>
 
       {/* WHAT IT IS — plain, quotable answer for search engines and AI assistants */}
-      <section className="section" style={{ paddingTop: "2.5rem" }}>
-        <div className="container" style={{ maxWidth: 820 }}>
-          <h2 className="section-title" style={{ fontSize: "1.6rem" }}>What is CALIVO AI?</h2>
-          <p className="section-desc" style={{ margin: "0 auto 1.2rem", textAlign: "left" }}>{calivo.oneLiner}</p>
-          <p className="section-desc" style={{ margin: "0 auto", textAlign: "left" }}>
+      <section className="cv-sec">
+        <div className="cv-narrow cv-what">
+          <h2 className="cv-h2">What is <em>CALIVO AI</em>?</h2>
+          <p>{calivo.oneLiner}</p>
+          <p>
             Most calorie apps are built for burgers and salads. CALIVO AI is built for <strong>dal-chawal, roti-sabzi,
             idli-sambar, poha and biryani</strong>. It understands katori and roti portions, estimates the oil and ghee in
             your cooking, and its AI dietitian plans meals around the foods you already eat at home.
@@ -139,105 +150,96 @@ export default function CalivoAiPage() {
       </section>
 
       {/* SCREENSHOTS */}
-      <section className="section" style={{ paddingTop: "1rem" }}>
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">Inside the app</div>
-            <h2 className="section-title">See CALIVO AI in action</h2>
+      <section className="cv-sec cv-sec-alt">
+        <div className="cv-wrap">
+          <div className="cv-head">
+            <div className="cv-pill">Inside the app</div>
+            <h2 className="cv-h2">See CALIVO AI in action</h2>
           </div>
-          <div style={{ display: "flex", gap: "1rem", overflowX: "auto", paddingBottom: "1rem", scrollSnapType: "x mandatory" }}>
+          <div className="cv-shots">
             {calivo.screenshots.map((s) => (
               // eslint-disable-next-line @next/next/no-img-element
-              <img key={s.src} src={s.src} alt={s.alt} width={240} height={427} loading="lazy"
-                style={{ width: 240, height: "auto", borderRadius: 18, flex: "0 0 auto", scrollSnapAlign: "start", boxShadow: "0 6px 20px rgba(0,0,0,.10)" }} />
+              <img key={s.src} src={s.src} alt={s.alt} width={200} height={356} loading="lazy" />
             ))}
           </div>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section className="section" style={{ paddingTop: "1rem" }}>
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">Features</div>
-            <h2 className="section-title">Everything you need to <span className="accent">eat smarter</span></h2>
+      <section className="cv-sec" id="features">
+        <div className="cv-wrap">
+          <div className="cv-head">
+            <div className="cv-pill">Features</div>
+            <h2 className="cv-h2">Everything you need to <em>eat smarter</em></h2>
           </div>
-          <div className="feature-list-grid">
-            {calivo.features.map((f, i) => (
-              <Reveal key={f.title} delay={i % 3}>
-                <div className="feature-tile" style={{ display: "block" }}>
-                  <div style={{ fontSize: "1.6rem", marginBottom: ".3rem" }}>{f.icon}</div>
-                  <h3 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 .3rem" }}>{f.title}</h3>
-                  <span>{f.text}</span>
+          <div className="cv-feat-grid">
+            {calivo.features.map((f) => (
+              <div key={f.title} className="cv-feat">
+                <div className="cv-feat-ic" aria-hidden="true">{f.icon}</div>
+                <div>
+                  <h3>{f.title}</h3>
+                  <p>{f.text}</p>
                 </div>
-              </Reveal>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="section" style={{ paddingTop: "1rem" }}>
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">How it works</div>
-            <h2 className="section-title">Start in 4 simple steps</h2>
+      <section className="cv-sec cv-sec-alt">
+        <div className="cv-wrap">
+          <div className="cv-head">
+            <div className="cv-pill">How it works</div>
+            <h2 className="cv-h2">Start in <em>4 simple steps</em></h2>
           </div>
-          <div className="feature-list-grid">
+          <div className="cv-steps">
             {calivo.steps.map((s, i) => (
-              <Reveal key={s.title} delay={i % 3}>
-                <div className="feature-tile" style={{ display: "block" }}>
-                  <div className="section-label" style={{ marginBottom: ".4rem" }}>Step {String(i + 1).padStart(2, "0")}</div>
-                  <strong style={{ display: "block", marginBottom: ".3rem" }}>{s.title}</strong>
-                  <span>{s.text}</span>
-                </div>
-              </Reveal>
+              <div key={s.title} className="cv-step">
+                <div className="cv-step-n">{i + 1}</div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* WHO IT'S FOR */}
-      <section className="section" style={{ paddingTop: "1rem" }}>
-        <div className="container" style={{ maxWidth: 820 }}>
-          <div className="section-header center">
-            <div className="section-label">Made for</div>
-            <h2 className="section-title">Who is CALIVO AI for?</h2>
+      <section className="cv-sec">
+        <div className="cv-wrap">
+          <div className="cv-head">
+            <div className="cv-pill">Made for</div>
+            <h2 className="cv-h2">Who is <em>CALIVO AI</em> for?</h2>
           </div>
-          <div className="feature-list-grid">
-            {calivo.audience.map((a, i) => (
-              <Reveal key={a} delay={i % 3}>
-                <div className="feature-tile"><CheckCircle2 size={19} strokeWidth={2.2} /> {a}</div>
-              </Reveal>
+          <div className="cv-aud">
+            {calivo.audience.map((a) => (
+              <div key={a}><CheckCircle2 size={19} strokeWidth={2.2} /> <span>{a}</span></div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="cta-band">
-        <Reveal>
-          <div className="cta-inner">
-            <h2>Download CALIVO AI — it&apos;s free</h2>
-            <p>Your AI dietitian for Indian food, in your pocket. Scan your next meal in 5 seconds.</p>
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem", position: "relative" }}>
-              <PlayBadge source="cta_band" height={64} />
-            </div>
-          </div>
-        </Reveal>
+      <section className="cv-wrap" style={{ marginBottom: "4.5rem" }}>
+        <div className="cv-band">
+          <h2>Download CALIVO AI — it&apos;s free</h2>
+          <p>Your AI dietitian for Indian food, in your pocket. Scan your next meal in 5 seconds.</p>
+          <PlayBadge source="cta_band" height={62} />
+        </div>
       </section>
 
       {/* FAQ — visible on page (required for honest FAQPage schema) */}
-      <section className="section" style={{ paddingTop: "2.5rem" }}>
-        <div className="container" style={{ maxWidth: 820 }}>
-          <div className="section-header center">
-            <div className="section-label">FAQ</div>
-            <h2 className="section-title">Frequently asked questions</h2>
+      <section className="cv-sec cv-sec-alt">
+        <div className="cv-narrow cv-faq">
+          <div className="cv-head">
+            <div className="cv-pill">FAQ</div>
+            <h2 className="cv-h2">Frequently asked questions</h2>
           </div>
           {calivo.faqs.map((f) => (
-            <details key={f.q} className="feature-tile" style={{ display: "block", marginBottom: ".7rem", cursor: "pointer" }}>
-              <summary style={{ fontWeight: 700 }}>{f.q}</summary>
-              <p style={{ marginTop: ".6rem" }}>{f.a}</p>
+            <details key={f.q}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
             </details>
           ))}
         </div>
@@ -245,17 +247,18 @@ export default function CalivoAiPage() {
 
       {/* GUIDES — internal links to the blog cluster */}
       {posts.length > 0 && (
-        <section className="section" style={{ paddingTop: "1rem" }}>
-          <div className="container">
-            <div className="section-header center">
-              <div className="section-label">Free guides</div>
-              <h2 className="section-title">Indian diet &amp; nutrition guides</h2>
+        <section className="cv-sec">
+          <div className="cv-wrap">
+            <div className="cv-head">
+              <div className="cv-pill">Free guides</div>
+              <h2 className="cv-h2">Indian diet &amp; nutrition guides</h2>
             </div>
-            <div className="feature-list-grid">
+            <div className="cv-guides">
               {posts.map((p) => (
-                <Link key={p.slug} href={`/blog/${p.slug}`} className="feature-tile" style={{ display: "block" }}>
-                  <strong style={{ display: "block", marginBottom: ".3rem" }}>{p.title}</strong>
-                  <span style={{ fontSize: ".85rem", opacity: 0.8 }}>{p.description}</span>
+                <Link key={p.slug} href={`/blog/${p.slug}`} className="cv-guide">
+                  <strong>{p.title}</strong>
+                  <span>{p.description}</span>
+                  <i>Read guide →</i>
                 </Link>
               ))}
             </div>
@@ -263,15 +266,11 @@ export default function CalivoAiPage() {
         </section>
       )}
 
-      <section className="section" style={{ paddingTop: 0, marginBottom: "3rem" }}>
-        <div className="container" style={{ textAlign: "center", fontSize: ".85rem", opacity: 0.8 }}>
-          <p>
-            CALIVO AI provides estimates for general wellness and is not medical advice. Consult your doctor for medical
-            conditions. · <Link href="/calivo-ai/privacy-policy">Privacy policy</Link> · Support:{" "}
-            <a href={`mailto:${calivo.supportEmail}`}>{calivo.supportEmail}</a>
-          </p>
-        </div>
-      </section>
+      <div className="cv-foot cv-wrap">
+        CALIVO AI provides estimates for general wellness and is not medical advice. Consult your doctor for medical
+        conditions. · <Link href="/calivo-ai/privacy-policy">Privacy policy</Link> · Support:{" "}
+        <a href={`mailto:${calivo.supportEmail}`}>{calivo.supportEmail}</a>
+      </div>
     </main>
   );
 }
