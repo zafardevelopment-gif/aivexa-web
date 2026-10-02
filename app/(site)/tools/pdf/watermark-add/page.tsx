@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("pdf", "watermark-add", {
-  title: "Add Watermark to PDF — Free Online Tool — AIVEXA",
+  title: "Add Watermark to PDF — Free Online Tool",
   description:
     "Overlay a text watermark on every PDF page with opacity, rotation and color options, free with no signup. Your files never leave your browser.",
 });

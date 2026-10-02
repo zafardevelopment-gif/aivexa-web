@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "invoice-generator", {
-  title: "Invoice Generator — Free Online Tool — AIVEXA",
+  title: "Invoice Generator — Free Online Tool",
   description:
     "Create a professional GST invoice PDF for free — line items, CGST/SGST split, Indian ₹ formatting, logo upload, no signup, data never leaves your browser.",
 });

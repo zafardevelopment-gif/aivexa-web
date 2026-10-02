@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("finance", "retirement-calculator", {
-  title: "Retirement Calculator — Free Online Tool — AIVEXA",
+  title: "Retirement Calculator — Free Online Tool",
   description:
     "Estimate your retirement corpus and monthly income from savings, monthly contributions and expected investment returns. Free and instant.",
 });

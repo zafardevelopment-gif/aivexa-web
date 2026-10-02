@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "age-calculator", {
-  title: "Age Calculator — Free Online Tool — AIVEXA",
+  title: "Age Calculator — Free Online Tool",
   description:
     "Calculate your exact age in years, months, and days for free, no signup required.",
 });

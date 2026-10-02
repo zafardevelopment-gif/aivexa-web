@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("image", "crop", {
-  title: "Image Cropper — Free Online Tool — AIVEXA",
+  title: "Image Cropper — Free Online Tool",
   description:
     "Crop images online for free with an interactive crop box and aspect ratio presets (1:1, 16:9, 4:3). No signup, no upload — cropping runs 100% in your browser.",
 });

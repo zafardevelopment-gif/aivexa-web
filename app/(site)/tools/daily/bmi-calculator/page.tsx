@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "bmi-calculator", {
-  title: "BMI Calculator — Free Online Tool — AIVEXA",
+  title: "BMI Calculator — Free Online Tool",
   description:
     "Calculate your Body Mass Index (BMI) in metric or imperial units for free, no signup required.",
 });

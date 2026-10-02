@@ -4,12 +4,12 @@ import { FileCode } from "lucide-react";
 import { getCategory } from "@/lib/tools-registry";
 
 export const metadata: Metadata = {
-  title: "Markdown Converter Tools — Convert Any File to .md — AIVEXA",
+  title: "Markdown Converter Tools — Convert Any File to .md",
   description:
     "Free browser-based tools to convert PDF, Word, Excel, CSV, image, HTML and plain text files to Markdown (.md) — no signup, no upload.",
   alternates: { canonical: "/tools/markdown" },
   openGraph: {
-    title: "Markdown Converter Tools — AIVEXA",
+    title: "Markdown Converter Tools",
     description:
       "Convert PDF, DOCX, XLSX, CSV, image, HTML and TXT to Markdown — free and browser-only.",
     type: "website",

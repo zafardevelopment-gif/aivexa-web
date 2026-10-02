@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "loan-comparison", {
-  title: "Loan Comparison Calculator — Free Online Tool — AIVEXA",
+  title: "Loan Comparison Calculator — Free Online Tool",
   description:
     "Compare EMI, total interest, and total payment across two or three loans side by side for free, no signup required.",
 });

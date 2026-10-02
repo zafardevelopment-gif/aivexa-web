@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("misc", "typing-speed-test", {
-  title: "Typing Speed Test — Free Online Tool — AIVEXA",
+  title: "Typing Speed Test — Free Online Tool",
   description:
     "Free online typing speed test to measure your words per minute (WPM) and typing accuracy with live character highlighting.",
 });

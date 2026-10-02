@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("image", "svg-to-png", {
-  title: "SVG to PNG Converter — Free Online Tool — AIVEXA",
+  title: "SVG to PNG Converter — Free Online Tool",
   description:
     "Convert SVG files or pasted SVG markup to PNG at any resolution online for free. Handles viewBox-only SVGs. No signup, no upload — 100% browser-based.",
 });

@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "invitation-card-maker", {
-  title: "Invitation Card Maker — Free Online Tool — AIVEXA",
+  title: "Invitation Card Maker — Free Online Tool",
   description:
     "Design a wedding, birthday or event invitation card free — elegant, festive and minimal templates, live preview, PDF and PNG download. No signup, fully in-browser.",
 });

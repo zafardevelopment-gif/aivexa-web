@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("finance", "us-salary-calculator", {
-  title: "US Salary Calculator — Take-Home Pay — AIVEXA",
+  title: "US Salary Calculator — Take-Home Pay",
   description:
     "Calculate your US take-home pay after federal income tax, Social Security, Medicare and state tax. Supports all 50 states for 2024–2025.",
 });

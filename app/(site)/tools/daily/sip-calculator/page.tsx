@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "sip-calculator", {
-  title: "SIP Calculator — Free Online Tool — AIVEXA",
+  title: "SIP Calculator — Free Online Tool",
   description:
     "Estimate the future value of your monthly SIP investments with a year-by-year growth table for free, no signup required.",
 });

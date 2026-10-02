@@ -5,7 +5,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "countdown-timer", {
-  title: "Countdown Timer — Free Online Tool — AIVEXA",
+  title: "Countdown Timer — Free Online Tool",
   description:
     "Free online countdown timer to any date or event with a shareable link, no signup required.",
 });

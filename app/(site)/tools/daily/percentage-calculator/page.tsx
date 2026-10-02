@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "percentage-calculator", {
-  title: "Percentage Calculator — Free Online Tool — AIVEXA",
+  title: "Percentage Calculator — Free Online Tool",
   description:
     "Calculate percentages, percentage change, and percentage of a value for free, no signup required.",
 });

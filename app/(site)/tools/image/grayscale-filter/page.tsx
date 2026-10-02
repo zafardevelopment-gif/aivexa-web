@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("image", "grayscale-filter", {
-  title: "Grayscale & Photo Filters — Free Online Tool — AIVEXA",
+  title: "Grayscale & Photo Filters — Free Online Tool",
   description:
     "Apply grayscale, sepia, high-contrast B&W and invert filters plus brightness control to any photo online for free. No signup, no upload — 100% browser-based.",
 });

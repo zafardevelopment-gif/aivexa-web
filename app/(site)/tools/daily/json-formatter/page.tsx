@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "json-formatter", {
-  title: "JSON Formatter — Free Online Tool — AIVEXA",
+  title: "JSON Formatter — Free Online Tool",
   description:
     "Format, validate, and beautify JSON instantly with clear error messages, free and no signup required.",
 });

@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("islamic", "salah-time-reminder", {
-  title: "Salah Time Reminder — Free Online Tool — AIVEXA",
+  title: "Salah Time Reminder — Free Online Tool",
   description:
     "Get browser notifications for today's remaining prayer times — free, private, and fully in your browser while the tab stays open.",
 });

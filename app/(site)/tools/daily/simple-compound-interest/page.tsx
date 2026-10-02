@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "simple-compound-interest", {
-  title: "Simple & Compound Interest Calculator — Free Online Tool — AIVEXA",
+  title: "Simple & Compound Interest Calculator — Free Online Tool",
   description:
     "Calculate simple and compound interest on your savings or loans for free, no signup required.",
 });

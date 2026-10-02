@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("islamic", "hijri-converter", {
-  title: "Hijri-Gregorian Converter — Free Online Tool — AIVEXA",
+  title: "Hijri-Gregorian Converter — Free Online Tool",
   description:
     "Convert dates between the Hijri (Islamic) and Gregorian calendars, both ways, free and instantly.",
 });

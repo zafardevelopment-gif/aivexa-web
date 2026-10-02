@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "offer-letter-generator", {
-  title: "Offer Letter Generator — Free Online Tool — AIVEXA",
+  title: "Offer Letter Generator — Free Online Tool",
   description:
     "Generate a formal employee offer letter in seconds — role, CTC, joining date, probation and more. Editable text, instant PDF, free, no signup, fully in-browser.",
 });

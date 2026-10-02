@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("islamic", "tasbih-counter", {
-  title: "Tasbih Counter — Free Online Tool — AIVEXA",
+  title: "Tasbih Counter — Free Online Tool",
   description: "A digital dhikr counter with target count, vibration alert, sound and reset. Saved automatically.",
 });
 

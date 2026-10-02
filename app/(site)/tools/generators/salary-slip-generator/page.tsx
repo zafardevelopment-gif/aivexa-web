@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "salary-slip-generator", {
-  title: "Salary Slip Generator — Free Online Tool — AIVEXA",
+  title: "Salary Slip Generator — Free Online Tool",
   description:
     "Generate a professional salary slip (payslip) PDF for free — earnings and deductions breakdown, automatic net pay, amount in words (lakh/crore), no signup, fully in-browser.",
 });

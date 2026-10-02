@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("misc", "rental-roi-calculator", {
-  title: "Rental ROI Calculator — Rental Yield & Payback Period — AIVEXA",
+  title: "Rental ROI Calculator — Rental Yield & Payback Period",
   description:
     "Free rental property ROI calculator for India. Get gross yield, net yield, total ROI with appreciation and payback period from purchase price and monthly rent. No signup.",
 });

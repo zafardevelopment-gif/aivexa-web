@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "qr-generator", {
-  title: "QR Code Generator — Free Online Tool — AIVEXA",
+  title: "QR Code Generator — Free Online Tool",
   description:
     "Generate a free downloadable QR code from any text or URL with color customization, no signup required.",
 });

@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("pdf", "merge", {
-  title: "Merge PDF — Free Online Tool — AIVEXA",
+  title: "Merge PDF — Free Online Tool",
   description:
     "Combine multiple PDF files into one, free and with no signup. 100% client-side — your files never leave your browser.",
 });

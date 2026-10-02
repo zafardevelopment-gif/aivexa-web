@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "cover-letter-generator", {
-  title: "Cover Letter Generator — Free Online Tool — AIVEXA",
+  title: "Cover Letter Generator — Free Online Tool",
   description:
     "Generate a professional, editable cover letter for any job in seconds — formal or friendly tone, PDF download, free, no signup, your data never leaves your browser.",
 });

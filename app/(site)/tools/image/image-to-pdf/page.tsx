@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("image", "image-to-pdf", {
-  title: "Image to PDF Converter — Free Online Tool — AIVEXA",
+  title: "Image to PDF Converter — Free Online Tool",
   description:
     "Convert JPG and PNG images to a single A4 PDF online for free — reorder pages, fit-to-page layout. No signup, no upload — the PDF is built 100% in your browser.",
 });

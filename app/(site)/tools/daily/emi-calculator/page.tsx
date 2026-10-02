@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "emi-calculator", {
-  title: "EMI Calculator — Free Online Tool — AIVEXA",
+  title: "EMI Calculator — Free Online Tool",
   description:
     "Calculate your monthly loan EMI, total interest, and full amortization schedule for free, no signup required.",
 });

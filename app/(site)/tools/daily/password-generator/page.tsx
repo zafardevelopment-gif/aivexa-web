@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "password-generator", {
-  title: "Password Generator — Free Online Tool — AIVEXA",
+  title: "Password Generator — Free Online Tool",
   description:
     "Generate strong, random, secure passwords for free, no signup required, with customizable length and character types.",
 });

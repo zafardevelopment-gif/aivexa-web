@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "time-zone-converter", {
-  title: "Time Zone Converter — Free Online Tool — AIVEXA",
+  title: "Time Zone Converter — Free Online Tool",
   description:
     "Convert date and time between time zones instantly for free, no signup required.",
 });

@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "tip-calculator", {
-  title: "Tip Calculator — Free Online Tool — AIVEXA",
+  title: "Tip Calculator — Free Online Tool",
   description:
     "Calculate tip amount, total bill, and per-person split for free, no signup required.",
 });

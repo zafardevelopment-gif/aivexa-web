@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("misc", "baby-name-generator", {
-  title: "Baby Name Generator — Free Online Tool — AIVEXA",
+  title: "Baby Name Generator — Free Online Tool",
   description:
     "Browse Islamic, Hindu, Christian and Sikh baby names with meaning, origin and gender filters, free and no signup required.",
 });

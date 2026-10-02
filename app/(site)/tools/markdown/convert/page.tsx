@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import FileToMarkdownTool from "./FileToMarkdownTool";
 
 export const metadata: Metadata = {
-  title: "File to Markdown Converter — PDF, DOCX, XLSX, CSV, Image & More — AIVEXA",
+  title: "File to Markdown Converter — PDF, DOCX, XLSX, CSV, Image & More",
   description:
     "Convert PDF, Word (.docx), Excel (.xlsx), CSV, image (OCR), HTML, JSON and plain text files to clean Markdown (.md) — free, no signup, runs entirely in your browser.",
   keywords: [
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/markdown/convert" },
   openGraph: {
-    title: "File to Markdown Converter — AIVEXA",
+    title: "File to Markdown Converter",
     description:
       "Free browser-based converter: PDF, DOCX, XLSX, CSV, image, HTML, JSON → Markdown .md file.",
     type: "website",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "File to Markdown Converter — AIVEXA",
+    title: "File to Markdown Converter",
     description: "PDF, DOCX, XLSX, CSV, image, HTML & TXT → .md — free, no upload.",
   },
 };

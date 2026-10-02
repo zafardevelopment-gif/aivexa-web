@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Practical guides on AI automation, Indian diet and nutrition, small-business finance, GST, free online PDF and image tools, and digital transformation for India.",
   alternates: { canonical: "/blog" },
   openGraph: {
-    title: "Blog | AIVEXA",
+    title: "Blog",
     description:
       "Practical guides on AI automation, Indian diet and nutrition, small-business finance, GST and free online tools.",
     type: "website",

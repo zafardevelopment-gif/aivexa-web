@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("finance", "australia-salary-calculator", {
-  title: "Australia Salary Calculator — Take-Home Pay 2024–25 — AIVEXA",
+  title: "Australia Salary Calculator — Take-Home Pay 2024–25",
   description:
     "Calculate your Australian take-home pay after income tax and Medicare levy for 2024–25. Supports annual, monthly, fortnightly and weekly pay.",
 });

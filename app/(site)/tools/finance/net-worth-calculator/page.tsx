@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("finance", "net-worth-calculator", {
-  title: "Net Worth Calculator — Free Online Tool — AIVEXA",
+  title: "Net Worth Calculator — Free Online Tool",
   description:
     "Calculate your personal net worth by adding up your assets and subtracting your liabilities. Free, private, browser-based.",
 });

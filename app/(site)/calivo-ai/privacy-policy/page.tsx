@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — CALIVO AI | AIVEXA",
+  title: "Privacy Policy — CALIVO AI",
   description:
     "Privacy policy for CALIVO AI — Your AI Calorie & Health Coach, operated by AIVEXA LLP.",
 };

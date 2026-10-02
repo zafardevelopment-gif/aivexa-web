@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("image", "watermark", {
-  title: "Add Watermark to Image — Free Online Tool — AIVEXA",
+  title: "Add Watermark to Image — Free Online Tool",
   description:
     "Add a text watermark to photos online for free — custom text, size, opacity and position (center, corners, tiled). No signup, no upload — 100% browser-based.",
 });

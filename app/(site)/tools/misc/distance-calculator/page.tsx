@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("misc", "distance-calculator", {
-  title: "Distance Calculator — Free Online Tool — AIVEXA",
+  title: "Distance Calculator — Free Online Tool",
   description:
     "Free tool to calculate the approximate straight-line and road distance in km between two major Indian cities.",
 });

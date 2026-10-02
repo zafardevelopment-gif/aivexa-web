@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("islamic", "qibla-direction", {
-  title: "Qibla Direction Finder — Free Online Tool — AIVEXA",
+  title: "Qibla Direction Finder — Free Online Tool",
   description:
     "Find the Qibla direction (bearing to the Kaaba in Makkah) from your location, with an interactive compass — free and fully in your browser.",
 });

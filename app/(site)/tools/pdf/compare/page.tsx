@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("pdf", "compare", {
-  title: "Compare PDFs — Free Online Tool — AIVEXA",
+  title: "Compare PDFs — Free Online Tool",
   description:
     "See a text diff between two PDF versions with added and removed lines highlighted, free with no signup. Your files never leave your browser.",
 });

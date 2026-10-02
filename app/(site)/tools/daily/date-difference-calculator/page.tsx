@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "date-difference-calculator", {
-  title: "Date Difference Calculator — Free Online Tool — AIVEXA",
+  title: "Date Difference Calculator — Free Online Tool",
   description:
     "Calculate the exact number of days, weeks, months, and years between two dates for free, no signup required.",
 });

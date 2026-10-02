@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "barcode-generator", {
-  title: "Barcode Generator — Free Online Tool — AIVEXA",
+  title: "Barcode Generator — Free Online Tool",
   description:
     "Generate free downloadable CODE128 and EAN-13 barcodes from text or numbers, no signup required.",
 });

@@ -4,7 +4,7 @@ import XmlToJsonTool from "./XmlToJsonTool";
 import ToolSeoContent from "@/components/tools/ToolSeoContent";
 
 export const metadata: Metadata = buildToolMetadata("json", "xml-to-json", {
-  title: "XML to JSON Converter — Free Online Tool — AIVEXA",
+  title: "XML to JSON Converter — Free Online Tool",
   description:
     "Parse XML and convert to clean JSON instantly. Free online XML to JSON converter — no signup, no file upload, 100% browser-based.",
 });

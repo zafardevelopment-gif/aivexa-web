@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Sakinah | AIVEXA",
+  title: "Privacy Policy — Sakinah",
   description:
     "Privacy policy for Sakinah — Lock to Pray, the privacy-first Islamic prayer companion by AIVEXA LLP.",
 };

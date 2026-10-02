@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "word-counter", {
-  title: "Word Counter — Free Online Tool — AIVEXA",
+  title: "Word Counter — Free Online Tool",
   description:
     "Count words, characters, sentences, and paragraphs with live reading time estimates, free and no signup required.",
 });

@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "currency-converter", {
-  title: "Currency Converter — Free Online Tool — AIVEXA",
+  title: "Currency Converter — Free Online Tool",
   description:
     "Convert between currencies using your own exchange rate for free, no signup and no external API required.",
 });

@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("islamic", "zakat-calculator", {
-  title: "Zakat Calculator — Free Online Tool — AIVEXA",
+  title: "Zakat Calculator — Free Online Tool",
   description:
     "Calculate Zakat payable on cash, gold, silver, savings and business assets, with gold/silver Nisab thresholds.",
 });

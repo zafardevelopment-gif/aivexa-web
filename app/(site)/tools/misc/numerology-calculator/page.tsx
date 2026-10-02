@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("misc", "numerology-calculator", {
-  title: "Numerology Calculator — Free Online Tool — AIVEXA",
+  title: "Numerology Calculator — Free Online Tool",
   description:
     "Calculate your free Life Path and Destiny (Expression) number from your name and date of birth using traditional Pythagorean numerology.",
 });

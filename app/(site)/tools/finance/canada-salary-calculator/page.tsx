@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("finance", "canada-salary-calculator", {
-  title: "Canada Salary Calculator — Take-Home Pay 2024 — AIVEXA",
+  title: "Canada Salary Calculator — Take-Home Pay 2024",
   description:
     "Calculate your Canadian take-home pay after federal and provincial income tax, CPP and EI deductions for 2024.",
 });

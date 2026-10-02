@@ -23,7 +23,6 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.legalName }],
   creator: siteConfig.legalName,
   publisher: siteConfig.legalName,
-  alternates: { canonical: "/" },
   manifest: "/manifest.webmanifest",
   robots: {
     index: true,

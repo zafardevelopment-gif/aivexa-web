@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "noc-letter-generator", {
-  title: "NOC Letter Generator — Free Online Tool — AIVEXA",
+  title: "NOC Letter Generator — Free Online Tool",
   description:
     "Generate a No Objection Certificate (NOC) letter free — landlord NOC for tenants, employer NOC for visa/travel, vehicle NOC for interstate transfer. Editable text, PDF download, fully in-browser.",
 });

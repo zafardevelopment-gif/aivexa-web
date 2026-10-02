@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("image", "background-color-change", {
-  title: "Change Image Background Color — Free Online Tool — AIVEXA",
+  title: "Change Image Background Color — Free Online Tool",
   description:
     "Fill the transparent background of a PNG with any solid color online for free. No signup, no upload — processing happens 100% in your browser.",
 });

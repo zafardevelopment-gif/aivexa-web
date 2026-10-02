@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("islamic", "property-land-distribution", {
-  title: "Property/Land Distribution — Free Online Tool — AIVEXA",
+  title: "Property/Land Distribution — Free Online Tool",
   description:
     "Divide property value or land area among heirs per Islamic Faraid rules, with Katha/Bigha/Acre/sqft/sqm support.",
 });

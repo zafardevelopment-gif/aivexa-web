@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("pdf", "compress", {
-  title: "Compress PDF — Free Online Tool — AIVEXA",
+  title: "Compress PDF — Free Online Tool",
   description:
     "Reduce PDF file size free with no signup — lossless clean-up or aggressive image recompression. Your files never leave your browser.",
 });

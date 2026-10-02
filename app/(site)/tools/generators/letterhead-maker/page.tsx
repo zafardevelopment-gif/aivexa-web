@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "letterhead-maker", {
-  title: "Letterhead Maker — Free Online Tool — AIVEXA",
+  title: "Letterhead Maker — Free Online Tool",
   description:
     "Create a professional company letterhead free — logo, tagline, contact details, accent color, two header layouts, A4 live preview and reusable blank PDF download. Fully in-browser.",
 });

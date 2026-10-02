@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("daily", "random-name-picker", {
-  title: "Random Name Picker — Free Online Tool — AIVEXA",
+  title: "Random Name Picker — Free Online Tool",
   description:
     "Pick a random name from a list instantly with a fun spinning animation, free and no signup required.",
 });

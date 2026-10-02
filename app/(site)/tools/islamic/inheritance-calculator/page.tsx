@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("islamic", "inheritance-calculator", {
-  title: "Inheritance (Mirath) Calculator — Free Online Tool — AIVEXA",
+  title: "Inheritance (Mirath) Calculator — Free Online Tool",
   description:
     "Estimate Islamic inheritance shares (Faraid) for a standard Sunni Hanafi estate distribution among heirs.",
 });

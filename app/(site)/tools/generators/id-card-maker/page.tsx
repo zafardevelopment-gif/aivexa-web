@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("generators", "id-card-maker", {
-  title: "ID Card Maker — Free Online Tool — AIVEXA",
+  title: "ID Card Maker — Free Online Tool",
   description:
     "Design an employee or student ID card free — photo upload, org color, live preview, print-ready PDF and PNG download, no signup, everything stays in your browser.",
 });

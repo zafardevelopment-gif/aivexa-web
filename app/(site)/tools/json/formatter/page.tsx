@@ -4,7 +4,7 @@ import JsonFormatterTool from "./JsonFormatterTool";
 import ToolSeoContent from "@/components/tools/ToolSeoContent";
 
 export const metadata: Metadata = buildToolMetadata("json", "formatter", {
-  title: "JSON Formatter & Validator — Free Online Tool — AIVEXA",
+  title: "JSON Formatter & Validator — Free Online Tool",
   description:
     "Beautify or minify JSON instantly in your browser. Free JSON formatter and validator with error highlighting — no signup, no file upload required.",
 });

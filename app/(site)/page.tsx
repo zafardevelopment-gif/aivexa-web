@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -49,6 +50,10 @@ const complianceBadges = [
   { icon: Server, label: "99.9% uptime infrastructure" },
   { icon: FileCheck2, label: "Full audit logging" },
 ];
+
+
+// Canonical lives here (not in the root layout) so other pages do not inherit "/".
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
   const [settings, products, steps, stats, testimonials, featuredDigital] = await Promise.all([

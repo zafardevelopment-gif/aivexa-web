@@ -4,7 +4,7 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import { buildToolMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildToolMetadata("pdf", "pdf-to-word", {
-  title: "PDF to Word — Free Online Tool — AIVEXA",
+  title: "PDF to Word — Free Online Tool",
   description:
     "Convert PDF text content into an editable Word .docx file, free with no signup. Your files never leave your browser.",
 });
