@@ -28,8 +28,6 @@ import {
   getTestimonials,
 } from "@/lib/data";
 import { getExternalLink } from "@/lib/external-links";
-import { calivoPlayUrl, PLAY_BADGE_IMG } from "@/lib/calivo";
-import { miftahPlayUrl } from "@/lib/miftah";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
 import { getFeaturedDigitalProducts, formatPrice } from "@/lib/digital-products";
 import { FileDown, ShoppingCart, Tag } from "lucide-react";
@@ -229,46 +227,6 @@ export default async function Home() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* ===== CALIVO AI (consumer app) ===== */}
-      <section className="cta-band" id="calivo-ai">
-        <Reveal>
-          <div className="cta-inner">
-            <h2>New: CALIVO AI — calorie counter &amp; diet coach for Indian food</h2>
-            <p>
-              Click a photo of your meal to see calories, get AI diet plans for weight loss, PCOS and diabetes,
-              and track water, weight and fasting — in English, Hindi, Urdu and Arabic. Free on Google Play.
-            </p>
-            <div style={{ display: "flex", gap: ".9rem", justifyContent: "center", alignItems: "center", flexWrap: "wrap", marginTop: "1rem", position: "relative" }}>
-              <a href={calivoPlayUrl("home")} target="_blank" rel="noopener" aria-label="Get CALIVO AI on Google Play" style={{ lineHeight: 0 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={PLAY_BADGE_IMG} alt="Get it on Google Play" height={58} style={{ height: 58, width: "auto" }} />
-              </a>
-              <Link href="/calivo-ai" className="btn-secondary">Learn more</Link>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* ===== MIFTAH (consumer app) ===== */}
-      <section className="cta-band" id="miftah" style={{ background: "linear-gradient(135deg, #1E4438 0%, #2F5D50 60%, #4A7F6C 100%)" }}>
-        <Reveal>
-          <div className="cta-inner">
-            <h2>Miftah — prayer times, Azan, Qibla &amp; Quran app</h2>
-            <p>
-              Accurate namaz times, a reminder before every prayer, Azan and Iqamah alerts, the Holy Quran and a
-              gentle app blocker that pauses distractions during salah. Free on Google Play.
-            </p>
-            <div style={{ display: "flex", gap: ".9rem", justifyContent: "center", alignItems: "center", flexWrap: "wrap", marginTop: "1rem", position: "relative" }}>
-              <a href={miftahPlayUrl("home")} target="_blank" rel="noopener" aria-label="Get Miftah on Google Play" style={{ lineHeight: 0 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={PLAY_BADGE_IMG} alt="Get it on Google Play" height={58} style={{ height: 58, width: "auto" }} />
-              </a>
-              <Link href="/miftah" className="btn-secondary">Learn more</Link>
-            </div>
-          </div>
-        </Reveal>
       </section>
 
       {/* ===== DIGITAL PRODUCTS (featured) ===== */}

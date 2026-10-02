@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts, getPostBySlug, getAllSlugs } from "@/lib/blog-posts";
 import { calivoPlayUrl, PLAY_BADGE_IMG } from "@/lib/calivo";
+import { miftahPlayUrl } from "@/lib/miftah";
 import { getDigitalProduct, formatPrice } from "@/lib/digital-products";
 import { catClass } from "../categories";
 import "../blog.css";
@@ -224,6 +225,25 @@ export default async function BlogPostPage({ params }: Props) {
           </section>
         )}
 
+        {post.cta === "miftah" && (
+          <section className="bl-narrow">
+            <div className="bl-box bl-box-calivo" style={{ background: "linear-gradient(135deg, #1E4438 0%, #2F5D50 60%, #4A7F6C 100%)" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="icon" src="/miftah/miftah-icon.png" alt="Miftah app icon" width={64} height={64} />
+              <h2>Never miss a salah</h2>
+              <p>
+                Miftah is a free prayer app: accurate offline namaz times, before-prayer, Azan &amp; Iqamah alerts, Qibla,
+                the Holy Quran, a salah tracker and a gentle app pause during prayer time.
+              </p>
+              <a href={miftahPlayUrl(`blog_${post.slug}`)} target="_blank" rel="noopener" aria-label="Get Miftah on Google Play" style={{ display: "inline-block", lineHeight: 0 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={PLAY_BADGE_IMG} alt="Get it on Google Play" height={60} style={{ height: 60, width: "auto" }} />
+              </a>
+              <div className="more"><Link href="/miftah">Learn more about Miftah →</Link></div>
+            </div>
+          </section>
+        )}
+
         {storeProduct && (
           <section className="bl-narrow">
             <div className="bl-box bl-box-store">
@@ -245,7 +265,7 @@ export default async function BlogPostPage({ params }: Props) {
           </section>
         )}
 
-        {post.cta !== "calivo" && !storeProduct && (
+        {!post.cta && !storeProduct && (
           <section className="bl-cta">
             <h2>Ready to automate your business?</h2>
             <p>AIVEXA builds AI systems for Indian businesses — on WhatsApp and Voice, in your customers&apos; languages.</p>

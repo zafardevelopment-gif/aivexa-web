@@ -4,6 +4,7 @@ import { CheckCircle2 } from "lucide-react";
 import "../calivo-ai/calivo.css";
 import { miftah, miftahPlayUrl, MIFTAH_PLAY_URL_CLEAN, MIFTAH_PACKAGE } from "@/lib/miftah";
 import { PLAY_BADGE_IMG } from "@/lib/calivo";
+import { blogPosts } from "@/lib/blog-posts";
 import { SITE_URL, siteConfig } from "@/lib/seo/config";
 
 const PATH = "/miftah";
@@ -59,6 +60,7 @@ function PlayBadge({ source, height = 64 }: { source: string; height?: number })
 
 export default function MiftahPage() {
   const url = `${SITE_URL}${PATH}`;
+  const posts = blogPosts.filter((p) => p.cta === "miftah").slice(0, 6);
 
   const jsonLd: Record<string, unknown>[] = [
     {
@@ -256,6 +258,27 @@ export default function MiftahPage() {
           <PlayBadge source="cta_band" height={62} />
         </div>
       </section>
+
+      {/* GUIDES — internal links to the blog cluster */}
+      {posts.length > 0 && (
+        <section className="cv-sec">
+          <div className="cv-wrap">
+            <div className="cv-head">
+              <div className="cv-pill">Free guides</div>
+              <h2 className="cv-h2">Prayer &amp; salah guides</h2>
+            </div>
+            <div className="cv-guides">
+              {posts.map((p) => (
+                <Link key={p.slug} href={`/blog/${p.slug}`} className="cv-guide">
+                  <strong>{p.title}</strong>
+                  <span>{p.description}</span>
+                  <i>Read guide →</i>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* FAQ — visible on page (required for honest FAQPage schema) */}
       <section className="cv-sec">

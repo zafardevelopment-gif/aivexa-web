@@ -7,12 +7,13 @@ export interface BlogPost {
   readTime: string;
   content: string;
   /** Optional product CTA shown at the end of the article (e.g. CALIVO AI download box). */
-  cta?: "calivo";
+  cta?: "calivo" | "miftah";
   /** Optional AIVEXA Store product slug — renders a product box at the end of the article. */
   storeSlug?: string;
 }
 
 import { calivoPosts } from "./calivo-blog-posts";
+import { miftahPosts } from "./miftah-blog-posts";
 import { storePosts } from "./store-blog-posts";
 
 export const blogPosts: BlogPost[] = [
@@ -1274,6 +1275,7 @@ If you are evaluating AI automation for your Indian business and want to underst
     `.trim(),
   },
   ...calivoPosts,
+  ...miftahPosts,
   ...storePosts,
 ];
 
