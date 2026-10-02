@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Old thin product page → the full MyRentSaathi landing page.
+      { source: "/products/myrentsaathi", destination: "/myrentsaathi", permanent: true },
       {
         source: "/privacy-policy",
         destination: "/miftah-privacy",

@@ -2,6 +2,7 @@ import { toolCategories } from "@/lib/tools-registry";
 import { SITE_URL, siteConfig } from "@/lib/seo/config";
 import { calivo, CALIVO_PLAY_URL_CLEAN } from "@/lib/calivo";
 import { calivoPosts } from "@/lib/calivo-blog-posts";
+import { aivexaApps } from "@/lib/aivexa-apps";
 import { getDigitalProducts, formatPrice } from "@/lib/digital-products";
 
 // Serve /llms.txt — a plain-text brief for AI assistants, generated from
@@ -40,6 +41,14 @@ ${siteConfig.name} is a product studio run by ${siteConfig.legalName}, based in 
 - A store of downloadable digital products (planners, templates, guides).
 - CALIVO AI, a free Android app: AI calorie counter and diet coach for Indian food.
 
+${aivexaApps.map((a) => `## ${a.name} — ${a.h1Accent}
+${a.oneLiner}
+- Website: ${a.url}
+- About page: ${SITE_URL}/${a.slug}
+- Pricing: ${a.pricingNote}
+- For: ${a.audience.join("; ")}.
+- Key features: ${a.features.map((f) => f.title).join("; ")}.
+`).join("\n")}
 ## CALIVO AI — AI calorie counter & diet coach app (consumer app)
 ${calivo.oneLiner}
 - Download (Android, free): ${CALIVO_PLAY_URL_CLEAN}

@@ -27,7 +27,9 @@ export default function Footer({ settings }: { settings: Settings }) {
             <Link href="/products/ai-hospital">AI Hospital</Link>
             <Link href="/products/ai-camp">AI Camp</Link>
             <Link href="/products/saferide-qr">SafeRide QR</Link>
-            <Link href="/products/myrentsaathi">MyRentSaathi</Link>
+            <Link href="/myrentsaathi">MyRentSaathi</Link>
+            <Link href="/testsaathi">TestSaathi</Link>
+            <Link href="/tentsaathi">TentSaathi</Link>
           </div>
         </div>
         <div>
