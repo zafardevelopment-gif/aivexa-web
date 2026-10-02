@@ -57,7 +57,7 @@ export const siteConfig = {
   /** Legal entity + contact — the address propagates from here. */
   entity: {
     legalName: "AIVEXA LLP",
-    email: "aivexallp@gmail.com",
+    email: "info@aivexallp.com",
     gstin: "10ACOFA0764H1ZO",
     address: {
       locality: "Darbhanga",

@@ -153,7 +153,7 @@ export default function CalivoPrivacyPolicyPage() {
           <li>
             <strong>Account deletion:</strong> You may request deletion of your account and all
             associated personal data by emailing us at{" "}
-            <a href="mailto:aivexallp@gmail.com">aivexallp@gmail.com</a> with the subject line
+            <a href="mailto:info@aivexallp.com">info@aivexallp.com</a> with the subject line
             &ldquo;Account Deletion Request&rdquo; from the email address associated with your
             account. We will process your request within 30 days.
           </li>
@@ -202,7 +202,7 @@ export default function CalivoPrivacyPolicyPage() {
           personal data, please contact us at:
         </p>
         <p>
-          <strong>Email:</strong> <a href="mailto:aivexallp@gmail.com">aivexallp@gmail.com</a>
+          <strong>Email:</strong> <a href="mailto:info@aivexallp.com">info@aivexallp.com</a>
           <br />
           <strong>App:</strong> CALIVO AI — Your AI Calorie &amp; Health Coach
         </p>

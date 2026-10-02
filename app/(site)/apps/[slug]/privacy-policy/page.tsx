@@ -104,7 +104,7 @@ export default async function AutoPrivacyPolicyPage({ params }: { params: Promis
 
         <h3>7. Contact</h3>
         <p>
-          Questions about this policy can be sent to: <strong>{app.email || "aivexallp@gmail.com"}</strong>
+          Questions about this policy can be sent to: <strong>{app.email || "info@aivexallp.com"}</strong>
         </p>
       </section>
     </main>

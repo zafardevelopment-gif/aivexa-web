@@ -3,24 +3,28 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ShoppingCart } from "lucide-react";
+import { ChevronDown, ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
 // Primary navigation — kept short so it fits on one line and reads professionally.
 // Home-page anchors (How it works, Why AIVEXA, Customers) live in the footer.
 const links: { href: string; label: string; newTab?: boolean; badge?: string }[] = [
-  { href: "/#products", label: "Products" },
-  { href: "/calivo-ai", label: "CALIVO AI", badge: "New" },
-  { href: "/miftah", label: "Miftah" },
   { href: "/store", label: "Digital Products" },
   { href: "/tools", label: "Free Tools" },
   { href: "/blog", label: "Blog" },
   { href: "/pdf-api", label: "PDF API", newTab: true },
 ];
 
+// "My Mobile Apps" dropdown — AIVEXA's own Android apps.
+const mobileApps: { href: string; label: string; sub: string; badge?: string }[] = [
+  { href: "/calivo-ai", label: "CALIVO AI", sub: "AI calorie counter & diet coach", badge: "New" },
+  { href: "/miftah", label: "Miftah", sub: "Prayer times, Azan, Qibla & Quran" },
+];
+
 export default function Nav({ siteName }: { siteName: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [appsOpen, setAppsOpen] = useState(false);
   const { count, openCart } = useCart();
 
   useEffect(() => {
@@ -48,6 +52,41 @@ export default function Nav({ siteName }: { siteName: string }) {
           />
         </Link>
         <div className={`nav-links${open ? " open" : ""}`}>
+          <a href="/#products" onClick={() => setOpen(false)}>Products</a>
+          <div
+            className={`nav-dd${appsOpen ? " open" : ""}`}
+            onMouseEnter={() => setAppsOpen(true)}
+            onMouseLeave={() => setAppsOpen(false)}
+          >
+            <button
+              type="button"
+              className="nav-dd-btn"
+              aria-haspopup="true"
+              aria-expanded={appsOpen}
+              onClick={() => setAppsOpen((v) => !v)}
+            >
+              My Mobile Apps <ChevronDown size={15} strokeWidth={2.2} />
+            </button>
+            <div className="nav-dd-menu" role="menu">
+              {mobileApps.map((a) => (
+                <a
+                  key={a.href}
+                  href={a.href}
+                  role="menuitem"
+                  onClick={() => {
+                    setOpen(false);
+                    setAppsOpen(false);
+                  }}
+                >
+                  <strong>
+                    {a.label}
+                    {a.badge && <span className="nav-new">{a.badge}</span>}
+                  </strong>
+                  <span>{a.sub}</span>
+                </a>
+              ))}
+            </div>
+          </div>
           {links.map((l) => (
             <a
               key={l.href}

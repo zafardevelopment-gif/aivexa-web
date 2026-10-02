@@ -125,7 +125,7 @@ export default function TermsOfServicePage() {
         <h3>13. Contact Us</h3>
         <p>
           If you have any questions about these Terms, please contact us at{" "}
-          <a href="mailto:aivexallp@gmail.com">aivexallp@gmail.com</a>.
+          <a href="mailto:info@aivexallp.com">info@aivexallp.com</a>.
         </p>
       </section>
     </main>

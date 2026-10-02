@@ -65,11 +65,11 @@ export const miftah = {
     { q: "How does the Quran recitation check work?", a: "In Premium, you tap the mic and recite an ayah. Miftah compares what it heard with the Quran text word by word, highlights wrong or skipped words, and plays each one in your selected qari's voice. It checks words, not fine tajweed details like makharij." },
     { q: "Is my data safe with Miftah?", a: "Miftah has no account system, keeps prayer data on your phone, and does not sell data. The accessibility service only detects the name of the app that is open — never messages, keystrokes or screen content." },
     { q: "Is Miftah available on iPhone?", a: "Currently Miftah is available on Android through Google Play." },
-    { q: "Who makes Miftah?", a: "Miftah is built by AIVEXA LLP, an Indian product studio. Support: zafardevelopment@gmail.com." },
+    { q: "Who makes Miftah?", a: "Miftah is built by AIVEXA LLP, an Indian product studio. Support: info@aivexallp.com." },
   ],
 
   /** Store screenshots in /public/miftah/ — add files here once exported. */
   screenshots: [] as { src: string; alt: string }[],
 
-  supportEmail: "zafardevelopment@gmail.com",
+  supportEmail: "info@aivexallp.com",
 };

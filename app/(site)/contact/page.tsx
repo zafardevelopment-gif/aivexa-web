@@ -35,7 +35,7 @@ export default function ContactPage() {
           <div>
             <h3>Email</h3>
             <p>
-              <a href="mailto:aivexallp@gmail.com">aivexallp@gmail.com</a>
+              <a href="mailto:info@aivexallp.com">info@aivexallp.com</a>
             </p>
 
             <h3>WhatsApp</h3>

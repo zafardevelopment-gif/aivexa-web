@@ -123,7 +123,7 @@ export default function SakinahPrivacyPolicyPage() {
 
         <h3>8. Contact</h3>
         <p>
-          Questions about this policy can be sent to: <strong>aivexallp@gmail.com</strong>
+          Questions about this policy can be sent to: <strong>info@aivexallp.com</strong>
         </p>
       </section>
     </main>
