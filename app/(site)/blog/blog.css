@@ -1,0 +1,96 @@
+/* AIVEXA blog — plain CSS (this site does not use Tailwind). Classes are `bl-` prefixed. */
+.bl { background: #fff; color: #0f172a; }
+.bl-wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.25rem; }
+.bl-narrow { max-width: 760px; margin: 0 auto; padding: 0 1.25rem; }
+
+/* Hero */
+.bl-hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; padding: 8.5rem 0 3.5rem; }
+.bl-hero.center { text-align: center; }
+.bl-hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.15; letter-spacing: -.02em; margin: 0 0 1rem; color: #fff; }
+.bl-hero p { color: #cbd5e1; font-size: 1.1rem; line-height: 1.65; max-width: 680px; margin: 0; }
+.bl-hero.center p { margin: 0 auto; }
+.bl-back { display: inline-flex; gap: .35rem; color: #94a3b8; font-size: .9rem; margin-bottom: 1.4rem; }
+.bl-back:hover { color: #fff; }
+.bl-meta { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; margin-bottom: 1rem; font-size: .82rem; color: #94a3b8; }
+.bl-date { display: block; margin-top: 1.2rem; color: #94a3b8; font-size: .9rem; }
+
+/* Category pill */
+.bl-cat { display: inline-block; font-size: .72rem; font-weight: 700; padding: .28rem .7rem; border-radius: 999px; background: #f1f5f9; color: #334155; letter-spacing: .01em; }
+.bl-cat-health { background: #d1fae5; color: #065f46; }
+.bl-cat-business { background: #fef3c7; color: #92400e; }
+.bl-cat-tools { background: #ffedd5; color: #9a3412; }
+.bl-cat-healthcare { background: #dbeafe; color: #1e40af; }
+.bl-cat-whatsapp { background: #dcfce7; color: #166534; }
+.bl-cat-ai { background: #ede9fe; color: #5b21b6; }
+.bl-cat-islamic { background: #ccfbf1; color: #115e59; }
+
+/* Filter chips on the index */
+.bl-filters { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; margin: -1.6rem auto 2.4rem; position: relative; }
+
+/* Index grid */
+.bl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; padding: 3.5rem 0 4.5rem; }
+.bl-card { display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 1.5rem; transition: box-shadow .2s, transform .2s, border-color .2s; }
+.bl-card:hover { box-shadow: 0 14px 34px rgba(15, 23, 42, .09); transform: translateY(-3px); border-color: #c7d2fe; }
+.bl-card-top { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; font-size: .78rem; color: #94a3b8; }
+.bl-card h2, .bl-card h3 { font-size: 1.08rem; font-weight: 700; line-height: 1.4; margin: 0 0 .6rem; }
+.bl-card h2 a, .bl-card h3 a { color: #0f172a; }
+.bl-card h2 a:hover, .bl-card h3 a:hover { color: #4f46e5; }
+.bl-card p { color: #475569; font-size: .92rem; line-height: 1.6; margin: 0 0 1rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.bl-card-foot { display: flex; justify-content: space-between; align-items: center; padding-top: .9rem; border-top: 1px solid #f1f5f9; font-size: .82rem; color: #94a3b8; }
+.bl-card-foot a { color: #4f46e5; font-weight: 600; font-size: .88rem; }
+
+/* Article body */
+.bl-article { padding: 3rem 0 2.5rem; }
+.bl-prose { font-size: 1.06rem; line-height: 1.8; color: #334155; }
+.bl-prose h2 { font-size: 1.55rem; font-weight: 800; color: #0f172a; margin: 2.4rem 0 .9rem; line-height: 1.3; letter-spacing: -.01em; }
+.bl-prose h3 { font-size: 1.2rem; font-weight: 700; color: #0f172a; margin: 1.8rem 0 .6rem; }
+.bl-prose p { margin: .9rem 0; }
+.bl-prose ul { margin: 1rem 0 1rem 1.3rem; list-style: disc; }
+.bl-prose li { margin: .45rem 0; }
+.bl-prose strong { color: #0f172a; }
+.bl-prose a { color: #4f46e5; text-decoration: underline; font-weight: 600; }
+.bl-prose code { background: #f1f5f9; padding: .1rem .35rem; border-radius: 4px; font-size: .92em; }
+.bl-prose table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: .94rem; display: block; overflow-x: auto; }
+.bl-prose th, .bl-prose td { border: 1px solid #e2e8f0; padding: .6rem .8rem; text-align: left; vertical-align: top; }
+.bl-prose thead th, .bl-prose thead td { background: #f8fafc; font-weight: 700; color: #0f172a; }
+.bl-prose tbody tr:nth-child(even) { background: #fcfcfd; }
+
+/* Product boxes */
+.bl-box { border-radius: 20px; padding: 1.8rem; margin: 0 0 3rem; }
+.bl-box-calivo { background: #ecfdf5; border: 1px solid #a7f3d0; text-align: center; }
+.bl-box-calivo img.icon { width: 64px; height: 64px; border-radius: 16px; margin: 0 auto .8rem; display: block; }
+.bl-box h2 { font-size: 1.45rem; font-weight: 800; margin: 0 0 .5rem; color: #0f172a; }
+.bl-box p { color: #334155; line-height: 1.6; margin: 0 auto 1.2rem; max-width: 560px; }
+.bl-box-calivo .more { margin-top: .8rem; font-size: .9rem; }
+.bl-box-calivo .more a { color: #065f46; text-decoration: underline; }
+.bl-box-store { background: #eef2ff; border: 1px solid #c7d2fe; display: flex; gap: 1.5rem; align-items: center; }
+.bl-box-store img { width: 150px; height: auto; border-radius: 12px; box-shadow: 0 6px 18px rgba(15, 23, 42, .12); }
+.bl-box-store .tag { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #4338ca; }
+.bl-box-store h2 { margin-top: .3rem; }
+.bl-box-store p { margin-left: 0; }
+.bl-price { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+.bl-price b { font-size: 1.5rem; }
+.bl-price s { color: #64748b; }
+.bl-btn { display: inline-block; background: #4f46e5; color: #fff; font-weight: 700; padding: .75rem 1.3rem; border-radius: 12px; transition: background .2s; }
+.bl-btn:hover { background: #4338ca; }
+.bl-btn-ghost { display: inline-block; background: #fff; color: #0f172a; font-weight: 700; padding: .75rem 1.3rem; border-radius: 12px; border: 1px solid #cbd5e1; }
+
+/* Generic CTA band */
+.bl-cta { background: #f8fafc; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 3rem 1.25rem; text-align: center; }
+.bl-cta h2 { font-size: 1.6rem; font-weight: 800; margin: 0 0 .5rem; }
+.bl-cta p { color: #475569; max-width: 560px; margin: 0 auto 1.4rem; }
+.bl-cta .row { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+
+/* Related */
+.bl-related { padding: 3.5rem 0 4.5rem; }
+.bl-related > h2 { font-size: 1.5rem; font-weight: 800; margin: 0 0 1.4rem; }
+.bl-related .bl-grid { padding: 0; }
+
+@media (max-width: 960px) { .bl-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  .bl-hero { padding: 7rem 0 2.6rem; }
+  .bl-grid { grid-template-columns: 1fr; }
+  .bl-box-store { flex-direction: column; text-align: center; }
+  .bl-box-store p { margin-left: auto; }
+  .bl-price { justify-content: center; }
+}

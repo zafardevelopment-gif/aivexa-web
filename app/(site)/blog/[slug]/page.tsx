@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { blogPosts, getPostBySlug, getAllSlugs } from "@/lib/blog-posts";
 import { calivoPlayUrl, PLAY_BADGE_IMG } from "@/lib/calivo";
 import { getDigitalProduct, formatPrice } from "@/lib/digital-products";
+import { catClass } from "../categories";
+import "../blog.css";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -150,15 +152,7 @@ function renderMarkdown(md: string): string {
   return html.join("\n");
 }
 
-const categoryColors: Record<string, string> = {
-  "Healthcare AI": "bg-blue-100 text-blue-800",
-  "WhatsApp Automation": "bg-green-100 text-green-800",
-  "AI Products": "bg-purple-100 text-purple-800",
-  "Free Tools": "bg-orange-100 text-orange-800",
-  "Islamic Tools": "bg-teal-100 text-teal-800",
-  Business: "bg-yellow-100 text-yellow-800",
-  "Health & Nutrition": "bg-emerald-100 text-emerald-800",
-};
+
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
@@ -193,148 +187,85 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      <main className="min-h-screen bg-white">
-        {/* Hero */}
-        <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-16 px-6">
-          <div className="max-w-3xl mx-auto">
-            <Link
-              href="/blog"
-              className="text-slate-400 hover:text-white text-sm mb-6 inline-flex items-center gap-1 transition-colors"
-            >
-              ← Back to Blog
-            </Link>
-            <div className="flex items-center gap-3 mb-4">
-              <span
-                className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                  categoryColors[post.category] ?? "bg-slate-100 text-slate-700"
-                }`}
-              >
-                {post.category}
-              </span>
-              <span className="text-slate-400 text-xs">{post.readTime}</span>
+      <main className="bl">
+        <section className="bl-hero">
+          <div className="bl-narrow">
+            <Link href="/blog" className="bl-back">← Back to Blog</Link>
+            <div className="bl-meta">
+              <span className={catClass(post.category)}>{post.category}</span>
+              <span>{post.readTime}</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-snug">
-              {post.title}
-            </h1>
-            <p className="text-slate-300 text-lg mb-6">{post.description}</p>
-            <time dateTime={post.date} className="text-slate-500 text-sm">
-              {formatDate(post.date)}
-            </time>
+            <h1>{post.title}</h1>
+            <p>{post.description}</p>
+            <time dateTime={post.date} className="bl-date">{formatDate(post.date)}</time>
           </div>
         </section>
 
-        {/* Article body */}
-        <article className="max-w-3xl mx-auto px-6 py-12">
-          <div
-            className="prose-content"
-            dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }}
-          />
+        <article className="bl-narrow bl-article">
+          <div className="bl-prose" dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }} />
         </article>
 
-        {/* CALIVO AI app CTA (health & nutrition posts) */}
         {post.cta === "calivo" && (
-          <section className="max-w-3xl mx-auto px-6 pb-12">
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 md:p-8 text-center">
+          <section className="bl-narrow">
+            <div className="bl-box bl-box-calivo">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/calivo/calivo-icon.png" alt="CALIVO AI app icon" width={64} height={64} className="mx-auto mb-3 rounded-2xl" />
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Count calories in Indian food with one photo</h2>
-              <p className="text-slate-700 mb-5 max-w-xl mx-auto">
+              <img className="icon" src="/calivo/calivo-icon.png" alt="CALIVO AI app icon" width={64} height={64} />
+              <h2>Count calories in Indian food with one photo</h2>
+              <p>
                 CALIVO AI is a free AI calorie counter &amp; diet coach for Indian meals — photo scanning, AI diet plans
                 for weight loss, PCOS and diabetes, protein tracking and fasting timer. English, Hindi, Urdu &amp; Arabic.
               </p>
-              <a href={calivoPlayUrl(`blog_${post.slug}`)} target="_blank" rel="noopener" aria-label="Get CALIVO AI on Google Play" className="inline-block">
+              <a href={calivoPlayUrl(`blog_${post.slug}`)} target="_blank" rel="noopener" aria-label="Get CALIVO AI on Google Play" style={{ display: "inline-block", lineHeight: 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={PLAY_BADGE_IMG} alt="Get it on Google Play" height={60} style={{ height: 60, width: "auto" }} />
               </a>
-              <p className="mt-3 text-sm">
-                <Link href="/calivo-ai" className="text-emerald-800 underline">Learn more about CALIVO AI →</Link>
-              </p>
+              <div className="more"><Link href="/calivo-ai">Learn more about CALIVO AI →</Link></div>
             </div>
           </section>
         )}
 
-        {/* AIVEXA Store product box */}
         {storeProduct && (
-          <section className="max-w-3xl mx-auto px-6 pb-12">
-            <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center">
+          <section className="bl-narrow">
+            <div className="bl-box bl-box-store">
               {storeProduct.preview_image && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={storeProduct.preview_image} alt={storeProduct.name} className="w-40 h-auto rounded-xl shadow" loading="lazy" />
+                <img src={storeProduct.preview_image} alt={storeProduct.name} loading="lazy" />
               )}
-              <div className="flex-1 text-center md:text-left">
-                <span className="text-xs font-semibold uppercase tracking-wide text-indigo-700">AIVEXA Store · Instant download</span>
-                <h2 className="text-xl md:text-2xl font-bold text-slate-900 mt-1 mb-2">{storeProduct.name}</h2>
-                {storeProduct.tagline && <p className="text-slate-700 mb-4">{storeProduct.tagline}</p>}
-                <div className="flex items-center gap-3 justify-center md:justify-start flex-wrap">
-                  <span className="text-2xl font-bold text-slate-900">{formatPrice(storeProduct.price)}</span>
-                  {storeProduct.original_price > 0 && (
-                    <span className="text-slate-500 line-through">{formatPrice(storeProduct.original_price)}</span>
-                  )}
-                  <Link href={`/store/${storeProduct.slug}`} className="inline-block bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition-colors">
-                    View &amp; buy →
-                  </Link>
+              <div style={{ flex: 1 }}>
+                <span className="tag">AIVEXA Store · Instant download</span>
+                <h2>{storeProduct.name}</h2>
+                {storeProduct.tagline && <p>{storeProduct.tagline}</p>}
+                <div className="bl-price">
+                  <b>{formatPrice(storeProduct.price)}</b>
+                  {storeProduct.original_price > 0 && <s>{formatPrice(storeProduct.original_price)}</s>}
+                  <Link href={`/store/${storeProduct.slug}`} className="bl-btn">View &amp; buy →</Link>
                 </div>
               </div>
             </div>
           </section>
         )}
 
-        {/* CTA */}
-        {post.cta !== "calivo" && <section className="bg-slate-50 py-12 px-6 text-center border-t border-slate-200">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
-            Ready to automate your business?
-          </h2>
-          <p className="text-slate-600 mb-6 max-w-xl mx-auto">
-            AIVEXA builds AI systems for Indian businesses — on WhatsApp and Voice, in your customers' languages.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/contact"
-              className="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Contact Us
-            </Link>
-            <Link
-              href="/tools"
-              className="inline-block bg-white text-slate-800 font-semibold px-6 py-3 rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors"
-            >
-              Try Free Tools
-            </Link>
-          </div>
-        </section>}
+        {post.cta !== "calivo" && !storeProduct && (
+          <section className="bl-cta">
+            <h2>Ready to automate your business?</h2>
+            <p>AIVEXA builds AI systems for Indian businesses — on WhatsApp and Voice, in your customers&apos; languages.</p>
+            <div className="row">
+              <Link href="/contact" className="bl-btn">Contact Us</Link>
+              <Link href="/tools" className="bl-btn-ghost">Try Free Tools</Link>
+            </div>
+          </section>
+        )}
 
-        {/* Related posts */}
         {otherPosts.length > 0 && (
-          <section className="max-w-6xl mx-auto px-6 py-16">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8">More Articles</h2>
-            <div className="grid gap-6 md:grid-cols-3">
+          <section className="bl-wrap bl-related">
+            <h2>More Articles</h2>
+            <div className="bl-grid">
               {otherPosts.map((p) => (
-                <article
-                  key={p.slug}
-                  className="border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow"
-                >
-                  <span
-                    className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                      categoryColors[p.category] ?? "bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    {p.category}
-                  </span>
-                  <h3 className="text-base font-bold text-slate-900 mt-3 mb-2 leading-snug">
-                    <Link
-                      href={`/blog/${p.slug}`}
-                      className="hover:text-blue-600 transition-colors"
-                    >
-                      {p.title}
-                    </Link>
-                  </h3>
-                  <p className="text-slate-600 text-sm line-clamp-2">{p.description}</p>
-                  <Link
-                    href={`/blog/${p.slug}`}
-                    className="inline-block mt-3 text-sm text-blue-600 font-medium hover:text-blue-700"
-                  >
-                    Read →
-                  </Link>
+                <article key={p.slug} className="bl-card">
+                  <div className="bl-card-top"><span className={catClass(p.category)}>{p.category}</span></div>
+                  <h3><Link href={`/blog/${p.slug}`}>{p.title}</Link></h3>
+                  <p>{p.description}</p>
+                  <div className="bl-card-foot"><span>{p.readTime}</span><Link href={`/blog/${p.slug}`}>Read →</Link></div>
                 </article>
               ))}
             </div>
