@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     url: PATH,
     type: "website",
     siteName: siteConfig.name,
-    images: [{ url: "/calivo/01_dashboard.webp", width: 540, height: 960, alt: "CALIVO AI app" }],
+    images: [{ url: "/calivo/calivo-og.png", width: 1200, height: 630, alt: "CALIVO AI — AI Calorie & Health Coach" }],
   },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESC, images: ["/calivo/01_dashboard.webp"] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESC, images: ["/calivo/calivo-og.png"] },
   other: { "google-play-app": `app-id=com.calivoai.app` },
 };
 

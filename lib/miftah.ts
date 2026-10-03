@@ -17,10 +17,10 @@ export const MIFTAH_PLAY_URL_CLEAN = `https://play.google.com/store/apps/details
 
 export const miftah = {
   name: "Miftah",
-  tagline: "Prayer Times, Azan, Qibla & Quran — with a gentle app blocker for Salah",
+  tagline: "Prayer Times, Azan, Qibla, Quran and a Namaz & Wudu guide — in English, Hindi, Urdu, Arabic and Indonesian",
   oneLiner:
-    "Miftah is a free, privacy-first Android app by AIVEXA LLP for Muslims: accurate offline prayer (namaz) times, Azan and Iqamah notifications, a Qibla compass, the Holy Quran, a salah tracker, and a gentle app blocker that pauses distracting apps during prayer time.",
-  languages: ["English", "Urdu", "Arabic", "Indonesian"],
+    "Miftah is a free, privacy-first Android app by AIVEXA LLP for Muslims: accurate offline prayer (namaz) times, Azan and Iqamah notifications, a Qibla compass, the Holy Quran with word-by-word meanings, a step-by-step Namaz & Wudu guide with diagrams, a Daily Sunnah checklist, authentic hadith and du'a, a salah tracker, and a gentle app blocker that pauses distracting apps during prayer time. Available in English, Hindi, Urdu, Arabic and Indonesian.",
+  languages: ["English", "Hindi", "Urdu", "Arabic", "Indonesian"],
   platform: "Android (Google Play)",
   price:
     "Free to download. Prayer times, Azan, Qibla, Quran, du'a, hadith and the salah tracker are free forever; optional Premium adds extra reciters, offline audio, Quran recitation check and more.",
@@ -28,21 +28,24 @@ export const miftah = {
   features: [
     { icon: "🕌", title: "Accurate prayer times", text: "GPS-based Fajr, Dhuhr, Asr, Maghrib and Isha times that work offline, with all major calculation methods (MWL, Karachi, Umm al-Qura, ISNA, Egypt and more) and Hanafi or Shafi'i Asr. Adjust any time to match your local masjid." },
     { icon: "🔔", title: "Azan, Iqamah & before-prayer alerts", text: "A reminder a few minutes before each prayer, the Azan notification at prayer time with a normal or “Allahu Akbar” sound, and an Iqamah reminder for congregation — scheduled a week ahead so you never miss one." },
-    { icon: "📖", title: "Holy Quran", text: "Mushaf page view in Uthmani or Indo-Pak script, multiple reciters and translations, bookmarks, word-by-word meaning and a tajweed guide. Resume from your last page in one tap." },
-    { icon: "🎙️", title: "Quran recitation check (Premium)", text: "Recite an ayah and Miftah checks it word by word — wrong or skipped words are highlighted, and you hear each one corrected in your chosen qari's voice." },
+    { icon: "📖", title: "Holy Quran", text: "Full Mushaf in Indo-Pak script with pinch-to-zoom, right in the bottom bar. Word-by-word meanings and full translation in Urdu (Nastaliq), Hindi, English, Arabic and Indonesian, famous reciters, bookmarks and surah search. Resume from your last page in one tap." },
+    { icon: "🧎", title: "Namaz & Wudu guide", text: "The fara'id and step-by-step method of Wudu, Namaz, Ghusl, Tayammum and Roza, with a small diagram for every step and salah posture, the du'a of each step with its reference, what breaks wudu and the fast, and the rak'ahs of the five prayers." },
+    { icon: "☀️", title: "Daily Sunnah checklist", text: "A daily checklist of sunnah habits — miswak, Bismillah, spreading salam, the 12 sunnah rak'ahs, tasbih after salah, sleeping du'as, Friday sunnahs and more — each with its hadith reference. It resets every day." },
+    { icon: "🇮🇳", title: "Hindi language", text: "The whole app, Quran translation (Maulana Azizul Haque al-Umari), word-by-word meanings, du'as, azkar, the 99 Names and the Umrah guide are available in Hindi, alongside English, Urdu, Arabic and Indonesian." },
+    { icon: "🎙️", title: "Quran recitation check (Premium)", text: "Recite an ayah and Miftah checks it word by word — wrong or skipped words are highlighted, and you hear each one corrected in your chosen qari's voice. Jump to any surah and ayah." },
     { icon: "🔒", title: "Lock-to-Pray app blocker", text: "Pick apps like social media, games or YouTube to pause during each salah window. Miftah shows an ayah, hadith or du'a instead and lets you continue after you pray — with gentle, medium or strict modes and an emergency bypass." },
     { icon: "✅", title: "Salah tracker & streaks", text: "Tick each prayer as prayed from the home screen, build a daily streak, see a weekly chart, and keep a qada list of missed prayers. Excused mode for women with no streak penalty." },
-    { icon: "🧭", title: "Qibla compass & masjid finder", text: "Find the Qibla with a compass or the AR camera view, and see nearby masjids and halal places on the map." },
-    { icon: "🤲", title: "Du'a, hadith & dhikr", text: "Hisnul Muslim du'as, morning and evening azkar, daily authentic hadith with source and grade, the 99 Names of Allah and a digital tasbih counter." },
-    { icon: "🌙", title: "Ramadan & Islamic tools", text: "Ramadan mode with Sehri and Iftar times, Hijri date, Zakat calculator, Islamic inheritance (Faraid) calculator, Islamic Q&A and a Janazah guide." },
+    { icon: "🧭", title: "Qibla compass & masjid finder", text: "Find the Qibla with a compass or the AR camera view, and find nearby masjids with directions in Google Maps." },
+    { icon: "🤲", title: "Du'a, hadith & dhikr", text: "400 authentic hadith from Sahih Bukhari and Sahih Muslim — browse by book and chapter, each with its source and number — plus du'as, morning and evening azkar, the 99 Names of Allah and a digital tasbih counter." },
+    { icon: "🌙", title: "Ramadan & Islamic tools", text: "Ramadan mode with Sehri and Iftar times, Hijri date, an Umrah guide with authentic du'as, a Zakat calculator and an Islamic inheritance (Faraid) calculator." },
     { icon: "🛡️", title: "Privacy first", text: "No account and no ads during worship. Prayer data stays on your phone and nothing is sold. The accessibility service only detects which app is open — never your screen content." },
   ],
 
   steps: [
-    { title: "Install & choose your language", text: "Download Miftah free from Google Play and pick English, Urdu, Arabic or Indonesian — translation language can be different from the app language." },
+    { title: "Install & choose your language", text: "Download Miftah free from Google Play and pick English, Hindi, Urdu, Arabic or Indonesian — translation language can be different from the app language." },
     { title: "Allow location & notifications", text: "Miftah calculates prayer times on your phone from your location and schedules the before-prayer, Azan and Iqamah alerts for the week ahead." },
     { title: "Pick apps to pause (optional)", text: "Choose which apps Miftah should gently pause during each prayer window, and how strict the pause should be." },
-    { title: "Pray, read & track", text: "Tick prayers on the home screen, read the Quran from where you stopped, and watch your salah streak grow." },
+    { title: "Pray, learn & track", text: "Tick prayers on the home screen, read the Quran from where you stopped, learn the right way of wudu and namaz, and tick off your daily sunnahs." },
   ],
 
   audience: [
@@ -50,7 +53,8 @@ export const miftah = {
     "Anyone who keeps getting pulled into their phone and misses salah on time",
     "People who want to read the Quran daily and resume where they left off",
     "Learners who want to check and improve their Quran recitation",
-    "Families who prefer Urdu, Arabic or Indonesian over English",
+    "Families who prefer Hindi, Urdu, Arabic or Indonesian over English",
+    "New learners and children who want to learn wudu, namaz and ghusl step by step",
     "Users who want an Islamic app with no account, no ads during worship and no data selling",
   ],
 
@@ -64,12 +68,23 @@ export const miftah = {
     { q: "Which prayer time calculation methods are supported?", a: "Muslim World League, Karachi (University of Islamic Sciences), Umm al-Qura, ISNA (North America), Egyptian, Dubai, Kuwait, Qatar, Singapore, Tehran, Turkey and Moonsighting Committee, with Hanafi or Shafi'i Asr." },
     { q: "How does the Quran recitation check work?", a: "In Premium, you tap the mic and recite an ayah. Miftah compares what it heard with the Quran text word by word, highlights wrong or skipped words, and plays each one in your selected qari's voice. It checks words, not fine tajweed details like makharij." },
     { q: "Is my data safe with Miftah?", a: "Miftah has no account system, keeps prayer data on your phone, and does not sell data. The accessibility service only detects the name of the app that is open — never messages, keystrokes or screen content." },
+    { q: "Is Miftah available in Hindi?", a: "Yes. You can choose Hindi as the app language and as the translation language. The Quran translation, word-by-word meanings, du'as, azkar, the 99 Names and the Umrah guide are in Hindi. Hadith are shown in English, Urdu or Indonesian because no authentic Hindi hadith source is available yet." },
+    { q: "Does Miftah teach how to pray and make wudu?", a: "Yes. The Namaz & Wudu guide shows the fara'id and the step-by-step method of Wudu, Namaz, Ghusl, Tayammum and Roza with a small diagram for each step and salah posture, and the du'a of each step with its reference. The fara'id follow the Hanafi school, as practised in India and Pakistan." },
     { q: "Is Miftah available on iPhone?", a: "Currently Miftah is available on Android through Google Play." },
     { q: "Who makes Miftah?", a: "Miftah is built by AIVEXA LLP, an Indian product studio. Support: info@aivexallp.com." },
   ],
 
   /** Store screenshots in /public/miftah/ — add files here once exported. */
-  screenshots: [] as { src: string; alt: string }[],
+  screenshots: [
+    { src: "/miftah/screens/01_home.jpg", alt: "Miftah home screen with next prayer countdown and today's 5 prayers" },
+    { src: "/miftah/screens/02_quran.jpg", alt: "Full Quran Mushaf in Indo-Pak script" },
+    { src: "/miftah/screens/03_wordbyword.jpg", alt: "Word-by-word Quran meanings in Urdu" },
+    { src: "/miftah/screens/04_recitation.jpg", alt: "Quran recitation check" },
+    { src: "/miftah/screens/05_basics.jpg", alt: "Namaz and Wudu guide with fara'id and diagrams" },
+    { src: "/miftah/screens/06_hadith.jpg", alt: "Authentic hadith by book and chapter" },
+    { src: "/miftah/screens/07_features.jpg", alt: "Quick access to Qibla, masjids, Zakat, Umrah and more" },
+    { src: "/miftah/screens/08_settings.jpg", alt: "Azan, Iqamah and reminder settings" },
+  ] as { src: string; alt: string }[],
 
   supportEmail: "info@aivexallp.com",
 };

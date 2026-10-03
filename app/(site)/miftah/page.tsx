@@ -8,9 +8,9 @@ import { blogPosts } from "@/lib/blog-posts";
 import { SITE_URL, siteConfig } from "@/lib/seo/config";
 
 const PATH = "/miftah";
-const TITLE = "Miftah — Prayer Times, Azan & Iqamah Alerts, Qibla & Quran App (Free)";
+const TITLE = "Miftah — Prayer Times, Azan, Quran & Namaz-Wudu Guide App in Hindi & Urdu (Free)";
 const DESC =
-  "Accurate offline namaz times, Azan and Iqamah notifications, Qibla compass, Holy Quran, salah tracker and a gentle app blocker for prayer time. Free Muslim app on Google Play.";
+  "Accurate offline namaz times, Azan and Iqamah alerts, Qibla, Quran with word-by-word meanings, a step-by-step Namaz & Wudu guide, Daily Sunnah, hadith and du'a — in Hindi, Urdu, English, Arabic and Indonesian. Free Muslim app on Google Play.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -19,7 +19,8 @@ export const metadata: Metadata = {
     "Miftah app", "prayer times app", "namaz time app", "azan app", "adhan notification app",
     "iqamah reminder", "qibla compass app", "quran app android", "salah tracker", "muslim app",
     "islamic app", "prayer reminder app", "app blocker for prayer", "namaz reminder app India",
-    "quran recitation check", "hijri calendar app",
+    "quran recitation check", "hijri calendar app", "namaz app in hindi", "quran in hindi app",
+    "wudu ka tarika", "namaz ka tarika", "namaz sikhne wala app", "daily sunnah app", "islamic app hindi",
   ],
   alternates: { canonical: PATH },
   openGraph: {
@@ -84,7 +85,7 @@ export default function MiftahPage() {
       operatingSystem: "Android",
       applicationCategory: "LifestyleApplication",
       applicationSubCategory: "Prayer times, Quran, Islamic app",
-      inLanguage: ["en", "ur", "ar", "id"],
+      inLanguage: ["en", "hi", "ur", "ar", "id"],
       image: `${SITE_URL}/miftah/miftah-icon.png`,
       ...(miftah.screenshots.length ? { screenshot: miftah.screenshots.map((s) => `${SITE_URL}${s.src}`) } : {}),
       featureList: miftah.features.map((f) => f.title).join(", "),
@@ -125,12 +126,13 @@ export default function MiftahPage() {
               <em style={{ background: `linear-gradient(90deg, #1E4438, ${GOLD})`, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                 Miftah
               </em>{" "}
-              — Prayer Times, Azan &amp; Quran, with an app blocker for Salah
+              — Prayer Times, Azan, Quran &amp; Namaz-Wudu guide
             </h1>
             <p className="cv-sub">
               Accurate namaz times for your city, a reminder before every prayer, the Azan at prayer time and an Iqamah
-              alert for jamaat. Read the Quran, find the Qibla, and let Miftah gently pause distracting apps until you
-              have prayed — in English, اردو, العربية and Bahasa Indonesia.
+              alert for jamaat. Read the Quran with word-by-word meanings, learn wudu and namaz step by step with
+              diagrams, tick your daily sunnahs, and let Miftah gently pause distracting apps until you have prayed — in
+              English, हिन्दी, اردو, العربية and Bahasa Indonesia.
             </p>
             <div className="cv-cta-row">
               <PlayBadge source="hero" height={60} />
@@ -140,6 +142,7 @@ export default function MiftahPage() {
               <span>✅ <b>Free</b> forever core</span>
               <span>📴 Works <b>offline</b></span>
               <span>🔒 <b>No account</b>, no data selling</span>
+              <span>🇮🇳 Now in <b>Hindi</b></span>
             </div>
             <div className="cv-crumb"><Link href="/">Home</Link> › Miftah</div>
           </div>
@@ -172,6 +175,12 @@ export default function MiftahPage() {
             pray on time: it reminds you before each salah, calls the Azan, reminds you again at Iqamah, and — if you
             choose — pauses Instagram, YouTube or games during the prayer window, showing an ayah, hadith or du&apos;a
             instead.
+          </p>
+          <p>
+            <strong>New:</strong> Miftah is now available in <strong>Hindi (हिन्दी)</strong> — the app, the Quran
+            translation and word-by-word meanings, du&apos;as, azkar and the 99 Names. It also adds a{" "}
+            <strong>Namaz &amp; Wudu guide</strong> with the fara&apos;id and step-by-step method of Wudu, Namaz, Ghusl,
+            Tayammum and Roza, and a <strong>Daily Sunnah checklist</strong>.
           </p>
         </div>
       </section>
