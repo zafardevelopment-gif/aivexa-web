@@ -7,14 +7,9 @@ import { SITE_URL } from "@/lib/seo/config";
 
 const BASE_URL = SITE_URL;
 
-// AIVEXA product landing pages under /products/<slug>.
-const productSlugs = [
-  "ai-munim",
-  "clinic-voice",
-  "ai-hospital",
-  "ai-camp",
-  "saferide-qr",
-];
+// Old /products/<slug> pages are now either redirected (ai-munim → /ai-munim)
+// or "coming soon" + noindex, so none of them belong in the sitemap.
+const productSlugs: string[] = [];
 
 // Legal / low-value content pages that should stay in the sitemap but at
 // low priority (they are indexable but rarely the ranking target).
@@ -40,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/myrentsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/testsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/tentsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE_URL}/ai-munim`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/calivo-ai/privacy-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 

@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     return [
       // Old thin product page → the full MyRentSaathi landing page.
       { source: "/products/myrentsaathi", destination: "/myrentsaathi", permanent: true },
+      { source: "/products/ai-munim", destination: "/ai-munim", permanent: true },
       {
         source: "/privacy-policy",
         destination: "/miftah-privacy",

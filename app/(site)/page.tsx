@@ -1,68 +1,43 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  AudioLines,
-  BarChart3,
-  CalendarCheck,
-  CheckCircle2,
-  FileCheck2,
-  Home as HomeIcon,
-  Lock,
-  PhoneCall,
-  Play,
-  Quote,
-  Server,
-  Settings as SettingsIcon,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, ExternalLink, Clock, Smartphone } from "lucide-react";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
 import ContactForm from "@/components/ContactForm";
-import {
-  getProducts,
-  getSettings,
-  getStats,
-  getSteps,
-  getTestimonials,
-} from "@/lib/data";
-import { getExternalLink } from "@/lib/external-links";
-import { ExternalLink as ExternalLinkIcon } from "lucide-react";
+import { getSettings } from "@/lib/data";
 import { getFeaturedDigitalProducts, formatPrice } from "@/lib/digital-products";
 import { FileDown, ShoppingCart, Tag } from "lucide-react";
 import AddToCartBtn from "@/components/AddToCartBtn";
+import { aivexaApps, appUrl, type AivexaApp } from "@/lib/aivexa-apps";
+import { COMING_SOON, LIVE_PRODUCT_CARD, LIVE_PRODUCT_SLUGS, MOBILE_APPS } from "@/lib/product-lineup";
 
 export const revalidate = 60;
-
-const trustedNames = [
-  "City Care Hospital",
-  "Khan Multispeciality Clinic",
-  "Gupta Trading Co.",
-  "Al-Shifa Diagnostics",
-  "NSC Events",
-];
-
-const complianceBadges = [
-  { icon: Lock, label: "End-to-end encrypted data" },
-  { icon: ShieldCheck, label: "IT Act 2000 compliant" },
-  { icon: Server, label: "99.9% uptime infrastructure" },
-  { icon: FileCheck2, label: "Full audit logging" },
-];
-
 
 // Canonical lives here (not in the root layout) so other pages do not inherit "/".
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
+const liveProducts = LIVE_PRODUCT_SLUGS.map((slug) => aivexaApps.find((a) => a.slug === slug)).filter(
+  (a): a is AivexaApp => Boolean(a)
+);
+
+const steps = [
+  { icon: "chat", title: "Pick your product", text: "Rent & society, exam practice, tent-house bookings or GST billing — each built for one job." },
+  { icon: "check", title: "Start the free trial", text: "Sign up on the product's website. No card, no installation — it works on your phone." },
+  { icon: "brain", title: "Use it in your language", text: "Hindi and English, WhatsApp built in, and simple screens made for Indian users." },
+  { icon: "shield", title: "Grow with support", text: "Real people from AIVEXA help you on WhatsApp and email when you need it." },
+];
+
+function Logo({ src, name, size = 56 }: { src: string | null; name: string; size?: number }) {
+  return src ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={`${name} logo`} width={size} height={size} className="lp-logo" style={{ width: size, height: size }} />
+  ) : (
+    <span className="lp-logo" style={{ width: size, height: size }} />
+  );
+}
+
 export default async function Home() {
-  const [settings, products, steps, stats, testimonials, featuredDigital] = await Promise.all([
-    getSettings(),
-    getProducts(),
-    getSteps(),
-    getStats(),
-    getTestimonials(),
-    getFeaturedDigitalProducts(),
-  ]);
+  const [settings, featuredDigital] = await Promise.all([getSettings(), getFeaturedDigitalProducts()]);
 
   return (
     <main>
@@ -73,109 +48,65 @@ export default async function Home() {
             <div className="hero-tagline">AI. VISION. AUTOMATION. EXCELLENCE.</div>
             <div className="hero-badge">
               <span className="dot"></span>
-              {settings.hero_badge}
+              Made in India · by AIVEXA LLP, Darbhanga
             </div>
             <h1>
-              One AI platform for <span className="accent">real-world operations</span>
+              Simple software for <span className="accent">real Indian work</span>
             </h1>
-            <p className="sub">{settings.hero_subtitle}</p>
+            <p className="sub">
+              AIVEXA builds focused apps that people actually use every day — collect rent on WhatsApp, practise for
+              CBSE boards, run a tent house without double bookings, make GST bills — plus mobile apps for health and
+              prayer.
+            </p>
             <div className="hero-btns">
-              <a href="#contact" className="btn-primary">
-                Book a Demo <ArrowRight size={17} strokeWidth={2.2} />
+              <a href="#products" className="btn-primary">
+                Explore products <ArrowRight size={17} strokeWidth={2.2} />
               </a>
-              <a href="#products" className="btn-secondary">
-                <Play size={16} strokeWidth={2.2} /> See It in Action
+              <a href="#contact" className="btn-secondary">
+                Talk to us
               </a>
             </div>
             <div className="hero-points">
               <div className="hero-point">
-                <CheckCircle2 size={17} strokeWidth={2.2} /> No app installs
+                <CheckCircle2 size={17} strokeWidth={2.2} /> Free trial on every product
               </div>
               <div className="hero-point">
-                <CheckCircle2 size={17} strokeWidth={2.2} /> Hindi, English &amp; Urdu
+                <CheckCircle2 size={17} strokeWidth={2.2} /> Hindi &amp; English
               </div>
               <div className="hero-point">
-                <CheckCircle2 size={17} strokeWidth={2.2} /> Live in days, not months
+                <CheckCircle2 size={17} strokeWidth={2.2} /> Works on any phone
               </div>
             </div>
           </div>
 
-          {/* Dashboard mockup */}
-          <div style={{ position: "relative" }}>
-            <div className="mockup-float float-1">
-              <PhoneCall size={18} strokeWidth={2} />
-              <span>
-                Call answered in 2.1s
-                <small>Clinic Voice · AI Receptionist</small>
+          {/* Product showcase */}
+          <div className="lp-showcase">
+            <div className="lp-showcase-head">
+              <b>Live today</b>
+              <span className="live-pill">
+                <span className="dot"></span> {liveProducts.length + MOBILE_APPS.length} products
               </span>
             </div>
-            <div className="mockup-float float-2">
-              <AudioLines size={18} strokeWidth={2} />
-              <span>
-                Ledger updated by voice note
-                <small>AI Munim · WhatsApp</small>
-              </span>
-            </div>
-            <div className="mockup">
-              <div className="mockup-bar">
-                <i></i>
-                <i></i>
-                <i></i>
-                <em>app.aivexa.in / dashboard</em>
-              </div>
-              <div className="mockup-body">
-                <div className="mockup-side">
-                  <i className="on"><HomeIcon size={16} /></i>
-                  <i><CalendarCheck size={16} /></i>
-                  <i><PhoneCall size={16} /></i>
-                  <i><BarChart3 size={16} /></i>
-                  <i><SettingsIcon size={16} /></i>
-                </div>
-                <div className="mockup-main">
-                  <div className="mockup-title">
-                    <b>Today&apos;s Overview</b>
-                    <span className="live-pill">
-                      <span className="dot"></span> AI Agent Live
-                    </span>
-                  </div>
-                  <div className="mockup-stats">
-                    <div className="mockup-stat">
-                      <b>32</b>
-                      <span>Appointments</span> <span className="up">+12%</span>
-                    </div>
-                    <div className="mockup-stat">
-                      <b>118</b>
-                      <span>Calls Answered</span> <span className="up">+8%</span>
-                    </div>
-                    <div className="mockup-stat">
-                      <b>0</b>
-                      <span>Missed Calls</span> <span className="up">100%</span>
-                    </div>
-                  </div>
-                  <div className="mockup-table">
-                    <div className="mockup-row head">
-                      <span>Patient</span>
-                      <span>Time</span>
-                      <span>Status</span>
-                    </div>
-                    <div className="mockup-row">
-                      <b>Anil Sharma</b>
-                      <span>10:30 AM</span>
-                      <span className="badge-ok">Confirmed</span>
-                    </div>
-                    <div className="mockup-row">
-                      <b>Fatima Begum</b>
-                      <span>11:15 AM</span>
-                      <span className="badge-ok">Confirmed</span>
-                    </div>
-                    <div className="mockup-row">
-                      <b>Rakesh Yadav</b>
-                      <span>12:00 PM</span>
-                      <span className="badge-wait">Reminder sent</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {liveProducts.map((app) => (
+              <Link key={app.slug} href={`/${app.slug}`} className="lp-showcase-row">
+                <Logo src={app.icon} name={app.name} size={42} />
+                <span>
+                  <b>{app.name}</b>
+                  <small>{app.h1Accent}</small>
+                </span>
+                <ArrowRight size={16} strokeWidth={2.2} />
+              </Link>
+            ))}
+            <div className="lp-showcase-apps">
+              {MOBILE_APPS.map((m) => (
+                <Link key={m.slug} href={m.href} className="lp-showcase-app">
+                  <Logo src={m.icon} name={m.name} size={30} />
+                  <span>
+                    <b>{m.name}</b>
+                    <small>Android app</small>
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -183,47 +114,134 @@ export default async function Home() {
         {/* Scrolling products strip */}
         <div className="hero-marquee">
           <div className="hero-marquee-track">
-            {[...products, ...products].map((product, i) => {
-              const external = getExternalLink(product.slug);
+            {[...liveProducts, ...liveProducts].map((app, i) => (
+              <Link href={`/${app.slug}`} className="hero-marquee-item" key={`${app.slug}-${i}`}>
+                <Logo src={app.icon} name={app.name} size={30} />
+                <span>
+                  <b>{app.name}</b>
+                  <small>{app.h1Accent}</small>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PRODUCTS (live) ===== */}
+      <section className="section" id="products">
+        <div className="container">
+          <div className="section-header center">
+            <div className="section-label">Products</div>
+            <h2 className="section-title">
+              Live products, <span className="accent">built for India</span>
+            </h2>
+            <p className="section-desc">
+              Each product has its own website and a free trial. Read the full details here, or go straight to the
+              product.
+            </p>
+          </div>
+          <div className="lp-grid">
+            {liveProducts.map((app, i) => {
+              const card = LIVE_PRODUCT_CARD[app.slug as keyof typeof LIVE_PRODUCT_CARD];
               return (
-                <a
-                  href={external ?? `/products/${product.slug}`}
-                  className="hero-marquee-item"
-                  key={`${product.slug}-${i}`}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  <span className="hero-marquee-icon">
-                    <Icon name={product.icon} size={18} strokeWidth={2} />
-                  </span>
-                  <span>
-                    <b>{product.name}</b>
-                    <small>{product.tagline}</small>
-                  </span>
-                </a>
+                <Reveal key={app.slug} delay={i % 2}>
+                  <div className="lp-card" style={{ ["--lp" as string]: app.color, ["--lp-light" as string]: app.colorLight }}>
+                    <div className="lp-card-top">
+                      <Logo src={app.icon} name={app.name} />
+                      <span className="lp-live">
+                        <span className="dot"></span> Live
+                      </span>
+                    </div>
+                    <h3>{app.name}</h3>
+                    <div className="lp-tagline">{app.h1Accent}</div>
+                    <p className="lp-desc">{card.short}</p>
+                    <div className="lp-points">
+                      {card.points.map((p) => (
+                        <div key={p}>
+                          <CheckCircle2 size={15} strokeWidth={2.2} /> {p}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="lp-trust">{app.trust.join(" · ")}</div>
+                    <div className="lp-actions">
+                      <Link href={`/${app.slug}`} className="lp-btn lp-btn-primary">
+                        View details <ArrowRight size={15} strokeWidth={2.2} />
+                      </Link>
+                      <a
+                        href={appUrl(app, "home_card")}
+                        target="_blank"
+                        rel="noopener"
+                        className="lp-btn lp-btn-ghost"
+                      >
+                        Visit website <ExternalLink size={14} strokeWidth={2.2} />
+                      </a>
+                    </div>
+                  </div>
+                </Reveal>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* ===== TRUSTED BY ===== */}
-      <section className="trusted">
-        <div className="trusted-inner">
-          <div className="trusted-label">
-            Trusted by clinics, hospitals and businesses across India
+      {/* ===== MOBILE APPS ===== */}
+      <section className="section alt" id="apps">
+        <div className="container">
+          <div className="section-header center">
+            <div className="section-label">Mobile Apps</div>
+            <h2 className="section-title">
+              Free apps on <span className="accent">Google Play</span>
+            </h2>
           </div>
-          <div className="trusted-logos">
-            {trustedNames.map((name) => (
-              <div className="trusted-logo" key={name}>
-                <Users size={18} strokeWidth={2} /> {name}
-              </div>
+          <div className="lp-apps">
+            {MOBILE_APPS.map((m) => (
+              <Reveal key={m.slug}>
+                <div className="lp-app">
+                  <Logo src={m.icon} name={m.name} size={64} />
+                  <div>
+                    <h3>{m.name}</h3>
+                    <div className="lp-tagline">{m.tagline}</div>
+                    <p className="lp-desc">{m.short}</p>
+                    <div className="lp-actions">
+                      <Link href={m.href} className="lp-btn lp-btn-primary">
+                        View details <ArrowRight size={15} strokeWidth={2.2} />
+                      </Link>
+                      <a href={m.play} target="_blank" rel="noopener" className="lp-btn lp-btn-ghost">
+                        <Smartphone size={14} strokeWidth={2.2} /> Get on Google Play
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
             ))}
           </div>
-          <div className="trusted-badges">
-            {complianceBadges.map(({ icon: BadgeIcon, label }) => (
-              <span className="trust-badge" key={label}>
-                <BadgeIcon size={15} strokeWidth={2.2} /> {label}
-              </span>
+        </div>
+      </section>
+
+      {/* ===== COMING SOON ===== */}
+      <section className="section" id="coming-soon">
+        <div className="container">
+          <div className="section-header center">
+            <div className="section-label">Coming soon</div>
+            <h2 className="section-title">
+              In the <span className="accent">workshop</span>
+            </h2>
+            <p className="section-desc">These products are in development. Want early access? Message us.</p>
+          </div>
+          <div className="lp-soon">
+            {COMING_SOON.map((p) => (
+              <div key={p.slug} className="lp-soon-card">
+                <span className="lp-soon-icon">
+                  <Icon name={p.icon} size={20} strokeWidth={2} />
+                </span>
+                <span>
+                  <b>{p.name}</b>
+                  <small>{p.tagline}</small>
+                </span>
+                <span className="lp-soon-badge">
+                  <Clock size={12} strokeWidth={2.4} /> Coming soon
+                </span>
+              </div>
             ))}
           </div>
         </div>
@@ -231,7 +249,7 @@ export default async function Home() {
 
       {/* ===== DIGITAL PRODUCTS (featured) ===== */}
       {featuredDigital.length > 0 && (
-        <section className="section dp-home-section" id="digital-products">
+        <section className="section alt dp-home-section" id="digital-products">
           <div className="container">
             <Reveal>
               <div className="section-header center">
@@ -250,6 +268,7 @@ export default async function Home() {
                   <Link href={`/store/${dp.slug}`} className="dp-card">
                     {dp.preview_image ? (
                       <div className="dp-card-img">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={dp.preview_image} alt={dp.name} loading="lazy" />
                       </div>
                     ) : (
@@ -296,148 +315,25 @@ export default async function Home() {
         </section>
       )}
 
-      {/* ===== PRODUCTS ===== */}
-      <section className="section" id="products">
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">Products</div>
-            <h2 className="section-title">
-              One platform. <span className="accent">Six AI systems.</span>
-            </h2>
-            <p className="section-desc">
-              Purpose-built AI for healthcare and business operations — delivered through
-              WhatsApp and Voice, so your team adopts it on day one.
-            </p>
-          </div>
-          <div className="products-grid">
-            {products.map((product, i) => (
-              <Reveal key={product.slug} delay={i % 2}>
-                <div className="product-card">
-                  <div className="product-top">
-                    <div className="product-icon">
-                      <Icon name={product.icon} size={26} strokeWidth={2} />
-                    </div>
-                    {product.badge && <span className="product-badge">{product.badge}</span>}
-                  </div>
-                  <h3>{product.name}</h3>
-                  <div className="product-tagline">{product.tagline}</div>
-                  <p className="product-desc">{product.description}</p>
-                  <div className="product-features">
-                    {product.features.slice(0, 4).map((feature) => (
-                      <div className="product-feat" key={feature}>
-                        <CheckCircle2 size={15} strokeWidth={2.2} /> {feature}
-                      </div>
-                    ))}
-                  </div>
-                  {getExternalLink(product.slug) ? (
-                    <a
-                      href={getExternalLink(product.slug)}
-                      className="product-link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Visit live app <ExternalLinkIcon size={14} strokeWidth={2.2} />
-                    </a>
-                  ) : (
-                    <Link href={`/products/${product.slug}`} className="product-link">
-                      Learn more <ArrowRight size={15} strokeWidth={2.2} />
-                    </Link>
-                  )}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ===== HOW IT WORKS ===== */}
-      <section className="section alt" id="how-it-works">
+      <section className="section" id="how-it-works">
         <div className="container">
           <div className="section-header center">
             <div className="section-label">How It Works</div>
             <h2 className="section-title">
-              Live in <span className="accent">four simple steps</span>
+              Start in <span className="accent">four simple steps</span>
             </h2>
-            <p className="section-desc">
-              From the first call to full automation — our AI systems work through
-              WhatsApp and Voice with zero training for your staff.
-            </p>
           </div>
           <div className="timeline">
             {steps.map((step, i) => (
-              <Reveal key={step.step_no} delay={i}>
+              <Reveal key={step.title} delay={i}>
                 <div className="tstep">
                   <div className="tstep-dot">
                     <Icon name={step.icon} size={22} strokeWidth={2} />
                   </div>
-                  <div className="tstep-num">Step {String(step.step_no).padStart(2, "0")}</div>
+                  <div className="tstep-num">Step {String(i + 1).padStart(2, "0")}</div>
                   <h4>{step.title}</h4>
-                  <p>{step.description}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== WHY AIVEXA (stats) ===== */}
-      <section className="section" id="why-us">
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">Why {settings.site_name}</div>
-            <h2 className="section-title">
-              Measurable results, <span className="accent">from day one</span>
-            </h2>
-            <p className="section-desc">
-              We combine enterprise-grade AI with practical design to deliver outcomes
-              your team and your patients can feel.
-            </p>
-          </div>
-          <div className="stats-grid">
-            {stats.map((stat, i) => (
-              <Reveal key={stat.label} delay={i}>
-                <div className="stat-card">
-                  <div className="stat-value">{stat.value}</div>
-                  <h4>{stat.label}</h4>
-                  <p>{stat.description}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== TESTIMONIALS ===== */}
-      <section className="section alt" id="testimonials">
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">Customers</div>
-            <h2 className="section-title">
-              Teams that <span className="accent">run on AIVEXA</span>
-            </h2>
-          </div>
-          <div className="testimonials-grid">
-            {testimonials.map((t, i) => (
-              <Reveal key={t.name} delay={i}>
-                <div className="testimonial">
-                  <Quote size={26} strokeWidth={2} className="quote-mark" />
-                  <p className="quote">{t.quote}</p>
-                  <div className="testimonial-person">
-                    <span className="avatar">
-                      {t.name
-                        .replace(/^Dr\.\s*/, "")
-                        .split(" ")
-                        .map((w) => w[0])
-                        .slice(0, 2)
-                        .join("")}
-                    </span>
-                    <span>
-                      <b>{t.name}</b>
-                      <span>
-                        {t.role}, {t.company}
-                      </span>
-                    </span>
-                  </div>
+                  <p>{step.text}</p>
                 </div>
               </Reveal>
             ))}
@@ -449,13 +345,13 @@ export default async function Home() {
       <section className="cta-band">
         <Reveal>
           <div className="cta-inner">
-            <h2>Ready to put AI to work?</h2>
+            <h2>Have a question about a product?</h2>
             <p>
-              From your clinic&apos;s phone line to your shop&apos;s daily hisaab — AIVEXA
-              automates it end-to-end. Get a personalized walkthrough.
+              Tell us what you need — rent collection, exam practice, tent-house bookings or GST billing — and we will
+              help you get started.
             </p>
             <a href="#contact" className="btn-primary">
-              Book a Demo <ArrowRight size={17} strokeWidth={2.2} />
+              Contact us <ArrowRight size={17} strokeWidth={2.2} />
             </a>
           </div>
         </Reveal>
@@ -469,10 +365,6 @@ export default async function Home() {
             <h2 className="section-title">
               Talk to our <span className="accent">team</span>
             </h2>
-            <p className="section-desc">
-              Tell us about your clinic or business — we will show you exactly what
-              AIVEXA can automate.
-            </p>
           </div>
           <div className="contact-grid">
             <Reveal>
@@ -506,7 +398,6 @@ export default async function Home() {
                       Legal Name: {settings.legal_name}
                       <br />
                       Trade Name: {settings.trade_name} ({settings.business_type})
-                      
                     </p>
                   </div>
                 </div>

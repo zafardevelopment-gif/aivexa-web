@@ -38,16 +38,16 @@ export const siteConfig = {
    * still supply their own; this is the root fallback.
    */
   description:
-    "AIVEXA builds enterprise-grade AI systems that answer calls, manage accounts and book appointments on WhatsApp and Voice — plus 120+ free online tools.",
+    "AIVEXA builds MyRentSaathi, TestSaathi, TentSaathi and AI Munim GST billing, plus the CALIVO AI and Miftah apps and 120+ free online tools — made in India.",
 
   /** Brand-level keyword seed. Page-level keywords are added per route. */
   keywords: [
     "AIVEXA",
     "AI Munim",
-    "Clinic Voice",
-    "WhatsApp automation",
-    "AI voice agent",
-    "AI receptionist India",
+    "MyRentSaathi",
+    "TestSaathi",
+    "TentSaathi",
+    "GST billing software",
     "free online tools",
     "free PDF tools",
     "free image tools",

@@ -8,6 +8,7 @@ import { getProduct, getProducts } from "@/lib/data";
 import { getExternalLink } from "@/lib/external-links";
 import { getProductContent } from "@/lib/product-content";
 import { SITE_URL, siteConfig } from "@/lib/seo/config";
+import { isComingSoon } from "@/lib/product-lineup";
 
 export const revalidate = 60;
 
@@ -33,6 +34,15 @@ export async function generateMetadata({
 
   const content = getProductContent(slug);
   const path = `/products/${slug}`;
+
+  if (isComingSoon(slug)) {
+    return {
+      title: `${product.name} — Coming soon | AIVEXA`,
+      description: `${product.name} by AIVEXA is in development and coming soon. ${product.tagline}`,
+      robots: { index: false, follow: true },
+      alternates: { canonical: path },
+    };
+  }
 
   const title = content?.seoTitle ?? `${product.name} — AIVEXA`;
   const description = content?.seoDescription ?? product.description;
@@ -65,6 +75,46 @@ export default async function ProductPage({
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
+
+  if (isComingSoon(slug)) {
+    return (
+      <main>
+        <section className="page-hero">
+          <div className="container" style={{ textAlign: "center" }}>
+            <div className="product-hero-icon">
+              <Icon name={product.icon} size={38} strokeWidth={2} />
+            </div>
+            <span className="product-badge" style={{ marginBottom: "1rem", display: "inline-block" }}>
+              Coming soon
+            </span>
+            <h1 className="section-title">
+              <span className="accent">{product.name}</span>
+            </h1>
+            <p className="section-desc" style={{ margin: "0 auto" }}>{product.tagline}</p>
+            <p className="section-desc" style={{ margin: "1.2rem auto 0", maxWidth: 640 }}>
+              {product.name} is in development and not available yet. Message us on WhatsApp to get
+              early access when it launches.
+            </p>
+            <div style={{ display: "flex", gap: ".9rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1.6rem" }}>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                <MessageCircle size={16} strokeWidth={2.2} /> Get early access
+              </a>
+              <Link href="/#products" className="btn-secondary">
+                See live products <ArrowRight size={16} strokeWidth={2.2} />
+              </Link>
+            </div>
+            <div className="breadcrumb">
+              <Link href="/">Home</Link>
+              <span>›</span>
+              <Link href="/#products">Products</Link>
+              <span>›</span>
+              <span>{product.name}</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   const others = (await getProducts()).filter((p) => p.slug !== slug);
   const externalUrl = getExternalLink(slug);

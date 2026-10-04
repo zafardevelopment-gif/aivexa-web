@@ -21,24 +21,19 @@ export default function Footer({ settings }: { settings: Settings }) {
         <div>
           <h5>Products</h5>
           <div className="footer-links">
-            <Link href="/calivo-ai">CALIVO AI (Calorie App)</Link>
-            <Link href="/miftah">Miftah (Prayer Times &amp; Quran App)</Link>
-            <Link href="/products/ai-munim">AI Munim</Link>
-            <Link href="/products/clinic-voice">Clinic Voice</Link>
-            <Link href="/products/ai-hospital">AI Hospital</Link>
-            <Link href="/products/ai-camp">AI Camp</Link>
-            <Link href="/products/saferide-qr">SafeRide QR</Link>
             <Link href="/myrentsaathi">MyRentSaathi</Link>
             <Link href="/testsaathi">TestSaathi</Link>
             <Link href="/tentsaathi">TentSaathi</Link>
+            <Link href="/ai-munim">AI Munim</Link>
+            <Link href="/calivo-ai">CALIVO AI (Calorie App)</Link>
+            <Link href="/miftah">Miftah (Prayer Times &amp; Quran App)</Link>
           </div>
         </div>
         <div>
           <h5>Company</h5>
           <div className="footer-links">
-            <a href="/#about">About Us</a>
             <a href="/#how-it-works">How It Works</a>
-            <a href="/#testimonials">Customers</a>
+            <a href="/#coming-soon">Coming soon</a>
             <a href="/#contact">Contact</a>
           </div>
         </div>
