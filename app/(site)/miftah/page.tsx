@@ -8,9 +8,9 @@ import { blogPosts } from "@/lib/blog-posts";
 import { SITE_URL, siteConfig } from "@/lib/seo/config";
 
 const PATH = "/miftah";
-const TITLE = "Miftah — Prayer Times, Azan, Quran & Namaz-Wudu Guide App in Hindi & Urdu (Free)";
+const TITLE = "Miftah — Prayer Times, Quran with Tafseer, Hadith Books & Namaz Guide (Free App)";
 const DESC =
-  "Accurate offline namaz times, Azan and Iqamah alerts, Qibla, Quran with word-by-word meanings, a step-by-step Namaz & Wudu guide, Daily Sunnah, hadith and du'a — in Hindi, Urdu, English, Arabic and Indonesian. Free Muslim app on Google Play.";
+  "Namaz times with Azan & Iqamah alerts, Qibla, Quran with translation & tafseer (Ibn Kathir, Ma'ariful Qur'an), Bukhari, Muslim & 5 more hadith books, Quran & hadith search, Namaz-Wudu guide — in Hindi, Urdu, Bangla, Malayalam & English.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -21,6 +21,8 @@ export const metadata: Metadata = {
     "islamic app", "prayer reminder app", "app blocker for prayer", "namaz reminder app India",
     "quran recitation check", "hijri calendar app", "namaz app in hindi", "quran in hindi app",
     "wudu ka tarika", "namaz ka tarika", "namaz sikhne wala app", "daily sunnah app", "islamic app hindi",
+    "quran with tafseer app", "ibn kathir tafseer app", "sahih bukhari app", "hadith books app", "quran search app",
+    "bangla quran app", "malayalam quran app", "namaz time bangladesh",
   ],
   alternates: { canonical: PATH },
   openGraph: {
@@ -85,10 +87,10 @@ export default function MiftahPage() {
       operatingSystem: "Android",
       applicationCategory: "LifestyleApplication",
       applicationSubCategory: "Prayer times, Quran, Islamic app",
-      softwareVersion: "0.1.4",
+      softwareVersion: "0.1.5",
       dateModified: "2026-10-03",
       keywords: "namaz times, azan, qibla, quran in hindi, wudu ka tarika, namaz ka tarika, daily sunnah, hadith, dua",
-      inLanguage: ["en", "hi", "ur", "ar", "id"],
+      inLanguage: ["en", "hi", "ur", "bn", "ml", "ar", "id"],
       image: `${SITE_URL}/miftah/miftah-icon.png`,
       ...(miftah.screenshots.length ? { screenshot: miftah.screenshots.map((s) => `${SITE_URL}${s.src}`) } : {}),
       featureList: miftah.features.map((f) => f.title).join(", "),
@@ -135,7 +137,7 @@ export default function MiftahPage() {
               Accurate namaz times for your city, a reminder before every prayer, the Azan at prayer time and an Iqamah
               alert for jamaat. Read the Quran with word-by-word meanings, learn wudu and namaz step by step with
               diagrams, tick your daily sunnahs, and let Miftah gently pause distracting apps until you have prayed — in
-              English, हिन्दी, اردو, العربية and Bahasa Indonesia.
+              English, हिन्दी, اردو, বাংলা, മലയാളം, العربية and Bahasa Indonesia.
             </p>
             <div className="cv-cta-row">
               <PlayBadge source="hero" height={60} />

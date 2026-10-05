@@ -45,7 +45,7 @@ ${siteConfig.name} is a product studio run by ${siteConfig.legalName}, based in 
 - A PDF/screenshot generation API ("pdf-api") for developers.
 - A store of downloadable digital products (planners, templates, guides).
 - CALIVO AI, a free Android app: AI calorie counter and diet coach for Indian food.
-- Miftah, a free Android app for Muslims: prayer times, Azan and Iqamah alerts, Qibla, Quran with word-by-word meanings, a Namaz & Wudu guide, Daily Sunnah checklist and a prayer-time app blocker — in English, Hindi, Urdu, Arabic and Indonesian.
+- Miftah, a free Android app for Muslims: prayer times, Azan and Iqamah alerts, Qibla, Quran with word-by-word meanings, a Namaz & Wudu guide, Daily Sunnah checklist and a prayer-time app blocker — with complete hadith books, Qur'an translation/tafseer choice and Qur'an & hadith search — in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian.
 
 ${aivexaApps.map((a) => `## ${a.name} — ${a.h1Accent}
 ${a.oneLiner}
