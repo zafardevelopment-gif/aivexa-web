@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>CALIVO AI · Secure payment</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;margin:0;color:#333;text-align:center;padding:0 20px}
+  img{width:64px;height:64px;border-radius:14px}
+  button{margin-top:18px;padding:12px 24px;border:0;border-radius:10px;background:#E64848;color:#fff;font-size:16px}
+  a{margin-top:16px;color:#666}
+</style>
+</head>
+<body>
+<img src="/calivo/calivo-icon.png" alt="CALIVO AI">
+<p id="msg">Opening secure payment…</p>
+<button id="pay" style="display:none">Pay securely</button>
+<a href="#" id="back">Cancel and return to app</a>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+(function () {
+  // Hosted on the registered AIVEXA website so Razorpay accepts the checkout.
+  // Opened by the CALIVO backend (/api/pay/checkout) with:
+  //   sub, key, email, ret (backend return URL), cancel (backend cancel URL)
+  var BACKEND = "https://calivo-ai-backend.onrender.com/api/pay/return";
+  var q = new URLSearchParams(location.search);
+  var sub = q.get("sub") || "", key = q.get("key") || "", email = q.get("email") || "";
+  var ret = q.get("ret") || "", cancel = q.get("cancel") || "";
+  var msg = document.getElementById("msg"), btn = document.getElementById("pay");
+  function okUrl(u) { return u.indexOf(BACKEND) === 0; }
+  if (!/^sub_[A-Za-z0-9]+$/.test(sub) || !/^rzp_(live|test)_[A-Za-z0-9]+$/.test(key) || !okUrl(ret) || !okUrl(cancel)) {
+    msg.textContent = "Invalid payment link. Please start again from the CALIVO AI app.";
+    document.getElementById("back").style.display = "none";
+    return;
+  }
+  function goCancel() { location.href = cancel; }
+  document.getElementById("back").onclick = function (e) { e.preventDefault(); goCancel(); };
+  function openPay() {
+    if (!window.Razorpay) { msg.textContent = "Could not load payment. Check your internet and try again."; btn.style.display = "inline-block"; return; }
+    var rz = new Razorpay({
+      key: key,
+      subscription_id: sub,
+      name: "CALIVO AI",
+      description: "Premium subscription",
+      image: location.origin + "/calivo/calivo-icon.png",
+      prefill: email ? { email: email } : {},
+      theme: { color: "#E64848" },
+      callback_url: ret,
+      redirect: true,
+      modal: { ondismiss: goCancel }
+    });
+    rz.on("payment.failed", function (r) {
+      msg.textContent = (r && r.error && r.error.description) || "Payment failed. Please try again.";
+      btn.style.display = "inline-block";
+    });
+    rz.open();
+  }
+  btn.onclick = openPay;
+  window.addEventListener("load", openPay);
+})();
+</script>
+</body>
+</html>
