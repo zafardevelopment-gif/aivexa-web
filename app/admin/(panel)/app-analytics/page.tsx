@@ -279,6 +279,29 @@ function CalivoTab() {
   return (
     <>
       {s.error && <div className="form-alert err">{s.error}</div>}
+      <Section title="Active users (opened the app)">
+        {!s.activeTracking && s.configured && (
+          <div className="form-alert err">
+            Active-user tracking starts once the <code>calivo_daily_active</code> table exists — run
+            backend/sql_daily_active.sql in the CALIVO Supabase project.
+          </div>
+        )}
+        <div className="admin-cards">
+          <Card value={num(s.activeToday)} label="Active today" hint={`${s.activeYesterday} yesterday`} />
+          <Card value={num(s.activeUsers7d)} label="Active · 7 days" />
+          <Card value={num(s.active30d)} label="Active · 30 days" />
+          <Card
+            value={s.active30d ? `${Math.round((s.activeToday / s.active30d) * 100)}%` : "—"}
+            label="Stickiness (DAU / MAU)"
+          />
+        </div>
+        {s.dailyActive.length > 0 && (
+          <div style={{ marginBottom: "1rem" }}>
+            <div style={{ fontSize: ".8rem", color: "var(--muted-2)", marginBottom: 6 }}>Daily active users (30 days, IST)</div>
+            <Bars data={s.dailyActive.map((d) => ({ label: d.date.slice(5), value: d.count }))} color="#16a34a" />
+          </div>
+        )}
+      </Section>
       <Section title="App users (live from CALIVO database)">
         <div className="admin-cards">
           <Card value={num(s.metric.installs)} label="Installs (Play)" hint={s.metric.installs_as_of ? `as of ${s.metric.installs_as_of}` : "enter below"} />
@@ -474,7 +497,17 @@ function MiftahTab() {
           <Card value={i ? inr(i.donated) : "—"} label="Given to madrasa" hint={i ? `${inr(Math.max(0, i.pledged - i.donated))} still to give` : ""} />
         </div>
         <div className="admin-muted">
-          Miftah has no accounts (privacy-first), so there are no sign-ups to count — installs and Premium purchases come from Play Console.
+          Miftah has no accounts and no tracking (privacy-first), so sign-ups and active users can&apos;t be counted from
+          the app. Google Play counts them for us — see <b>Daily active users</b> and <b>Monthly active users</b> in Play
+          Console › Statistics.{" "}
+          <a
+            href="https://play.google.com/console/u/3/developers/8987920338658726445/app/4973760122760051624/statistics"
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: "var(--indigo)" }}
+          >
+            Open Miftah statistics ↗
+          </a>
         </div>
       </Section>
       <Section title="Installs (from Play Console)">

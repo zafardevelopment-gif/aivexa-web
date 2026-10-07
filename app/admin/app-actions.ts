@@ -41,6 +41,11 @@ export interface CalivoStats {
   signups7d: number;
   signups30d: number;
   activeUsers7d: number;
+  activeToday: number;
+  activeYesterday: number;
+  active30d: number;
+  activeTracking: boolean; // false until calivo_daily_active exists
+  dailyActive: { date: string; count: number }[];
   premiumActive: number;
   premiumMonthly: number;
   premiumYearly: number;
@@ -89,6 +94,11 @@ export async function getCalivoStats(): Promise<CalivoStats> {
     signups7d: 0,
     signups30d: 0,
     activeUsers7d: 0,
+    activeToday: 0,
+    activeYesterday: 0,
+    active30d: 0,
+    activeTracking: false,
+    dailyActive: [],
     premiumActive: 0,
     premiumMonthly: 0,
     premiumYearly: 0,
@@ -115,13 +125,33 @@ export async function getCalivoStats(): Promise<CalivoStats> {
     const since7 = new Date(now.getTime() - 7 * 86400000);
     const today = new Date(now.toISOString().slice(0, 10) + "T00:00:00Z");
 
-    const [{ count: total }, users30, recent, subs, meals7] = await Promise.all([
+    const [{ count: total }, users30, recent, subs, meals7, dau] = await Promise.all([
       db.from("calivo_users").select("id", { count: "exact", head: true }),
       db.from("calivo_users").select("created_at").gte("created_at", since30.toISOString()),
       db.from("calivo_users").select("email, created_at").order("created_at", { ascending: false }).limit(15),
       db.from("calivo_subscriptions").select("plan, status"),
       db.from("calivo_meals").select("user_id").gte("logged_at", since7.toISOString()).limit(20000),
+      // One row per user per (IST) day the app was opened — written by the backend.
+      db.from("calivo_daily_active").select("user_id, day").gte("day", isoDay(since30)).limit(50000),
     ]);
+
+    const dauRows = (dau.data as { user_id: string; day: string }[] | null) ?? [];
+    const tracking = !dau.error;
+    // Days are stored in IST.
+    const istDay = (d: Date) => new Date(d.getTime() + 5.5 * 3600000).toISOString().slice(0, 10);
+    const todayIst = istDay(now);
+    const yesterdayIst = istDay(new Date(now.getTime() - 86400000));
+    const since7Ist = istDay(since7);
+    const byDay = new Map<string, Set<string>>();
+    for (const r of dauRows) {
+      if (!byDay.has(r.day)) byDay.set(r.day, new Set());
+      byDay.get(r.day)!.add(r.user_id);
+    }
+    const dailyActive: { date: string; count: number }[] = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = istDay(new Date(now.getTime() - i * 86400000));
+      dailyActive.push({ date: d, count: byDay.get(d)?.size ?? 0 });
+    }
 
     const created = ((users30.data as { created_at: string }[] | null) ?? []).map((u) => new Date(u.created_at));
     const daily: { date: string; count: number }[] = [];
@@ -142,7 +172,14 @@ export async function getCalivoStats(): Promise<CalivoStats> {
       signupsToday: created.filter((c) => c >= today).length,
       signups7d: created.filter((c) => c >= since7).length,
       signups30d: created.length,
-      activeUsers7d: activeUsers,
+      activeUsers7d: tracking
+        ? new Set(dauRows.filter((r) => r.day >= since7Ist).map((r) => r.user_id)).size
+        : activeUsers,
+      activeToday: byDay.get(todayIst)?.size ?? 0,
+      activeYesterday: byDay.get(yesterdayIst)?.size ?? 0,
+      active30d: new Set(dauRows.map((r) => r.user_id)).size,
+      activeTracking: tracking,
+      dailyActive,
       premiumActive: active.length,
       premiumMonthly: monthly,
       premiumYearly: yearly,
