@@ -6,6 +6,7 @@ import {
   BarChart3,
   FileText,
   Inbox,
+  LineChart,
   LayoutDashboard,
   LogOut,
   MessageSquareQuote,
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/admin/homepage", label: "Homepage", icon: MessageSquareQuote },
   { href: "/admin/pages", label: "Pages", icon: FileText },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/app-analytics", label: "App Analytics", icon: LineChart },
   { href: "/admin/branded-apps", label: "Branded Apps", icon: Smartphone },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
