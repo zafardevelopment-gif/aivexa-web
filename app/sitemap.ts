@@ -20,6 +20,19 @@ const LEGAL_SLUGS = new Set([
   "miftah-privacy",
 ]);
 
+function langEntries(base: string, langs: string[]): MetadataRoute.Sitemap {
+  const href = (l: string) => `${BASE_URL}${l === "en" ? base : `${base}/${l}`}`;
+  const languages: Record<string, string> = {};
+  for (const l of langs) languages[l] = href(l);
+  return langs.map((l) => ({
+    url: href(l),
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: l === "en" ? 0.95 : 0.85,
+    alternates: { languages },
+  }));
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
@@ -30,8 +43,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
     { url: `${BASE_URL}/pdf-api`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/calivo-ai`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
-    { url: `${BASE_URL}/miftah`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
+    // App landing pages in every language, each listing its hreflang siblings.
+    ...langEntries("/calivo-ai", ["en", "hi", "ur", "ar"]),
+    ...langEntries("/miftah", ["en", "hi", "ur", "bn", "ml", "ar", "id"]),
     { url: `${BASE_URL}/myrentsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/testsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/tentsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
