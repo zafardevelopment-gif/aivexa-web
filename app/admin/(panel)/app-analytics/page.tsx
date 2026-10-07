@@ -118,6 +118,28 @@ function TopTable({ title, rows, total }: { title: string; rows: CountRow[]; tot
   );
 }
 
+const istTime = (iso: string) =>
+  new Date(iso).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+const istClock = (iso: string) =>
+  new Date(iso).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit" });
+const hourLabel = (h: number) => `${h % 12 === 0 ? 12 : h % 12}${h < 12 ? "am" : "pm"}`;
+
+/** 24 bars, one per hour of the day (IST), with the busiest hour named. */
+function HourChart({ data, color, title }: { data: number[]; color: string; title: string }) {
+  if (!data.length) return null;
+  const peak = data.indexOf(Math.max(...data));
+  const total = data.reduce((a, b) => a + b, 0);
+  return (
+    <div style={{ marginBottom: "1rem" }}>
+      <div style={{ fontSize: ".8rem", color: "var(--muted-2)", marginBottom: 6 }}>
+        {title}
+        {total > 0 && <> — busiest around <b>{hourLabel(peak)}–{hourLabel((peak + 1) % 24)}</b></>}
+      </div>
+      <Bars data={data.map((v, h) => ({ label: hourLabel(h), value: v }))} color={color} />
+    </div>
+  );
+}
+
 const grid2: React.CSSProperties = { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "1rem" };
 const input: React.CSSProperties = {
   padding: ".55rem .7rem",
@@ -252,6 +274,7 @@ function TrafficReport({ app }: { app: AppKey }) {
               <Bars data={t.daily.map((d) => ({ label: d.date.slice(5), value: d.views }))} />
             </div>
           )}
+          <HourChart data={t.byHour} color="#7c3aed" title="Visits by hour of day (IST)" />
           <div style={grid2}>
             <TopTable title="Top pages" rows={t.topPages} total={t.views} />
             <TopTable title="Traffic source" rows={t.referrers} total={t.views} />
@@ -260,6 +283,30 @@ function TrafficReport({ app }: { app: AppKey }) {
             <TopTable title="Device" rows={t.devices} total={t.views} />
             <TopTable title="Operating system" rows={t.os} total={t.views} />
           </div>
+          {t.recent.length > 0 && (
+            <table className="admin-table" style={{ marginTop: "1rem" }}>
+              <thead>
+                <tr>
+                  <th style={{ width: 130 }}>When (IST)</th>
+                  <th>Page</th>
+                  <th>Source</th>
+                  <th>Place</th>
+                  <th>Device</th>
+                </tr>
+              </thead>
+              <tbody>
+                {t.recent.map((r, i) => (
+                  <tr key={r.at + i}>
+                    <td style={{ whiteSpace: "nowrap" }}>{istTime(r.at)}</td>
+                    <td style={{ wordBreak: "break-all" }}>{r.page}</td>
+                    <td>{r.source}</td>
+                    <td>{r.place}</td>
+                    <td>{r.device}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </>
       )}
     </Section>
@@ -299,6 +346,34 @@ function CalivoTab() {
           <div style={{ marginBottom: "1rem" }}>
             <div style={{ fontSize: ".8rem", color: "var(--muted-2)", marginBottom: 6 }}>Daily active users (30 days, IST)</div>
             <Bars data={s.dailyActive.map((d) => ({ label: d.date.slice(5), value: d.count }))} color="#16a34a" />
+          </div>
+        )}
+        <HourChart data={s.opensByHour} color="#0ea5e9" title="When people open the app (IST, last 7 days)" />
+        {s.todayActivity.length > 0 && (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Active today</th>
+                <th style={{ width: 110 }}>First open</th>
+                <th style={{ width: 110 }}>Last open</th>
+                <th style={{ width: 80, textAlign: "right" }}>Opens*</th>
+              </tr>
+            </thead>
+            <tbody>
+              {s.todayActivity.map((u) => (
+                <tr key={u.email}>
+                  <td>{u.email}</td>
+                  <td>{istClock(u.first)}</td>
+                  <td>{istClock(u.last)}</td>
+                  <td style={{ textAlign: "right" }}>{u.opens}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {s.configured && (
+          <div className="admin-muted" style={{ marginTop: "-.8rem" }}>
+            * counted once per 15 minutes. Times are IST and start from when this tracking went live.
           </div>
         )}
       </Section>

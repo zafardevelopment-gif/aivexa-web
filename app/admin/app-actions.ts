@@ -46,6 +46,8 @@ export interface CalivoStats {
   active30d: number;
   activeTracking: boolean; // false until calivo_daily_active exists
   dailyActive: { date: string; count: number }[];
+  opensByHour: number[]; // 24 buckets, IST, last 7 days
+  todayActivity: { email: string; first: string; last: string; opens: number }[];
   premiumActive: number;
   premiumMonthly: number;
   premiumYearly: number;
@@ -99,6 +101,8 @@ export async function getCalivoStats(): Promise<CalivoStats> {
     active30d: 0,
     activeTracking: false,
     dailyActive: [],
+    opensByHour: [],
+    todayActivity: [],
     premiumActive: 0,
     premiumMonthly: 0,
     premiumYearly: 0,
@@ -125,7 +129,7 @@ export async function getCalivoStats(): Promise<CalivoStats> {
     const since7 = new Date(now.getTime() - 7 * 86400000);
     const today = new Date(now.toISOString().slice(0, 10) + "T00:00:00Z");
 
-    const [{ count: total }, users30, recent, subs, meals7, dau] = await Promise.all([
+    const [{ count: total }, users30, recent, subs, meals7, dau, opens] = await Promise.all([
       db.from("calivo_users").select("id", { count: "exact", head: true }),
       db.from("calivo_users").select("created_at").gte("created_at", since30.toISOString()),
       db.from("calivo_users").select("email, created_at").order("created_at", { ascending: false }).limit(15),
@@ -133,7 +137,14 @@ export async function getCalivoStats(): Promise<CalivoStats> {
       db.from("calivo_meals").select("user_id").gte("logged_at", since7.toISOString()).limit(20000),
       // One row per user per (IST) day the app was opened — written by the backend.
       db.from("calivo_daily_active").select("user_id, day").gte("day", isoDay(since30)).limit(50000),
+      db.from("calivo_app_opens").select("user_id, at").gte("at", since7.toISOString()).order("at").limit(50000),
     ]);
+
+    // When people open the app (IST).
+    const openRows = (opens.data as { user_id: string; at: string }[] | null) ?? [];
+    const opensByHour = new Array(24).fill(0) as number[];
+    const istHour = (iso: string) => new Date(new Date(iso).getTime() + 5.5 * 3600000).getUTCHours();
+    for (const o of openRows) opensByHour[istHour(o.at)]++;
 
     const dauRows = (dau.data as { user_id: string; day: string }[] | null) ?? [];
     const tracking = !dau.error;
@@ -161,6 +172,25 @@ export async function getCalivoStats(): Promise<CalivoStats> {
       daily.push({ date: key, count: created.filter((c) => isoDay(c) === key).length });
     }
 
+    const todayOpens = openRows.filter((o) => istDay(new Date(o.at)) === todayIst);
+    const perUser = new Map<string, { first: string; last: string; opens: number }>();
+    for (const o of todayOpens) {
+      const e = perUser.get(o.user_id);
+      if (!e) perUser.set(o.user_id, { first: o.at, last: o.at, opens: 1 });
+      else {
+        e.last = o.at;
+        e.opens++;
+      }
+    }
+    let todayActivity: CalivoStats["todayActivity"] = [];
+    if (perUser.size) {
+      const { data: us } = await db.from("calivo_users").select("id, email").in("id", Array.from(perUser.keys()));
+      const emails = new Map(((us as { id: string; email: string }[] | null) ?? []).map((u) => [u.id, u.email]));
+      todayActivity = Array.from(perUser.entries())
+        .map(([id, v]) => ({ email: emails.get(id) ?? id.slice(0, 8), ...v }))
+        .sort((a, b) => (a.last < b.last ? 1 : -1));
+    }
+
     const active = ((subs.data as { plan: string; status: string }[] | null) ?? []).filter((s) => s.status === "active");
     const monthly = active.filter((s) => s.plan === "monthly").length;
     const yearly = active.filter((s) => s.plan === "yearly").length;
@@ -180,6 +210,8 @@ export async function getCalivoStats(): Promise<CalivoStats> {
       active30d: new Set(dauRows.map((r) => r.user_id)).size,
       activeTracking: tracking,
       dailyActive,
+      opensByHour,
+      todayActivity,
       premiumActive: active.length,
       premiumMonthly: monthly,
       premiumYearly: yearly,
@@ -266,6 +298,8 @@ export interface AppTraffic {
   os: CountRow[];
   countries: CountRow[];
   cities: CountRow[];
+  byHour: number[]; // 24 buckets, IST
+  recent: { at: string; page: string; source: string; place: string; device: string }[];
 }
 
 type PvRow = {
@@ -325,6 +359,8 @@ export async function getAppTraffic(app: "calivo" | "miftah", days = 30): Promis
     os: [],
     countries: [],
     cities: [],
+    byHour: [],
+    recent: [],
   };
   if (!(await isAdmin())) return { ...empty, error: "Not authorised" };
   const db = supabaseAdmin();
@@ -352,8 +388,10 @@ export async function getAppTraffic(app: "calivo" | "miftah", days = 30): Promis
   const cities = new Map<string, number>();
   const dayViews = new Map<string, number>();
   const dayVisitors = new Map<string, Set<string>>();
+  const byHour = new Array(24).fill(0) as number[];
 
   for (const r of rows) {
+    byHour[new Date(new Date(r.created_at).getTime() + 5.5 * 3600000).getUTCHours()]++;
     bump(pages, r.path.split("?")[0]);
     bump(refs, referrerLabel(r.referrer));
     bump(devices, r.device_type || "Unknown");
@@ -385,5 +423,13 @@ export async function getAppTraffic(app: "calivo" | "miftah", days = 30): Promis
     os: top(oses, 6),
     countries: top(countries, 10),
     cities: top(cities, 12),
+    byHour,
+    recent: rows.slice(0, 60).map((r) => ({
+      at: r.created_at,
+      page: r.path.split("?")[0],
+      source: referrerLabel(r.referrer),
+      place: [r.city, r.region, r.country].filter(Boolean).join(", ") || "—",
+      device: [r.device_type, r.os].filter(Boolean).join(" · ") || "—",
+    })),
   };
 }
