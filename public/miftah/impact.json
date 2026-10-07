@@ -1,0 +1,15 @@
+{
+  "updated": "2026-10-07",
+  "currency": "INR",
+  "collected": 1000,
+  "share_percent": 20,
+  "pledged": 200,
+  "donated": 200,
+  "recipient": {
+    "name": "Al-Mahad Lil Tahfizul Quran",
+    "address": "Doghra, Darbhanga, Bihar, India 847302"
+  },
+  "donations": [
+    { "date": "2026-10-07", "amount": 200 }
+  ]
+}
