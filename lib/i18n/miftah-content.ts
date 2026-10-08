@@ -13,12 +13,15 @@ function withIcons(items: [string, string][]) {
 }
 
 const en: LandingContent = {
-  title: "Miftah — Prayer Times, Quran with Tafseer, Hadith Books & Namaz Guide (Free App)",
-  desc: "Namaz times with Azan & Iqamah alerts, Qibla, Quran with translation & tafseer (Ibn Kathir, Ma'ariful Qur'an), Bukhari, Muslim & 5 more hadith books, Quran & hadith search, Namaz-Wudu guide — in 7 languages.",
+  title: "Miftah — Prayer Times, Quran & Tafseer, Hifz, Khatam Planner, Hadith (Free App)",
+  desc: "Namaz times with Azan & Iqamah alerts, Qibla, Quran with tafseer, Hifz mode, Khatam planner, Hijri calendar with sunnah fast reminders, 7 hadith books and a kids' Noorani Qaida — in 7 languages.",
   keywords: [
     "Miftah app", "prayer times app", "namaz time app", "azan app", "iqamah reminder", "qibla compass app",
     "quran app android", "quran with tafseer app", "ibn kathir tafseer app", "sahih bukhari app", "hadith books app",
     "namaz ka tarika", "wudu ka tarika", "islamic app", "muslim app", "salah tracker",
+    "quran khatam planner", "quran hifz app", "quran memorization app", "ayah repeat app", "hijri calendar app",
+    "islamic calendar 2026", "sunnah fasting reminder", "ayyam al bid reminder", "surah kahf friday reminder",
+    "noorani qaida app", "six kalimas", "islamic app for kids",
   ],
   h1Rest: "Prayer Times, Azan, Quran & Namaz-Wudu guide",
   sub: "Accurate namaz times for your city, a reminder before every prayer, the Azan at prayer time and an Iqamah alert for jamaat. Read the Quran with translation and tafseer, complete hadith books, learn wudu and namaz step by step — in English, हिन्दी, اردو, বাংলা, മലയാളം, العربية and Bahasa Indonesia.",
@@ -423,5 +426,130 @@ const id: LandingContent = {
   heroCard: { greet: "Assalamu'alaikum", next: "Sholat berikutnya", prayer: "Ashar · 15:58", remaining: "01:24:09 lagi" },
 };
 
+/**
+ * Features added in v0.1.12 (Khatam planner, Hifz mode, Islamic calendar,
+ * Kids corner) — merged into each non-English page. English takes them
+ * from lib/miftah.ts.
+ */
+type Extra = { keywords: string[]; features: [string, string, string][]; faqs: { q: string; a: string }[]; audience: string[] };
+
+const EXTRA: Record<string, Extra> = {
+  hi: {
+    keywords: ["क़ुरआन ख़त्म प्लानर", "हिफ़्ज़ ऐप", "क़ुरआन याद करने का ऐप", "इस्लामी कैलेंडर", "हिजरी तारीख़", "सुन्नत रोज़े रिमाइंडर", "अय्यामे बीज़", "नूरानी क़ायदा ऐप", "छह कलिमे", "quran khatam app", "hifz app hindi"],
+    features: [
+      ["🎯", "ख़त्म प्लानर और स्ट्रीक", "7, 30, 40 दिन या अपनी मर्ज़ी चुनें — मिफ़्ताह 604 पन्नों को रोज़ के हिस्से में बाँटता है। मुसहफ़ पढ़ते ही पन्ने अपने आप गिने जाते हैं, स्ट्रीक, आगे/पीछे का हाल, रोज़ का रिमाइंडर और ख़त्म पर दुआ।"],
+      ["🧠", "हिफ़्ज़ मोड", "कोई भी सूरह चुनें, आयत छिपाएँ या सिर्फ़ पहला शब्द दिखाएँ, क़ारी की आवाज़ में हर आयत 1–20 बार और पूरी रेंज बार-बार सुनें, याद हुई आयतें मार्क करें और दोहराने वाली सूरतें देखें।"],
+      ["🗓️", "इस्लामी कैलेंडर और सुन्नत रोज़े", "हिजरी महीना — अय्यामे बीज़, सोमवार-गुरुवार, अरफ़ा, आशूरा, शव्वाल के छह रोज़े, ताक़ रातें और ईदें, हदीस हवाले के साथ। पिछली शाम रिमाइंडर, जुमा को सूरह कहफ़ और दुरूद की याद, और ±2 दिन हिजरी एडजस्टमेंट।"],
+      ["🧒", "बच्चों का कोना (नूरानी क़ायदा)", "नूरानी क़ायदा के हरूफ़ और ज़बर-ज़ेर-पेश — टैप करें और सुनें — छह कलिमे मतलब के साथ और 12 सवालों का मज़ेदार क्विज़।"],
+    ],
+    faqs: [
+      { q: "क्या मिफ़्ताह में क़ुरआन ख़त्म करने का प्लानर है?", a: "हाँ। दिन चुनें (जैसे रमज़ान के 30 दिन) और ऐप 604 पन्नों को रोज़ के हिस्से में बाँट देता है। ऐप में पढ़ते ही पन्ने गिने जाते हैं, या छपे हुए क़ुरआन से पढ़ा हो तो \"आज का हिस्सा पढ़ लिया\" दबाएँ। स्ट्रीक और रोज़ का रिमाइंडर भी मिलता है।" },
+      { q: "क्या मिफ़्ताह से क़ुरआन हिफ़्ज़ कर सकते हैं?", a: "हाँ। हिफ़्ज़ मोड में आयत छिपाकर ख़ुद को परखें, क़ारी की आवाज़ में आयत बार-बार सुनें, याद हुई आयतें मार्क करें और दोहराने का वक़्त देखें।" },
+      { q: "क्या सुन्नत रोज़ों का रिमाइंडर मिलता है?", a: "हाँ। अय्यामे बीज़ (13-15), अरफ़ा, आशूरा और शव्वाल के रोज़ों की याद पिछली शाम मिलती है; सोमवार-गुरुवार का रिमाइंडर आप चाहें तो चालू करें।" },
+      { q: "क्या बच्चों के लिए नूरानी क़ायदा है?", a: "हाँ। बच्चों के कोने में अरबी हरूफ़ और हरकात आवाज़ के साथ, छह कलिमे और एक क्विज़ है।" },
+    ],
+    audience: ["जो रमज़ान या महीने भर में क़ुरआन ख़त्म करना चाहते हैं", "जो क़ुरआन हिफ़्ज़ कर रहे हैं", "माता-पिता जो बच्चों को हरूफ़ और कलिमे सिखाना चाहते हैं"],
+  },
+  ur: {
+    keywords: ["قرآن ختم پلانر", "حفظ ایپ", "قرآن حفظ کرنے کی ایپ", "اسلامی کیلنڈر", "ہجری تاریخ", "سنت روزوں کی یاد دہانی", "ایام بیض", "نورانی قاعدہ ایپ", "چھ کلمے", "hifz app urdu"],
+    features: [
+      ["🎯", "ختم پلانر اور اسٹریک", "7، 30، 40 دن یا اپنی مرضی چنیں — مفتاح 604 صفحات کو روزانہ کے حصے میں بانٹتا ہے۔ مصحف پڑھتے ہی صفحات خود گنے جاتے ہیں، اسٹریک، روزانہ یاد دہانی اور ختم پر دعا۔"],
+      ["🧠", "حفظ موڈ", "کوئی بھی سورہ چنیں، آیت چھپائیں یا صرف پہلا لفظ دکھائیں، قاری کی آواز میں ہر آیت 1–20 بار اور پوری حد بار بار سنیں، یاد ہوئی آیات نشان کریں اور دہرانے والی سورتیں دیکھیں۔"],
+      ["🗓️", "اسلامی کیلنڈر اور سنت روزے", "ہجری مہینہ — ایام بیض، پیر و جمعرات، عرفہ، عاشورا، شوال کے چھ روزے، طاق راتیں اور عیدیں، حدیث حوالوں کے ساتھ۔ پچھلی شام یاد دہانی، جمعہ کو سورہ کہف اور درود، اور ±2 دن ہجری تبدیلی۔"],
+      ["🧒", "بچوں کا کونا (نورانی قاعدہ)", "نورانی قاعدہ کے حروف اور زبر زیر پیش — ٹیپ کریں اور سنیں — چھ کلمے معنی کے ساتھ اور 12 سوالوں کا کوئز۔"],
+    ],
+    faqs: [
+      { q: "کیا مفتاح میں قرآن ختم کرنے کا پلانر ہے؟", a: "جی ہاں۔ دن چنیں (جیسے رمضان کے 30 دن) اور ایپ 604 صفحات کو روزانہ کے حصے میں بانٹ دیتی ہے۔ ایپ میں پڑھتے ہی صفحات گنے جاتے ہیں، اسٹریک اور روزانہ یاد دہانی بھی ملتی ہے۔" },
+      { q: "کیا مفتاح سے قرآن حفظ کر سکتے ہیں؟", a: "جی ہاں۔ حفظ موڈ میں آیت چھپا کر خود کو آزمائیں، قاری کی آواز میں آیات بار بار سنیں اور یاد ہوئی آیات نشان کریں۔" },
+      { q: "کیا سنت روزوں کی یاد دہانی ملتی ہے؟", a: "جی ہاں۔ ایام بیض، عرفہ، عاشورا اور شوال کے روزوں کی یاد پچھلی شام ملتی ہے؛ پیر و جمعرات کی یاد دہانی اختیاری ہے۔" },
+      { q: "کیا بچوں کے لیے نورانی قاعدہ ہے؟", a: "جی ہاں۔ بچوں کے کونے میں عربی حروف اور حرکات آواز کے ساتھ، چھ کلمے اور ایک کوئز ہے۔" },
+    ],
+    audience: ["جو رمضان یا مہینے بھر میں قرآن ختم کرنا چاہتے ہیں", "جو قرآن حفظ کر رہے ہیں", "والدین جو بچوں کو حروف اور کلمے سکھانا چاہتے ہیں"],
+  },
+  bn: {
+    keywords: ["কুরআন খতম পরিকল্পনা", "হিফজ অ্যাপ", "কুরআন মুখস্থ অ্যাপ", "ইসলামি ক্যালেন্ডার", "হিজরি তারিখ", "সুন্নত রোজা রিমাইন্ডার", "আইয়ামে বীয", "নূরানী কায়দা অ্যাপ", "ছয় কালিমা"],
+    features: [
+      ["🎯", "খতম পরিকল্পনা ও ধারাবাহিকতা", "৭, ৩০, ৪০ দিন বা নিজের লক্ষ্য বেছে নিন — Miftah ৬০৪ পৃষ্ঠাকে দৈনিক অংশে ভাগ করে, পড়ার সময় পৃষ্ঠা গোনে, ধারাবাহিকতা ও দৈনিক রিমাইন্ডার দেয়।"],
+      ["🧠", "হিফজ মোড", "যেকোনো সূরা বেছে নিন, আয়াত লুকান বা শুধু প্রথম শব্দ দেখান, কারীর কণ্ঠে প্রতিটি আয়াত ১–২০ বার শুনুন, মুখস্থ আয়াত চিহ্নিত করুন।"],
+      ["🗓️", "ইসলামি ক্যালেন্ডার ও সুন্নত রোজা", "হিজরি মাস — আইয়ামে বীয, সোম-বৃহস্পতি, আরাফা, আশুরা, শাওয়ালের ছয় রোজা ও ঈদ, হাদিসের রেফারেন্সসহ; আগের সন্ধ্যায় রিমাইন্ডার ও জুমায় সূরা কাহফ।"],
+      ["🧒", "শিশুদের কোণ (নূরানী কায়দা)", "নূরানী কায়দার হরফ ও হরকত শব্দসহ, ছয় কালিমা অর্থসহ এবং একটি মজার কুইজ।"],
+    ],
+    faqs: [
+      { q: "Miftah-এ কি কুরআন খতমের পরিকল্পনা আছে?", a: "হ্যাঁ। দিন বেছে নিন (যেমন রমজানের ৩০ দিন), অ্যাপ ৬০৪ পৃষ্ঠাকে দৈনিক অংশে ভাগ করে এবং পড়ার সময় পৃষ্ঠা গোনে।" },
+      { q: "Miftah দিয়ে কি কুরআন হিফজ করা যায়?", a: "হ্যাঁ। হিফজ মোডে আয়াত লুকিয়ে নিজেকে যাচাই করুন এবং কারীর কণ্ঠে আয়াত বারবার শুনুন।" },
+      { q: "সুন্নত রোজার রিমাইন্ডার আছে কি?", a: "হ্যাঁ। আইয়ামে বীয, আরাফা, আশুরা ও শাওয়ালের রোজার আগের সন্ধ্যায় রিমাইন্ডার আসে।" },
+    ],
+    audience: ["যারা রমজানে বা মাসে কুরআন খতম করতে চান", "যারা কুরআন হিফজ করছেন", "যে অভিভাবকরা শিশুদের হরফ ও কালিমা শেখাতে চান"],
+  },
+  ml: {
+    keywords: ["ഖുർആൻ ഖത്തം പ്ലാനർ", "ഹിഫ്‌ള് ആപ്പ്", "ഇസ്‌ലാമിക് കലണ്ടർ", "ഹിജ്റ തീയതി", "സുന്നത്ത് നോമ്പ് ഓർമ്മപ്പെടുത്തൽ", "നൂറാനി ഖാഇദ ആപ്പ്", "ആറ് കലിമ"],
+    features: [
+      ["🎯", "ഖത്തം പ്ലാനറും സ്ട്രീക്കും", "7, 30, 40 ദിവസം അല്ലെങ്കിൽ ഇഷ്ടാനുസൃതം — 604 പേജുകൾ ദൈനംദിന ഭാഗങ്ങളായി, വായിക്കുമ്പോൾ പേജുകൾ സ്വയം എണ്ണും, സ്ട്രീക്കും ഓർമ്മപ്പെടുത്തലും."],
+      ["🧠", "ഹിഫ്‌ള് മോഡ്", "ഏത് സൂറയും തിരഞ്ഞെടുക്കുക, ആയത്ത് മറയ്ക്കുക, ഖാരിയുടെ ശബ്ദത്തിൽ ഓരോ ആയത്തും 1–20 തവണ കേൾക്കുക, മനഃപാഠമായവ അടയാളപ്പെടുത്തുക."],
+      ["🗓️", "ഇസ്‌ലാമിക് കലണ്ടറും സുന്നത്ത് നോമ്പും", "അയ്യാമുൽ ബീള്, തിങ്കൾ-വ്യാഴം, അറഫ, ആശൂറാ, ശവ്വാൽ നോമ്പുകൾ, പെരുന്നാളുകൾ — തലേന്ന് വൈകുന്നേരം ഓർമ്മപ്പെടുത്തൽ, വെള്ളിയാഴ്ച സൂറത്തുൽ കഹ്ഫ്."],
+      ["🧒", "കുട്ടികളുടെ കോർണർ (നൂറാനി ഖാഇദ)", "അറബി അക്ഷരങ്ങളും ഹറകാത്തും ശബ്ദത്തോടെ, ആറ് കലിമകൾ അർത്ഥത്തോടെ, ഒരു ക്വിസ്."],
+    ],
+    faqs: [
+      { q: "Miftah-ൽ ഖുർആൻ ഖത്തം പ്ലാനർ ഉണ്ടോ?", a: "ഉണ്ട്. ദിവസങ്ങൾ തിരഞ്ഞെടുക്കുക, 604 പേജുകൾ ദൈനംദിന ഭാഗങ്ങളായി വിഭജിക്കും, വായിക്കുമ്പോൾ പേജുകൾ സ്വയം എണ്ണും." },
+      { q: "Miftah ഉപയോഗിച്ച് ഹിഫ്‌ള് ചെയ്യാമോ?", a: "ചെയ്യാം. ആയത്ത് മറച്ച് സ്വയം പരീക്ഷിക്കുക, ഖാരിയുടെ ശബ്ദത്തിൽ ആവർത്തിച്ച് കേൾക്കുക." },
+      { q: "സുന്നത്ത് നോമ്പ് ഓർമ്മപ്പെടുത്തൽ ഉണ്ടോ?", a: "ഉണ്ട്. അയ്യാമുൽ ബീള്, അറഫ, ആശൂറാ, ശവ്വാൽ നോമ്പുകൾക്ക് തലേന്ന് വൈകുന്നേരം ഓർമ്മപ്പെടുത്തും." },
+    ],
+    audience: ["റമദാനിലോ മാസത്തിലോ ഖുർആൻ പൂർത്തിയാക്കാൻ ആഗ്രഹിക്കുന്നവർ", "ഖുർആൻ മനഃപാഠമാക്കുന്നവർ", "കുട്ടികളെ അക്ഷരങ്ങളും കലിമകളും പഠിപ്പിക്കുന്ന രക്ഷിതാക്കൾ"],
+  },
+  ar: {
+    keywords: ["مخطط ختم القرآن", "تطبيق حفظ القرآن", "تكرار الآيات", "التقويم الهجري", "تذكير صيام السنن", "الأيام البيض", "تذكير سورة الكهف", "القاعدة النورانية للأطفال"],
+    features: [
+      ["🎯", "مخطط الختمة والسلسلة", "اختر 7 أو 30 أو 40 يومًا أو مدتك الخاصة، فيقسّم مفتاح الصفحات الـ604 إلى ورد يومي، ويحسب الصفحات أثناء القراءة، مع سلسلة أيام وتذكير يومي ودعاء عند الختم."],
+      ["🧠", "وضع الحفظ", "اختر أي سورة، وأخفِ النص أو أظهر الكلمة الأولى فقط، وكرّر كل آية من 1 إلى 20 مرة بصوت القارئ، وعلّم ما حفظته، واعرف السور التي حان وقت مراجعتها."],
+      ["🗓️", "التقويم الهجري وصيام السنن", "الأيام البيض والاثنين والخميس وعرفة وعاشوراء وست من شوال والليالي الوتر والعيدان، مع المراجع الحديثية، وتذكير مساء اليوم السابق، وتذكير الجمعة بسورة الكهف، وتعديل ±2 يوم."],
+      ["🧒", "ركن الأطفال (القاعدة النورانية)", "الحروف والحركات من القاعدة النورانية مع الصوت، والكلمات الست بالمعنى، ومسابقة ممتعة من 12 سؤالًا."],
+    ],
+    faqs: [
+      { q: "هل في مفتاح مخطط لختم القرآن؟", a: "نعم. اختر عدد الأيام (مثل 30 يومًا في رمضان) فيقسّم التطبيق الصفحات إلى ورد يومي ويحسبها تلقائيًا أثناء القراءة، مع سلسلة أيام وتذكير يومي." },
+      { q: "هل يمكن حفظ القرآن بمفتاح؟", a: "نعم. وضع الحفظ يخفي النص لتختبر نفسك، ويكرّر الآيات بصوت القارئ، ويحفظ تقدّمك ومواعيد المراجعة." },
+      { q: "هل يذكّر مفتاح بصيام السنن؟", a: "نعم. يذكّر مساء اليوم السابق بالأيام البيض وعرفة وعاشوراء وست من شوال، وتذكير الاثنين والخميس اختياري." },
+    ],
+    audience: ["من يريد ختم القرآن في رمضان أو كل شهر", "حفّاظ القرآن وطلاب الحفظ", "الآباء الذين يعلّمون أطفالهم الحروف والكلمات"],
+  },
+  id: {
+    keywords: ["aplikasi khatam quran", "aplikasi hafalan quran", "murojaah quran", "kalender hijriah", "pengingat puasa sunnah", "ayyamul bidh", "pengingat al kahfi jumat", "qaidah nuraniyah anak"],
+    features: [
+      ["🎯", "Perencana khatam & streak", "Pilih 7, 30, 40 hari atau target sendiri — Miftah membagi 604 halaman menjadi bagian harian, menghitung halaman saat membaca, dengan streak, pengingat harian dan doa saat khatam."],
+      ["🧠", "Mode hafalan (hifz)", "Pilih surah, sembunyikan teks atau tampilkan kata pertama saja, ulangi tiap ayat 1–20 kali dengan qari pilihan, tandai ayat yang sudah hafal dan lihat jadwal muraja'ah."],
+      ["🗓️", "Kalender Hijriah & puasa sunnah", "Ayyamul bidh, Senin-Kamis, Arafah, Asyura, enam hari Syawal, malam ganjil dan dua Id — dengan referensi hadis, pengingat malam sebelumnya, pengingat Al-Kahfi hari Jumat dan penyesuaian ±2 hari."],
+      ["🧒", "Pojok anak (Qaidah Nuraniyah)", "Huruf hijaiyah dan harakat dengan suara, enam kalimat beserta artinya, dan kuis seru 12 pertanyaan."],
+    ],
+    faqs: [
+      { q: "Apakah Miftah punya perencana khatam Al-Qur'an?", a: "Ya. Pilih jumlah hari (misalnya 30 hari Ramadhan), aplikasi membagi halaman menjadi bagian harian dan menghitungnya otomatis saat membaca, dengan streak dan pengingat harian." },
+      { q: "Apakah bisa menghafal Al-Qur'an dengan Miftah?", a: "Ya. Mode hafalan menyembunyikan teks untuk menguji diri, mengulang ayat dengan suara qari dan mencatat hafalan serta jadwal muraja'ah." },
+      { q: "Apakah ada pengingat puasa sunnah?", a: "Ya. Pengingat malam sebelumnya untuk ayyamul bidh, Arafah, Asyura dan enam hari Syawal; pengingat Senin-Kamis opsional." },
+    ],
+    audience: ["Yang ingin khatam Al-Qur'an saat Ramadhan atau tiap bulan", "Penghafal Al-Qur'an", "Orang tua yang mengajarkan huruf hijaiyah dan kalimat kepada anak"],
+  },
+};
+
+function withExtra(c: LandingContent, lang: string): LandingContent {
+  const x = EXTRA[lang];
+  if (!x) return c;
+  const extraFeatures = x.features.map(([icon, title, text]) => ({ icon, title, text }));
+  // Keep "privacy" as the closing feature.
+  const features = [...c.features.slice(0, -1), ...extraFeatures, ...c.features.slice(-1)];
+  return {
+    ...c,
+    keywords: [...c.keywords, ...x.keywords],
+    features,
+    audience: [...c.audience, ...x.audience],
+    faqs: [...c.faqs.slice(0, -1), ...x.faqs, ...c.faqs.slice(-1)],
+  };
+}
+
 export const MIFTAH_LANGS: LangCode[] = ["en", "hi", "ur", "bn", "ml", "ar", "id"];
-export const MIFTAH_CONTENT: Record<string, LandingContent> = { en, hi, ur, bn, ml, ar, id };
+export const MIFTAH_CONTENT: Record<string, LandingContent> = {
+  en,
+  hi: withExtra(hi, "hi"),
+  ur: withExtra(ur, "ur"),
+  bn: withExtra(bn, "bn"),
+  ml: withExtra(ml, "ml"),
+  ar: withExtra(ar, "ar"),
+  id: withExtra(id, "id"),
+};

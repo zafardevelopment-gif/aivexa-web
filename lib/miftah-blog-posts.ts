@@ -353,4 +353,188 @@ Small sunnahs, done every day, add up. Here are 16 easy ones with the hadith the
 Pick three to start with, and add one more each week. [Miftah](/miftah) has a free **Daily Sunnah checklist** with all 16 habits and their du'as — tick them off each day; the list resets every morning. Available in English, Hindi (हिन्दी), Urdu, Arabic and Indonesian.
 `,
   },
+
+  {
+    slug: "how-to-complete-quran-in-30-days-khatam-plan",
+    title: "How to Complete the Quran in 30 Days (or Any Target): A Simple Khatam Plan",
+    description:
+      "How many pages a day to finish the Quran in 7, 15, 30, 40, 60 or 90 days, how to split it around the five prayers, and how to catch up after a missed day.",
+    date: "2026-10-08",
+    category: "Islamic Tools",
+    readTime: "5 min read",
+    cta: "miftah",
+    content: `
+The common 15-line (Madani / Indo-Pak) mushaf has **604 pages** and 30 juz of about **20 pages** each. Finishing the Quran is simply a matter of reading a fixed number of pages every day.
+
+## Pages per day for each target
+
+| Finish in | Pages a day | About |
+|---|---|---|
+| 7 days | 87 | 4½ juz |
+| 15 days | 41 | 2 juz |
+| 30 days (one Ramadan) | 21 | 1 juz |
+| 40 days | 16 | ¾ juz |
+| 60 days | 11 | ½ juz |
+| 90 days | 7 | ⅓ juz |
+| 1 year | 2 | 2 pages |
+
+A page takes most readers 2–3 minutes, so **one juz a day is about 45–60 minutes**.
+
+## Split it around the five prayers
+
+For a 30-day khatam, read **4 pages after each salah** — Fajr, Dhuhr, Asr, Maghrib and Isha — and you finish one juz a day without a single long sitting. For 60 days, 2 pages after each prayer is enough.
+
+## Missed a day? Spread it out
+
+Don't double up the next day — that is how most plans break. Divide the pages you are behind by the days left and add a little to each day. Example: on day 10 of a 30-day plan you are 21 pages behind; adding 1 extra page a day for the remaining 21 days closes the gap.
+
+## Keep it going
+
+- Fix a place and a time (after Fajr is easiest for many).
+- Track a **streak** — a small daily win keeps you consistent.
+- When you finish, make du'a; many begin the next khatam right away.
+
+## Track it in Miftah
+
+[Miftah](/miftah) has a free **Khatam planner**: choose 7, 30, 40, 60 days or your own target and it shows today's portion, counts pages automatically as you read the mushaf in the app (or lets you mark a portion read from a printed Quran), keeps your streak, tells you if you are ahead or behind, and reminds you each day at your chosen time.
+`,
+  },
+  {
+    slug: "how-to-memorize-quran-hifz-method-at-home",
+    title: "How to Memorise the Quran at Home: A Simple Hifz Method That Works",
+    description:
+      "A practical hifz routine for adults and children: listen and repeat, the 3 × 10 method, new lesson (sabaq), recent revision (sabqi) and old revision (manzil), and where to start.",
+    date: "2026-10-08",
+    category: "Islamic Tools",
+    readTime: "6 min read",
+    cta: "miftah",
+    content: `
+Memorising the Quran is less about talent and more about a **steady daily routine** and **constant revision**. The method below is the one most hifz teachers use, adapted for learning at home.
+
+## 1. Start small and short
+
+Begin with **Juz 'Amma** (the 30th juz) — short surahs like An-Nas, Al-Falaq, Al-Ikhlas and Al-Kawthar. Quick wins build confidence, and these surahs are recited in salah every day.
+
+## 2. Listen before you read
+
+Play one ayah by a clear qari **5–10 times** while following the text. Listening first fixes the correct pronunciation and rhythm in your ear before mistakes can settle in.
+
+## 3. The 3 × 10 method
+
+1. Read the ayah **10 times** looking at the text.
+2. Recite it **10 times** without looking.
+3. Join it to the previous ayah and recite both **10 times**.
+
+Then move to the next ayah. At the end, recite the whole new portion three times without looking.
+
+## 4. Three parts every day
+
+| Part | What | How much |
+|---|---|---|
+| Sabaq (new) | New ayahs | 3–5 ayahs or ¼ page to start |
+| Sabqi (recent) | The last 7 days of new lessons | Every day |
+| Manzil (old) | Everything memorised before | A fixed amount daily, so all of it is revised every 1–2 weeks |
+
+Skipping revision is the most common reason memorisation fades. **Revision matters more than new lessons.**
+
+## 5. Test yourself and get checked
+
+Hide the text and recite, then check. Recite to a teacher, parent or friend at least once a week — someone else hears mistakes you can't.
+
+## Practise with Miftah
+
+[Miftah](/miftah) has a free **Hifz mode**: pick a surah, hide the text or show only the first word, repeat each ayah 1–20 times and loop a range with your chosen qari, tick ayahs as memorised, and see which surahs are due for revision. Premium adds a word-by-word **recitation check**. It supports your teacher — it doesn't replace one.
+`,
+  },
+  {
+    slug: "sunnah-fasting-days-ayyam-al-bid-monday-thursday-arafah-ashura",
+    title: "Sunnah Fasting Days: Ayyam al-Bid, Monday & Thursday, Arafah, Ashura and Shawwal",
+    description:
+      "The recommended (sunnah) fasts with their hadith references — the white days, Mondays and Thursdays, Arafah, Ashura, six days of Shawwal — and the days on which fasting is not allowed.",
+    date: "2026-10-08",
+    category: "Islamic Tools",
+    readTime: "4 min read",
+    cta: "miftah",
+    content: `
+Besides Ramadan, the Prophet ﷺ encouraged several voluntary fasts. Here they are with their references.
+
+| Fast | When | Reference |
+|---|---|---|
+| Ayyam al-Bid ("white days") | 13th, 14th and 15th of every Hijri month | Jami' at-Tirmidhi 761 |
+| Monday | Every Monday — the day the Prophet ﷺ was born | Sahih Muslim 1162 |
+| Monday & Thursday | Deeds are presented to Allah on these days | Jami' at-Tirmidhi 747 |
+| Day of Arafah | 9 Dhul Hijjah (for those not on Hajj) — expiates two years | Sahih Muslim 1162 |
+| Ashura | 10 Muharram, with the 9th — expiates the past year | Sahih Muslim 1162, 1134 |
+| Six days of Shawwal | Any six days after Eid al-Fitr — like fasting the whole year | Sahih Muslim 1164 |
+| First 9 days of Dhul Hijjah | The best days for good deeds | Sahih al-Bukhari 969 |
+
+## Days you must not fast
+
+- **Eid al-Fitr** (1 Shawwal) and **Eid al-Adha** (10 Dhul Hijjah).
+- The **days of Tashreeq** (11, 12, 13 Dhul Hijjah) — "days of eating, drinking and remembering Allah" (Sahih Muslim 1141).
+
+So in Dhul Hijjah the white-day fast is kept on the 14th and 15th only.
+
+## The Hijri date and moon sighting
+
+Sunnah fasts follow the **Hijri calendar**, which starts with the new moon. Calculated calendars can differ by a day from local moon sighting (in India the date is often one day behind Saudi Arabia), so follow your local announcement.
+
+## Get reminded
+
+[Miftah](/miftah) has a free **Islamic calendar** that marks all of these days, lets you adjust the Hijri date by ±2 days for your area, and can remind you **the evening before** so you can make the intention and set a sehri alarm. Monday/Thursday reminders are optional, and a Friday reminder for Surah al-Kahf and durood is included.
+`,
+  },
+  {
+    slug: "noorani-qaida-for-kids-arabic-letters-six-kalimas",
+    title: "Noorani Qaida for Kids: Teaching Arabic Letters, Harakat and the Six Kalimas at Home",
+    description:
+      "How to start your child on the Noorani Qaida — the 29 Arabic letters, fatha, kasra and damma — plus the six kalimas with meaning and tips to keep children interested.",
+    date: "2026-10-08",
+    category: "Islamic Tools",
+    readTime: "5 min read",
+    cta: "miftah",
+    content: `
+The **Noorani Qaida** is the beginner's book most children in India, Pakistan and Bangladesh use before they start reading the Quran. Its first lessons can be taught at home in a few minutes a day.
+
+## Lesson 1: the letters (huroof)
+
+There are 29 letters in the order taught by the Qaida:
+
+ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن و ه ء ي
+
+Teach 3–4 letters a day. Say the letter's **name** (Alif, Baa, Taa…), let the child repeat it, then point to letters at random. Arabic is read **right to left** — show this early.
+
+## Lesson 2: the short vowels (harakat)
+
+| Mark | Name (Urdu/Hindi) | Sound | Example |
+|---|---|---|---|
+| ـَ above | Fatha (zabar) | a | بَ = ba |
+| ـِ below | Kasra (zer) | i | بِ = bi |
+| ـُ above | Damma (pesh) | u | بُ = bu |
+
+Go letter by letter: بَ بِ بُ, تَ تِ تُ … Children enjoy it when it becomes a chant.
+
+## The six kalimas
+
+1. **Tayyibah** — There is no god but Allah, Muhammad is the Messenger of Allah.
+2. **Shahadah** — bearing witness to Allah's oneness and the Prophet's ﷺ messengership.
+3. **Tamjeed** — glorifying Allah: SubhanAllah, Alhamdulillah, La ilaha illallah, Allahu Akbar.
+4. **Tawheed** — Allah alone gives life and death; all good is in His hand.
+5. **Astaghfar** — seeking forgiveness for every sin, known and unknown.
+6. **Radd-e-Kufr** — seeking refuge from shirk and every sin.
+
+Teach one kalima a week, a line at a time, with its meaning.
+
+## Tips that work
+
+- Keep sessions to **10–15 minutes**, same time daily.
+- Praise effort, not just correct answers.
+- Use sound and colour — children learn by hearing.
+- For correct pronunciation (makharij), a teacher is still best.
+
+## Practise with Miftah
+
+[Miftah](/miftah) has a free **Kids corner**: tap any letter or letter-with-harakah to hear it, read the six kalimas with transliteration and meaning, and play a 12-question quiz about Islam. It uses the phone's Arabic voice, so it is a practice aid alongside a teacher.
+`,
+  },
 ];

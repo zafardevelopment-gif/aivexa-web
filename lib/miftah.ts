@@ -17,9 +17,9 @@ export const MIFTAH_PLAY_URL_CLEAN = `https://play.google.com/store/apps/details
 
 export const miftah = {
   name: "Miftah",
-  tagline: "Prayer Times, Azan, Quran with Tafseer, complete Hadith books and a Namaz & Wudu guide — in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian",
+  tagline: "Prayer Times, Azan, Quran with Tafseer, Hifz & Khatam planner, complete Hadith books, Islamic calendar and a Namaz & Wudu guide — in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian",
   oneLiner:
-    "Miftah is a free, privacy-first Android app by AIVEXA LLP for Muslims: accurate offline prayer (namaz) times, Azan and Iqamah notifications, a Qibla compass, the Holy Quran with word-by-word meanings, your choice of translator and tafseer (Ibn Kathir, Ma'ariful Qur'an, Bayan-ul-Qur'an and more), complete hadith books (Bukhari, Muslim, Abu Dawud, Tirmidhi, Nasa'i, Ibn Majah, Muwatta), Qur'an and hadith search, a step-by-step Namaz & Wudu guide with diagrams, a Daily Sunnah checklist, a salah tracker, and a gentle app blocker that pauses distracting apps during prayer time. Available in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian.",
+    "Miftah is a free, privacy-first Android app by AIVEXA LLP for Muslims: accurate offline prayer (namaz) times, Azan and Iqamah notifications, a Qibla compass, the Holy Quran with word-by-word meanings, your choice of translator and tafseer (Ibn Kathir, Ma'ariful Qur'an, Bayan-ul-Qur'an and more), complete hadith books (Bukhari, Muslim, Abu Dawud, Tirmidhi, Nasa'i, Ibn Majah, Muwatta), Qur'an and hadith search, a step-by-step Namaz & Wudu guide with diagrams, a Daily Sunnah checklist, a Khatam planner with daily portions and streaks, a Hifz (Quran memorisation) mode with ayah repeat and hidden text, an Islamic Hijri calendar with sunnah-fasting and Jumu'ah reminders, a Kids corner (Noorani Qaida letters and harakat with sound, the six kalimas and a quiz), a salah tracker, and a gentle app blocker that pauses distracting apps during prayer time. Available in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian.",
   languages: ["English", "Hindi", "Urdu", "Bangla", "Malayalam", "Arabic", "Indonesian"],
   platform: "Android (Google Play)",
   price:
@@ -41,6 +41,10 @@ export const miftah = {
     { icon: "🧭", title: "Qibla compass & masjid finder", text: "Find the Qibla with a compass or the AR camera view, and find nearby masjids with directions in Google Maps." },
     { icon: "🤲", title: "Du'a, hadith & dhikr", text: "400 authentic hadith from Sahih Bukhari and Sahih Muslim — browse by book and chapter, each with its source and number — plus du'as, morning and evening azkar, the 99 Names of Allah and a digital tasbih counter." },
     { icon: "🌙", title: "Ramadan & Islamic tools", text: "Ramadan mode with Sehri and Iftar times, Hijri date, an Umrah guide with authentic du'as, a Zakat calculator and an Islamic inheritance (Faraid) calculator." },
+    { icon: "🎯", title: "Khatam planner & streak", text: "Choose 7, 30, 40, 60 days or your own target and Miftah splits the 604 pages into a daily portion. Pages count automatically as you read the mushaf (or mark a portion read from a printed Quran), with a streak, an on-track/behind indicator, a daily reminder at your chosen time and a du'a when you finish the khatam." },
+    { icon: "🧠", title: "Hifz mode (Quran memorisation)", text: "Pick any surah and memorise it: hide the text or show only the first word to test yourself, repeat each ayah 1–20 times and the whole range in a loop with your chosen qari, tick ayahs as memorised, and see which surahs are due for revision. Short surahs (Juz 'Amma) are listed first." },
+    { icon: "🗓️", title: "Islamic calendar & sunnah fasting reminders", text: "A Hijri month view with Islamic days and sunnah fasts marked — Ayyam al-Bid (13–15), Monday & Thursday, Arafah, Ashura, six of Shawwal, Ramadan, the odd nights of the last ten, both Eids — each with its hadith reference. Reminders the evening before, a Friday Surah al-Kahf & durood reminder, and a ±2 day Hijri adjustment for local moon sighting." },
+    { icon: "🧒", title: "Kids corner (Noorani Qaida)", text: "Arabic letters and harakat (fatha, kasra, damma) from the Noorani Qaida — tap any letter to hear it — the six kalimas with transliteration and meaning, and a fun 12-question Islamic quiz, plus quick links to wudu, namaz, du'as and the 99 Names." },
     { icon: "🛡️", title: "Privacy first", text: "No account and no ads during worship. Prayer data stays on your phone and nothing is sold. The accessibility service only detects which app is open — never your screen content." },
   ],
 
@@ -59,6 +63,10 @@ export const miftah = {
     "Families who prefer Hindi, Urdu, Bangla, Malayalam, Arabic or Indonesian over English",
     "Students of knowledge who want hadith books and tafseer on their phone",
     "New learners and children who want to learn wudu, namaz and ghusl step by step",
+    "Anyone who wants to complete the Quran in Ramadan or on a monthly plan",
+    "Huffaz and students memorising the Quran with a qari on repeat",
+    "Parents teaching children the Arabic letters, kalimas and basics",
+    "Muslims who want reminders for sunnah fasts and Islamic days",
     "Users who want an Islamic app with no account, no ads during worship and no data selling",
   ],
 
@@ -77,6 +85,12 @@ export const miftah = {
     { q: "Which hadith books and tafseer are in Miftah?", a: "The Books tab has Sahih al-Bukhari, Sahih Muslim, Sunan Abu Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah, Muwatta Malik, 40 Hadith an-Nawawi, 40 Hadith Qudsi and Shah Waliullah Dehlawi's 40 Hadith, plus tafseer such as Ibn Kathir, Ma'ariful Qur'an, Bayan-ul-Qur'an, Tazkirul Qur'an, Fi Zilal al-Qur'an and Ahsanul Bayaan. Books are read online from open datasets (hadith-api, Quran.com)." },
     { q: "Can I search the Qur'an for a topic like namaz?", a: "Yes. Type a word such as namaz, roza, zakat or sabr (or the English/Arabic word) and Miftah lists every matching ayah with its translation. You can also type 2:255 or 'page 50' to jump there." },
     { q: "Is Miftah available in Bangla and Malayalam?", a: "Yes. Besides English, Hindi, Urdu, Arabic and Indonesian, the app and Qur'an translation are available in Bangla and Malayalam; hadith books are available in Bangla too." },
+    { q: "Does Miftah have a Quran khatam planner?", a: "Yes. Choose how many days you want (for example 30 days for Ramadan) and Miftah divides the 604 mushaf pages into a daily portion. Pages are counted automatically while you read in the app, or you can mark today's portion as read if you used a printed Quran. It shows your streak, whether you are ahead or behind, sends a daily reminder and shows a du'a when the khatam is complete." },
+    { q: "Can I memorise the Quran (hifz) with Miftah?", a: "Yes. Hifz mode lets you pick a surah, hide the ayah text or show only the first word, repeat each ayah up to 20 times and loop a range of ayahs with your chosen qari, mark ayahs as memorised, and see which memorised surahs are due for revision. You can also check your recitation word by word with the Quran recitation check (Premium)." },
+    { q: "Does Miftah remind me about sunnah fasts?", a: "Yes. The Islamic calendar marks Ayyam al-Bid (13th–15th of each Hijri month), Mondays and Thursdays, the Day of Arafah, Ashura (9th & 10th Muharram) and six days of Shawwal, and can remind you the evening before so you can make the intention and set a sehri alarm. Monday/Thursday reminders are optional." },
+    { q: "Does Miftah show the Hijri (Islamic) date and calendar?", a: "Yes. It shows today's Hijri date on the home screen and a full Hijri month calendar with Gregorian dates. Because local moon sighting can differ from the calculated calendar, you can adjust the Hijri date by up to ±2 days (in India it is often −1)." },
+    { q: "Does Miftah remind me to read Surah al-Kahf on Friday?", a: "Yes. A Jumu'ah reminder on Friday morning reminds you to read Surah al-Kahf and send durood on the Prophet ﷺ. You can turn it off or change the time in the calendar settings." },
+    { q: "Is there a Noorani Qaida or kids section in Miftah?", a: "Yes. The Kids corner teaches the Arabic letters and harakat (fatha, kasra, damma) from the Noorani Qaida with sound, the six kalimas with transliteration and meaning, and has a 12-question quiz about Islam. The sound uses the phone's Arabic voice, so learning with a teacher is still best for correct pronunciation." },
     { q: "Is Miftah available on iPhone?", a: "Currently Miftah is available on Android through Google Play." },
     { q: "Who makes Miftah?", a: "Miftah is built by AIVEXA LLP, an Indian product studio. Support: info@aivexallp.com." },
   ],

@@ -30,7 +30,7 @@ export const miftahApp: LandingApp = {
   bandBackground: "linear-gradient(135deg, #1E4438 0%, #2F5D50 60%, #4A7F6C 100%)",
   stepBackground: "linear-gradient(135deg, #2F5D50, #1E4438)",
   heroVisual: "card",
-  posts: blogPosts.filter((p) => p.cta === "miftah").slice(0, 6),
+  posts: blogPosts.filter((p) => p.cta === "miftah").slice(0, 10),
 };
 
 export const calivoApp: LandingApp = {
