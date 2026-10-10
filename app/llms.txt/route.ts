@@ -45,7 +45,7 @@ ${siteConfig.name} is a product studio run by ${siteConfig.legalName}, based in 
 - A PDF/screenshot generation API ("pdf-api") for developers.
 - A store of downloadable digital products (planners, templates, guides).
 - CALIVO AI, a free Android app: AI calorie counter and diet coach for Indian food.
-- Miftah, a free Android app for Muslims: prayer times, Azan and Iqamah alerts, Qibla, Quran with word-by-word meanings, a Namaz & Wudu guide, Daily Sunnah checklist, a Khatam planner, Hifz (memorisation) mode, an Islamic Hijri calendar with sunnah-fasting reminders, a Kids corner (Noorani Qaida, six kalimas) and a prayer-time app blocker — with complete hadith books, Qur'an translation/tafseer choice and Qur'an & hadith search — in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian.
+- Miftah, a free Android app for Muslims: prayer times, Azan and Iqamah alerts, Qibla, Quran with word-by-word meanings, a Namaz & Wudu guide, Daily Sunnah checklist, a Khatam planner, Hifz (memorisation) mode, an Islamic Hijri calendar with sunnah-fasting reminders, a Kids tab with the full Noorani Qaida (qari audio), sunnah reminders, du'as after salah, the Seerah, Qur'an auto-scroll and a prayer-time app blocker — with complete hadith books, Qur'an translation/tafseer choice and Qur'an & hadith search — in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian.
 
 ${aivexaApps.map((a) => `## ${a.name} — ${a.h1Accent}
 ${a.oneLiner}
@@ -82,7 +82,6 @@ ${miftah.oneLiner}
 - Khatam planner: pick a target (e.g. 30 days for Ramadan); the 604 mushaf pages are split into a daily portion, pages are counted automatically while reading in the app (or marked manually for a printed Quran), with streaks, ahead/behind status, a daily reminder and a du'a on completion.
 - Hifz mode: memorise any surah — hide the text or show only the first word, repeat each ayah 1–20 times and loop a range with the chosen qari, mark ayahs memorised and see surahs due for revision.
 - Islamic calendar: Hijri month view (±2 day adjustment for local moon sighting) marking Ayyam al-Bid, Monday/Thursday fasts, Arafah, Ashura, six of Shawwal, Ramadan, odd nights of the last ten and both Eids with hadith references; evening-before reminders and a Friday Surah al-Kahf & durood reminder.
-- Kids corner: Noorani Qaida letters and harakat with sound (phone's Arabic voice), the six kalimas with transliteration and meaning, and a 12-question quiz.
 - Kids tab: the full Noorani Qaida in 13 lessons (letters, joined letters, muqatta'at, harakat, tanween, standing harakat, madd, leen, sukoon, tashdeed, madd) ending with reading Al-Fatihah and short surahs word by word; examples are real Qur'an words recited by a qari (Quran.com word-by-word audio).
 - Sunnah reminders: morning/evening azkar, daily Qur'an, Surah al-Mulk at night, bedtime sunnahs, Surah al-Kahf and Jumu'ah on Friday; a "For you today" card on Home opens the exact page.
 - Du'as after every fard salah (with counter and hadith references), du'as for 12 moods (anxious, sad, sick, exams…), and the Seerah of the Prophet in 25 chapters (English, Hindi, Urdu).
