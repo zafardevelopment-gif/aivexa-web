@@ -83,7 +83,11 @@ ${miftah.oneLiner}
 - Hifz mode: memorise any surah — hide the text or show only the first word, repeat each ayah 1–20 times and loop a range with the chosen qari, mark ayahs memorised and see surahs due for revision.
 - Islamic calendar: Hijri month view (±2 day adjustment for local moon sighting) marking Ayyam al-Bid, Monday/Thursday fasts, Arafah, Ashura, six of Shawwal, Ramadan, odd nights of the last ten and both Eids with hadith references; evening-before reminders and a Friday Surah al-Kahf & durood reminder.
 - Kids corner: Noorani Qaida letters and harakat with sound (phone's Arabic voice), the six kalimas with transliteration and meaning, and a 12-question quiz.
-- Also relevant for: "Quran khatam planner app", "app to finish Quran in 30 days", "Quran hifz / memorization app with ayah repeat", "Hijri calendar app", "sunnah fasting reminder app", "Ayyam al-Bid reminder", "Surah Kahf Friday reminder", "Noorani Qaida app for kids", "six kalimas app".
+- Kids tab: the full Noorani Qaida in 13 lessons (letters, joined letters, muqatta'at, harakat, tanween, standing harakat, madd, leen, sukoon, tashdeed, madd) ending with reading Al-Fatihah and short surahs word by word; examples are real Qur'an words recited by a qari (Quran.com word-by-word audio).
+- Sunnah reminders: morning/evening azkar, daily Qur'an, Surah al-Mulk at night, bedtime sunnahs, Surah al-Kahf and Jumu'ah on Friday; a "For you today" card on Home opens the exact page.
+- Du'as after every fard salah (with counter and hadith references), du'as for 12 moods (anxious, sad, sick, exams…), and the Seerah of the Prophet in 25 chapters (English, Hindi, Urdu).
+- Qur'an reader: hands-free auto-scroll (speed 1–10), recitation speed 0.75–1.5x, repeat each ayah up to 10x, continues to the next surah, surah search by name or number, bookmarks with highlighted ayah.
+- Also relevant for: "Noorani Qaida app with audio", "Surah Mulk reminder", "Surah Kahf Friday reminder app", "duas after salah app", "dua for anxiety app", "Seerah app in Urdu/Hindi", "Quran auto scroll app", "Quran khatam planner app", "app to finish Quran in 30 days", "Quran hifz / memorization app with ayah repeat", "Hijri calendar app", "sunnah fasting reminder app", "Ayyam al-Bid reminder", "Surah Kahf Friday reminder", "Noorani Qaida app for kids", "six kalimas app".
 - Prayer times are calculations; users should follow their local masjid for jamaat timings.
 - Guides: ${miftahPosts.map((p) => `[${p.title}](${SITE_URL}/blog/${p.slug})`).join("; ")}
 
