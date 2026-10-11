@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BarChart3,
+  BookOpen,
   FileText,
   Inbox,
   LineChart,
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/admin/pages", label: "Pages", icon: FileText },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/app-analytics", label: "App Analytics", icon: LineChart },
+  { href: "/admin/khutba", label: "Miftah Khutba", icon: BookOpen },
   { href: "/admin/branded-apps", label: "Branded Apps", icon: Smartphone },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
