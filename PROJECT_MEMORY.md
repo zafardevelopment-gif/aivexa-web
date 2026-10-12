@@ -31,9 +31,6 @@ Next.js 15 site for aivexallp.com. Last updated: 11 Oct 2026.
 ## 3. Other
 - `public/pay/calivo.html` = CALIVO Razorpay checkout (must stay on aivexallp.com; Razorpay blocks unregistered domains).
 - `app/(site)/miftah/impact.json/route.ts` reads `miftah_impact` table (madrasa fund) — edited from admin App Analytics.
-- Miftah Juma Khutba: table `miftah_khutbas` (supabase/migrations/004_miftah_khutbas.sql — run once in the SQL editor),
-  admin page `app/admin/(panel)/khutba/page.tsx` + `app/admin/khutba-actions.ts` (sidebar "Miftah Khutba"),
-  public JSON `app/(site)/miftah/khutba.json/route.ts` (list) and `app/(site)/miftah/khutba/[id]/route.ts` (full text).
-  The app reads these; add each Friday's Makkah + Madinah khutba there.
+- Miftah Juma Khutba admin/feed was built then removed (no official Haramain API; owner chose not to enter khutbas manually).
 - Admin App Analytics: `app/admin/(panel)/app-analytics/page.tsx`, `app/admin/app-actions.ts`.
 - Typecheck: `node_modules/.bin/tsc --noEmit -p .`
