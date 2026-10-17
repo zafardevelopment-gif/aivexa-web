@@ -27,6 +27,8 @@ const EXTRA_ARGS = [
   "--safebrowsing-disable-auto-update",
 ];
 
+const IS_SERVERLESS = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+
 async function getBrowser(): Promise<Browser> {
   if (browser?.connected) return browser;
 
@@ -54,7 +56,13 @@ async function getBrowser(): Promise<Browser> {
 
     browser = await puppeteer.launch({
       headless: chromium.headless,
-      args: [...chromium.args, ...EXTRA_ARGS],
+      // "--single-process" is only safe on AWS Lambda/Vercel. On a normal Linux
+      // server (Hostinger VPS) it makes Chromium crash when a new page/context
+      // is opened ("Target.createTarget: Target closed"), so drop it there.
+      args: [
+        ...chromium.args.filter((a) => IS_SERVERLESS || a !== "--single-process"),
+        ...EXTRA_ARGS,
+      ],
       executablePath,
       defaultViewport: chromium.defaultViewport,
     });

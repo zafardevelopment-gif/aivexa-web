@@ -20,7 +20,7 @@ export async function GET() {
 
     const browser = await puppeteer.launch({
       headless: chromium.headless,
-      args: chromium.args,
+      args: (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) ? chromium.args : chromium.args.filter((a) => a !== "--single-process"),
       executablePath,
       defaultViewport: chromium.defaultViewport,
     });
