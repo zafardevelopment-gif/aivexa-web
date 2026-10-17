@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Generate pixel-perfect PDFs from HTML and URLs with a single API call. Fast Chromium-based rendering. Start free.",
 };
 
-const CODE_EXAMPLE = `curl -X POST https://aivexa.com/api/v1/pdf \\
+const CODE_EXAMPLE = `curl -X POST https://www.aivexallp.com/api/v1/pdf \\
   -H "Authorization: Bearer avx_pdf_live_xxx" \\
   -H "Content-Type: application/json" \\
   -d '{

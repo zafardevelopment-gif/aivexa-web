@@ -19,7 +19,7 @@ const SIZES = [
   { size: 512, name: "android-chrome-512x512.png" },
 ];
 
-const README = `Favicon set generated with AIVEXA Free Tools (https://aivexa.com/tools)
+const README = `Favicon set generated with AIVEXA Free Tools (https://www.aivexallp.com/tools)
 
 Copy the PNG files to your site root, then paste this into your <head>:
 

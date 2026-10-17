@@ -3,6 +3,10 @@
 import { useState, useMemo } from "react";
 import { createClient } from "@supabase/supabase-js";
 
+// Google login is off until the Google provider is enabled on the VPS Supabase
+// (db.aivexallp.com). Set NEXT_PUBLIC_PDFAPI_GOOGLE_LOGIN=true in .env.local and rebuild to bring it back.
+const GOOGLE_LOGIN_ENABLED = process.env.NEXT_PUBLIC_PDFAPI_GOOGLE_LOGIN === "true";
+
 export default function PdfApiLoginPage() {
   const supabase = useMemo(() => createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -101,6 +105,7 @@ export default function PdfApiLoginPage() {
 
         <div className="pdfapi-card" style={{ padding: "28px 28px" }}>
 
+          {GOOGLE_LOGIN_ENABLED && (<>
           {/* Google Login — PRIMARY */}
           <button
             type="button"
@@ -136,6 +141,7 @@ export default function PdfApiLoginPage() {
             <span style={{ fontSize: 12, color: "var(--pdf-muted)" }}>or use email & password</span>
             <div style={{ flex: 1, height: 1, background: "var(--pdf-border)" }} />
           </div>
+          </>)}
 
           {/* Email + Password form */}
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>

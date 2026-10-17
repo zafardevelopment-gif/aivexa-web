@@ -43,7 +43,7 @@ export default function DocsPage() {
         <section id="overview" style={{ marginBottom: 56 }}>
           <h2 style={h2Style}>Overview</h2>
           <p style={pStyle}>The AIVEXA PDF API is a REST API that accepts HTML markup or a publicly accessible URL and returns a professionally rendered PDF file. The rendering engine is based on Chromium, which means the output is identical to what you would see in a Chrome browser with <code style={codeStyle}>Print to PDF</code>.</p>
-          <p style={pStyle}>Base URL: <code style={codeStyle}>https://aivexa.com/api/v1</code></p>
+          <p style={pStyle}>Base URL: <code style={codeStyle}>https://www.aivexallp.com/api/v1</code></p>
         </section>
 
         {/* Quick Start */}
@@ -51,7 +51,7 @@ export default function DocsPage() {
           <h2 style={h2Style}>Quick Start</h2>
           <p style={pStyle}>1. Sign up and create an API key in your <a href="/pdf-api/dashboard/api-keys" style={linkStyle}>dashboard</a>.</p>
           <p style={pStyle}>2. Make a POST request:</p>
-          <pre style={preStyle}>{`curl -X POST https://aivexa.com/api/v1/pdf \\
+          <pre style={preStyle}>{`curl -X POST https://www.aivexallp.com/api/v1/pdf \\
   -H "Authorization: Bearer avx_pdf_live_xxx" \\
   -H "Content-Type: application/json" \\
   -d '{"html": "<h1>Hello World</h1>", "format": "A4"}' \\

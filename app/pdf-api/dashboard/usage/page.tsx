@@ -19,6 +19,30 @@ interface UsageData {
   credits_used: number;
 }
 
+// /api/v1/usage returns { plan, daily, totals } — convert it to the shape this page renders.
+type ApiUsage = {
+  plan?: { name?: string; credits?: number; credits_used?: number };
+  daily?: { date: string; total: number; success: number; failed: number }[];
+  totals?: { total?: number; success?: number; failed?: number };
+};
+
+function toUsageData(api: ApiUsage): UsageData {
+  const days = (api.daily ?? []).map((d) => ({
+    date: d.date,
+    requests: d.total ?? 0,
+    credits_used: d.success ?? 0, // only completed requests use a credit
+    success_rate: d.total ? Math.round(((d.success ?? 0) / d.total) * 100) : 0,
+  }));
+  return {
+    days,
+    total_requests: api.totals?.total ?? 0,
+    total_credits: api.totals?.success ?? 0,
+    plan_name: api.plan?.name ?? "Free",
+    credits: api.plan?.credits ?? 0,
+    credits_used: api.plan?.credits_used ?? 0,
+  };
+}
+
 export default function UsagePage() {
   const [data, setData] = useState<UsageData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,7 +63,7 @@ export default function UsagePage() {
     try {
       const headers = await getAuthHeader();
       const res = await fetch(`/api/v1/usage?days=${range}`, { headers });
-      if (res.ok) setData(await res.json());
+      if (res.ok) setData(toUsageData(await res.json()));
     } finally {
       setLoading(false);
     }

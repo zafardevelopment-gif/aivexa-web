@@ -98,13 +98,13 @@ export default function PlaygroundPage() {
   const getCurlCode = () => {
     const k = apiKey || "YOUR_API_KEY";
     if (mode === "html") {
-      return `curl -X POST https://aivexa.com/api/v1/pdf \\
+      return `curl -X POST https://www.aivexallp.com/api/v1/pdf \\
   -H "Authorization: Bearer ${k}" \\
   -H "Content-Type: application/json" \\
   -d '{"html": "<h1>Hello World</h1>", "format": "${format}", "orientation": "${orientation}"}' \\
   --output document.pdf`;
     }
-    return `curl -X POST https://aivexa.com/api/v1/url-to-pdf \\
+    return `curl -X POST https://www.aivexallp.com/api/v1/url-to-pdf \\
   -H "Authorization: Bearer ${k}" \\
   -H "Content-Type: application/json" \\
   -d '{"url": "${urlInput}", "format": "${format}"}' \\
