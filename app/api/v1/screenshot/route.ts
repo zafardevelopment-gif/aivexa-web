@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
   const { userId, keyId, isTest, rateLimit } = keyResult.data;
 
-  const rl = checkRateLimit(`key_${keyId}`, rateLimit);
+  const rl = checkRateLimit(keyId ? `key_${keyId}` : `user_${userId}`, rateLimit);
   if (!rl.ok) {
     return apiError("RATE_LIMIT_EXCEEDED", requestId, { retry_after_ms: rl.retryAfterMs });
   }

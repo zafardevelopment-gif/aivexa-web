@@ -72,12 +72,14 @@ export async function validateApiKey(
     ? authHeader.slice(7).trim()
     : authHeader.trim();
 
-  if (!raw.startsWith("avx_pdf_live_") && !raw.startsWith("avx_pdf_test_")) {
-    return { ok: false, error: "INVALID_KEY_FORMAT" };
-  }
-
   const db = supabaseAdmin();
   if (!db) return { ok: false, error: "KEY_NOT_FOUND" };
+
+  if (!raw.startsWith("avx_pdf_live_") && !raw.startsWith("avx_pdf_test_")) {
+    // Dashboard Playground: accept a logged-in Supabase session token (JWT)
+    if (raw.split(".").length === 3) return validateSessionToken(db, raw);
+    return { ok: false, error: "INVALID_KEY_FORMAT" };
+  }
 
   const hash = hashKey(raw);
 
@@ -129,6 +131,44 @@ export async function validateApiKey(
   };
 }
 
+// ── Session (Playground) validation ───────────────────────────
+
+async function validateSessionToken(
+  db: NonNullable<ReturnType<typeof supabaseAdmin>>,
+  token: string
+): Promise<{ ok: true; data: ValidatedKey } | { ok: false; error: KeyValidationError }> {
+  const { data: authData, error: authErr } = await db.auth.getUser(token);
+  if (authErr || !authData?.user) return { ok: false, error: "KEY_NOT_FOUND" };
+
+  const { data: userRow, error } = await db
+    .from("pdfapi_users")
+    .select(`plan_id, credits_used, is_active, pdfapi_plans!inner ( credits, rate_limit_rpm, max_pdf_bytes )`)
+    .eq("id", authData.user.id)
+    .single();
+
+  if (error || !userRow) return { ok: false, error: "KEY_NOT_FOUND" };
+  if (!userRow.is_active) return { ok: false, error: "ACCOUNT_SUSPENDED" };
+
+  const plan = (userRow.pdfapi_plans as unknown) as Record<string, unknown>;
+  const creditsUsed = userRow.credits_used as number;
+  const credits = plan.credits as number;
+  if (creditsUsed >= credits) return { ok: false, error: "QUOTA_EXCEEDED" };
+
+  return {
+    ok: true,
+    data: {
+      userId: authData.user.id,
+      keyId: 0, // no API key — playground session
+      isTest: false,
+      planId: userRow.plan_id as string,
+      creditsUsed,
+      credits,
+      rateLimit: plan.rate_limit_rpm as number,
+      maxPdfBytes: plan.max_pdf_bytes as number,
+    },
+  };
+}
+
 // ── Increment usage ───────────────────────────────────────────
 
 export async function incrementUsage(userId: string): Promise<void> {
@@ -166,7 +206,7 @@ export async function logRequest(data: RequestLogData): Promise<void> {
   await db.from("pdfapi_requests").insert({
     request_id: data.requestId,
     user_id: data.userId,
-    api_key_id: data.apiKeyId,
+    api_key_id: data.apiKeyId || null,
     endpoint: data.endpoint,
     is_test: data.isTest,
     status: data.status,
