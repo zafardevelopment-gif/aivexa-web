@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
 
   // ── Generate PDF ───────────────────────────────────────────
   const opts: PdfRequestOptions = {
+    watermark: isTest ? "TEST MODE — AIVEXA PDF API (use a live key to remove this)" : undefined,
     url,
     format: (body.format as PdfRequestOptions["format"]) ?? "A4",
     orientation: (body.orientation as PdfRequestOptions["orientation"]) ?? "portrait",

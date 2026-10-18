@@ -1,9 +1,29 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/seo/config";
 
 export const metadata: Metadata = {
   title: "AIVEXA PDF API — HTML & URL to PDF for Developers",
-  description: "Generate pixel-perfect PDFs from HTML and URLs with a single API call. Fast Chromium-based rendering. Start free.",
+  description: "HTML to PDF and URL to PDF API made in India. Chromium rendering, Hindi/Arabic/Urdu fonts, INR pricing, 100 free PDFs every month. Start free, no card needed.",
+  alternates: { canonical: `${SITE_URL}/pdf-api` },
+};
+
+const PDF_API_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "AIVEXA PDF API",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Any (REST API)",
+  url: `${SITE_URL}/pdf-api`,
+  description:
+    "REST API that converts HTML or any public URL into a PDF or screenshot using headless Chromium. Supports A4/Letter, landscape, margins, headers and footers, background graphics and Indian and Arabic scripts.",
+  provider: { "@type": "Organization", name: "AIVEXA LLP", url: SITE_URL },
+  offers: [
+    { "@type": "Offer", name: "Free", price: "0", priceCurrency: "INR", description: "100 PDFs per month" },
+    { "@type": "Offer", name: "Starter", price: "999", priceCurrency: "INR", description: "1,000 PDFs per month" },
+    { "@type": "Offer", name: "Growth", price: "1999", priceCurrency: "INR", description: "2,000 PDFs per month" },
+    { "@type": "Offer", name: "Pro", price: "3999", priceCurrency: "INR", description: "5,000 PDFs per month" },
+  ],
 };
 
 const CODE_EXAMPLE = `curl -X POST https://www.aivexallp.com/api/v1/pdf \\
@@ -37,6 +57,7 @@ const PLANS = [
 export default function PdfApiLanding() {
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PDF_API_JSONLD) }} />
 
       {/* Hero */}
       <section style={{ padding: "80px 0 64px", textAlign: "center" }}>

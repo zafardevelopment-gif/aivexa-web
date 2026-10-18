@@ -1,75 +1,82 @@
 /**
  * POST /api/payments/create-order
- * Creates a Razorpay order for plan upgrade.
+ * Creates a Razorpay order for a PDF API plan upgrade.
+ * The price is always taken from the database — never from the browser.
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { getSessionUser } from "@/lib/pdf-api/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import Razorpay from "razorpay";
 
-async function getSessionUser(req: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const authHeader = req.headers.get("authorization");
-  const accessToken =
-    (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null) ??
-    req.cookies.get("sb-access-token")?.value ?? null;
-  if (!accessToken) return null;
-  const client = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: `Bearer ${accessToken}` } },
-  });
-  const { data: { user } } = await client.auth.getUser();
-  return user;
-}
-
 export async function POST(req: NextRequest) {
   const user = await getSessionUser(req);
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!user) return NextResponse.json({ error: "Please sign in again." }, { status: 401 });
 
-  let body: { planId?: string; cycle?: string; amount?: number };
+  if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+    return NextResponse.json({ error: "Online payment is not available right now. Please contact support." }, { status: 503 });
+  }
+
+  let body: { planId?: string; cycle?: string };
   try { body = await req.json(); } catch { body = {}; }
 
-  const { planId, cycle, amount } = body;
-  if (!planId || !amount || amount <= 0) {
-    return NextResponse.json({ error: "Invalid plan or amount" }, { status: 400 });
+  const planId = String(body.planId ?? "");
+  const cycle = body.cycle === "yearly" ? "yearly" : "monthly";
+
+  const db = supabaseAdmin();
+  if (!db) return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+
+  const { data: plan } = await db
+    .from("pdfapi_plans")
+    .select("id, name, price_monthly, price_yearly, is_active")
+    .eq("id", planId)
+    .maybeSingle();
+
+  if (!plan || !plan.is_active) {
+    return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
+  }
+  const amount = cycle === "yearly" ? plan.price_yearly : plan.price_monthly; // paise
+  if (!amount || amount <= 0) {
+    return NextResponse.json({ error: "This plan cannot be purchased." }, { status: 400 });
   }
 
-  const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID!,
-    key_secret: process.env.RAZORPAY_KEY_SECRET!,
-  });
+  try {
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
 
-  const order = await razorpay.orders.create({
-    amount: amount, // already in paise
-    currency: "INR",
-    receipt: `pdf_${user.id.slice(0, 8)}_${Date.now()}`,
-    notes: {
-      userId: user.id,
-      planId: planId ?? "",
-      cycle: cycle ?? "monthly",
-    },
-  });
+    const order = await razorpay.orders.create({
+      amount,
+      currency: "INR",
+      receipt: `pdf_${user.id.slice(0, 8)}_${Date.now()}`,
+      notes: { userId: user.id, planId: plan.id, cycle, product: "pdf-api" },
+    });
 
-  // Store pending order in DB
-  const db = supabaseAdmin();
-  if (db) {
-    await db.from("pdfapi_payment_orders").insert({
+    const { error } = await db.from("pdfapi_payment_orders").insert({
       order_id: order.id,
       user_id: user.id,
-      plan_id: planId,
-      cycle: cycle ?? "monthly",
+      plan_id: plan.id,
+      cycle,
       amount,
       status: "created",
-    }).maybeSingle();
-  }
+    });
+    if (error) {
+      console.error("[payments] could not save order", error.message);
+      return NextResponse.json({ error: "Could not start payment. Please try again." }, { status: 500 });
+    }
 
-  return NextResponse.json({
-    orderId: order.id,
-    amount: order.amount,
-    currency: order.currency,
-    keyId: process.env.RAZORPAY_KEY_ID,
-    userEmail: user.email,
-    userName: user.user_metadata?.full_name ?? "",
-  });
+    return NextResponse.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      keyId: process.env.RAZORPAY_KEY_ID,
+      planName: plan.name,
+      userEmail: user.email,
+      userName: user.user_metadata?.full_name ?? "",
+    });
+  } catch (err) {
+    console.error("[payments] create-order failed", err);
+    return NextResponse.json({ error: "Could not start payment. Please try again." }, { status: 502 });
+  }
 }

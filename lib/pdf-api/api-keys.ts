@@ -83,6 +83,11 @@ export async function validateApiKey(
 
   const hash = hashKey(raw);
 
+  // Reset the monthly counter / expire old paid plan before checking quota
+  const { data: ownerRow } = await db
+    .from("pdfapi_api_keys").select("user_id").eq("key_hash", hash).maybeSingle();
+  if (ownerRow?.user_id) await refreshUser(ownerRow.user_id);
+
   // Join api_key → user → plan in one query
   const { data: keyRow, error } = await db
     .from("pdfapi_api_keys")
@@ -131,6 +136,25 @@ export async function validateApiKey(
   };
 }
 
+// ── Account helpers ──────────────────────────────────────────
+
+/** Resets the monthly credit counter when the period is over and expires old paid plans. */
+export async function refreshUser(userId: string): Promise<void> {
+  const db = supabaseAdmin();
+  if (!db) return;
+  await db.rpc("pdfapi_refresh_user", { p_user_id: userId });
+}
+
+/** Creates the PDF API profile if this auth user does not have one yet. */
+export async function ensurePdfUser(userId: string, email: string): Promise<void> {
+  const db = supabaseAdmin();
+  if (!db) return;
+  await db.from("pdfapi_users").upsert(
+    { id: userId, email, full_name: email.split("@")[0] },
+    { onConflict: "id", ignoreDuplicates: true }
+  );
+}
+
 // ── Session (Playground) validation ───────────────────────────
 
 async function validateSessionToken(
@@ -139,6 +163,8 @@ async function validateSessionToken(
 ): Promise<{ ok: true; data: ValidatedKey } | { ok: false; error: KeyValidationError }> {
   const { data: authData, error: authErr } = await db.auth.getUser(token);
   if (authErr || !authData?.user) return { ok: false, error: "KEY_NOT_FOUND" };
+  await ensurePdfUser(authData.user.id, authData.user.email ?? "");
+  await refreshUser(authData.user.id);
 
   const { data: userRow, error } = await db
     .from("pdfapi_users")

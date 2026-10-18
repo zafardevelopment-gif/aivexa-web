@@ -6,6 +6,9 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function GET() {
+  if (process.env.PDF_DEBUG_BROWSER !== "1") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
   const info: Record<string, unknown> = {
     node: process.version,
     env: process.env.NODE_ENV,

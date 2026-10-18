@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 // Google login is off until the Google provider is enabled on the VPS Supabase
@@ -15,15 +15,44 @@ export default function PdfApiLoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
+  const [info, setInfo] = useState("");
+  const [canResend, setCanResend] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState<"signup" | null>(null);
 
+  const nextPath = () => {
+    if (typeof window === "undefined") return "/pdf-api/dashboard";
+    const n = new URLSearchParams(window.location.search).get("next") || "";
+    return n.startsWith("/pdf-api/") ? n : "/pdf-api/dashboard";
+  };
+
+  // Already signed in (or just confirmed the email) → go straight to the dashboard
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location.replace(nextPath());
+    });
+    if (new URLSearchParams(window.location.search).get("mode") === "signup") setMode("signup");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [supabase]);
+
+  async function resendConfirmation() {
+    setError(""); setInfo("");
+    const { error } = await supabase.auth.resend({
+      type: "signup", email,
+      options: { emailRedirectTo: `${window.location.origin}/pdf-api/dashboard` },
+    });
+    if (error) setError(friendlyError(error.message));
+    else { setInfo("Confirmation email sent again. Please check your inbox and spam folder."); setCanResend(false); }
+  }
+
   function friendlyError(msg: string): string {
     if (msg.includes("Invalid login credentials")) return "Incorrect email or password.";
-    if (msg.includes("Email not confirmed")) return "Please confirm your email first, then sign in.";
+    if (msg.includes("Email not confirmed")) { setCanResend(true); return "Please confirm your email first (check inbox and spam), then sign in."; }
+    if (msg.toLowerCase().includes("password should be")) return "Password must be at least 6 characters.";
+    if (msg.toLowerCase().includes("invalid email") || msg.toLowerCase().includes("unable to validate email")) return "Please enter a valid email address.";
     if (msg.includes("User already registered")) return "Account exists — please sign in instead.";
     if (msg.includes("rate limit")) return "Too many attempts. Please wait a few minutes.";
     return msg;
@@ -46,19 +75,31 @@ export default function PdfApiLoginPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setInfo("");
+    setCanResend(false);
     setLoading(true);
     try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/pdf-api/reset-password`,
+        });
+        if (error) throw error;
+        setInfo("If an account exists for this email, a password reset link has been sent. Please check your inbox and spam folder.");
+      } else if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
           email, password,
           options: { emailRedirectTo: `${window.location.origin}/pdf-api/dashboard` }
         });
         if (error) throw error;
+        if (data.session) { window.location.href = nextPath(); return; } // email confirmation is off
+        if (data.user && (data.user.identities?.length ?? 0) === 0) {
+          throw new Error("User already registered");
+        }
         setDone("signup");
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        if (data.session) window.location.href = "/pdf-api/dashboard";
+        if (data.session) window.location.href = nextPath();
       }
     } catch (err: unknown) {
       setError(friendlyError(err instanceof Error ? err.message : "Authentication failed"));
@@ -99,7 +140,7 @@ export default function PdfApiLoginPage() {
             </span>
           </a>
           <p style={{ color: "var(--pdf-muted)", fontSize: 14, margin: 0 }}>
-            {mode === "login" ? "Welcome back" : "Create your free account"}
+            {mode === "login" ? "Welcome back" : mode === "signup" ? "Create your free account — 100 PDFs/month free" : "Reset your password"}
           </p>
         </div>
 
@@ -156,8 +197,16 @@ export default function PdfApiLoginPage() {
                 autoComplete="email"
               />
             </div>
-            <div>
-              <label className="pdfapi-label">Password</label>
+            {mode !== "forgot" && <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <label className="pdfapi-label">Password</label>
+                {mode === "login" && (
+                  <button type="button" onClick={() => { setMode("forgot"); setError(""); setInfo(""); }}
+                    style={{ background: "none", border: "none", color: "var(--pdf-accent)", cursor: "pointer", fontSize: 12, padding: 0 }}>
+                    Forgot password?
+                  </button>
+                )}
+              </div>
               <input
                 className="pdfapi-input"
                 type="password" required minLength={6}
@@ -166,7 +215,23 @@ export default function PdfApiLoginPage() {
                 onChange={e => setPassword(e.target.value)}
                 autoComplete={mode === "login" ? "current-password" : "new-password"}
               />
-            </div>
+            </div>}
+
+            {info && (
+              <div style={{
+                color: "var(--pdf-success)", fontSize: 13,
+                background: "rgba(34,197,94,0.08)", padding: "10px 14px",
+                borderRadius: 8, border: "1px solid rgba(34,197,94,0.25)", lineHeight: 1.5
+              }}>
+                {info}
+              </div>
+            )}
+
+            {canResend && (
+              <button type="button" onClick={resendConfirmation} className="pdfapi-btn pdfapi-btn-secondary" style={{ padding: "9px 0", width: "100%", fontSize: 13 }}>
+                Resend confirmation email
+              </button>
+            )}
 
             {error && (
               <div style={{
@@ -184,11 +249,18 @@ export default function PdfApiLoginPage() {
               disabled={loading || googleLoading}
               style={{ padding: "12px 0", width: "100%", fontSize: 15 }}
             >
-              {loading ? "Please wait…" : mode === "login" ? "Sign In" : "Create Account"}
+              {loading ? "Please wait…" : mode === "login" ? "Sign In" : mode === "signup" ? "Create Account" : "Send reset link"}
             </button>
 
             <p style={{ textAlign: "center", margin: 0, fontSize: 13, color: "var(--pdf-muted)" }}>
-              {mode === "login" ? (
+              {mode === "forgot" ? (
+                <>Remembered it?{" "}
+                  <button type="button" onClick={() => { setMode("login"); setError(""); setInfo(""); }}
+                    style={{ background: "none", border: "none", color: "var(--pdf-accent)", cursor: "pointer", fontSize: 13, padding: 0, fontWeight: 600 }}>
+                    Back to sign in
+                  </button>
+                </>
+              ) : mode === "login" ? (
                 <>No account?{" "}
                   <button type="button" onClick={() => { setMode("signup"); setError(""); }}
                     style={{ background: "none", border: "none", color: "var(--pdf-accent)", cursor: "pointer", fontSize: 13, padding: 0, fontWeight: 600 }}>
@@ -209,8 +281,8 @@ export default function PdfApiLoginPage() {
 
         <p style={{ textAlign: "center", marginTop: 16, fontSize: 12, color: "var(--pdf-muted)" }}>
           By continuing you agree to our{" "}
-          <a href="/pdf-api/terms" style={{ color: "var(--pdf-accent)" }}>Terms</a> and{" "}
-          <a href="/privacy-policy" style={{ color: "var(--pdf-accent)" }}>Privacy Policy</a>.
+          <a href="/terms" style={{ color: "var(--pdf-accent)" }}>Terms</a> and{" "}
+          <a href="/privacy" style={{ color: "var(--pdf-accent)" }}>Privacy Policy</a>.
         </p>
       </div>
     </div>

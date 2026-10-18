@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
 
   // ── Build engine options ───────────────────────────────────
   const opts: PdfRequestOptions = {
+    watermark: isTest ? "TEST MODE — AIVEXA PDF API (use a live key to remove this)" : undefined,
     html,
     format: (body.format as PdfRequestOptions["format"]) ?? "A4",
     orientation: (body.orientation as PdfRequestOptions["orientation"]) ?? "portrait",

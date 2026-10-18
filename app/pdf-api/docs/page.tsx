@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/seo/config";
 
 export const metadata: Metadata = {
-  title: "Documentation — AIVEXA PDF API",
+  title: "Documentation",
+  description: "AIVEXA PDF API docs: authentication, HTML to PDF, URL to PDF, screenshots, page size, margins, headers and footers, errors and rate limits, with curl examples.",
+  alternates: { canonical: `${SITE_URL}/pdf-api/docs` },
 };
 
 const SECTIONS = [
@@ -68,7 +71,7 @@ export default function DocsPage() {
             <thead><tr><th style={thStyle}>Key Type</th><th style={thStyle}>Prefix</th><th style={thStyle}>Behaviour</th></tr></thead>
             <tbody>
               <tr><td style={tdStyle}>Live</td><td style={tdStyle}><code style={codeStyle}>avx_pdf_live_</code></td><td style={tdStyle}>Consumes credits, production use</td></tr>
-              <tr><td style={tdStyle}>Test</td><td style={tdStyle}><code style={codeStyle}>avx_pdf_test_</code></td><td style={tdStyle}>Free, no credits consumed, for development</td></tr>
+              <tr><td style={tdStyle}>Test</td><td style={tdStyle}><code style={codeStyle}>avx_pdf_test_</code></td><td style={tdStyle}>Free, no credits used; output has a small &quot;TEST MODE&quot; stamp</td></tr>
             </tbody>
           </table>
           <p style={{ ...pStyle, fontSize: 13, color: "var(--pdf-muted)" }}>

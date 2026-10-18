@@ -42,7 +42,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/store`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${BASE_URL}/pdf-api`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/pdf-api`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/pdf-api/docs`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     // App landing pages in every language, each listing its hreflang siblings.
     ...langEntries("/calivo-ai", ["en", "hi", "ur", "ar"]),
     ...langEntries("/miftah", ["en", "hi", "ur", "bn", "ml", "ar", "id"]),

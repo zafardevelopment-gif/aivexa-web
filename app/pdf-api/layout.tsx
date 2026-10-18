@@ -1,25 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_URL } from "@/lib/seo/config";
 
 export const metadata: Metadata = {
   title: { default: "AIVEXA PDF API — HTML & URL to PDF for Developers", template: "%s | AIVEXA PDF API" },
   description: "Convert HTML and URLs to PDF with a single API call. Chromium-powered, 99.9% uptime, plans from ₹0. Start free — no credit card needed.",
   keywords: ["html to pdf api", "url to pdf", "pdf generation api", "pdf api india", "chromium pdf", "aivexa pdf"],
-  authors: [{ name: "AIVEXA LLP", url: "https://www.aivexallp.com" }],
+  authors: [{ name: "AIVEXA LLP", url: SITE_URL }],
   openGraph: {
     type: "website",
     siteName: "AIVEXA PDF API",
     title: "AIVEXA PDF API — HTML & URL to PDF for Developers",
     description: "Convert HTML or any URL to a pixel-perfect PDF in milliseconds. Chromium-powered. Plans start at ₹0.",
-    url: "https://www.aivexallp.com/pdf-api",
-    images: [{ url: "https://www.aivexallp.com/og-pdf-api.png", width: 1200, height: 630, alt: "AIVEXA PDF API" }],
+    url: `${SITE_URL}/pdf-api`,
   },
   twitter: {
     card: "summary_large_image",
     title: "AIVEXA PDF API — HTML & URL to PDF",
     description: "Developer API to generate PDFs from HTML and URLs. Free plan available.",
   },
-  alternates: { canonical: "https://www.aivexallp.com/pdf-api" },
   robots: { index: true, follow: true },
 };
 

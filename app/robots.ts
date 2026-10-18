@@ -12,6 +12,7 @@ const DISALLOW = [
   "/pdf-api/dashboard",
   "/pdf-api/dashboard/",
   "/pdf-api/login",
+  "/pdf-api/reset-password",
   "/store/order-success",
   "/store/*/success",
 ];

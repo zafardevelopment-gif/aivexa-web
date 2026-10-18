@@ -116,6 +116,8 @@ export type PdfRequestOptions = {
   viewportWidth?: number;
   viewportHeight?: number;
   timeout?: number;
+  /** Text stamped at the bottom of every page (used for test API keys). */
+  watermark?: string;
 };
 
 export type ScreenshotRequestOptions = {
@@ -130,6 +132,7 @@ export type ScreenshotRequestOptions = {
   delay?: number;
   waitForSelector?: string;
   timeout?: number;
+  watermark?: string;
 };
 
 export type EngineResult =
@@ -198,6 +201,21 @@ async function loadContent(
   }
 }
 
+// ── Test-mode watermark ────────────────────────────────────────
+
+async function addWatermark(page: Page, text?: string): Promise<void> {
+  if (!text) return;
+  await page.evaluate((t: string) => {
+    const d = document.createElement("div");
+    d.textContent = t;
+    d.setAttribute("style",
+      "position:fixed;left:0;right:0;bottom:4px;text-align:center;" +
+      "font:bold 11px Arial,sans-serif;letter-spacing:1px;color:rgba(220,38,38,0.85);" +
+      "z-index:2147483647;pointer-events:none;");
+    document.body.appendChild(d);
+  }, text).catch(() => {});
+}
+
 // ── PDF Generation ─────────────────────────────────────────────
 
 export async function generatePdf(opts: PdfRequestOptions): Promise<EngineResult> {
@@ -216,6 +234,7 @@ export async function generatePdf(opts: PdfRequestOptions): Promise<EngineResult
 
     const loadResult = await loadContent(page, opts, timeout);
     if (!loadResult.ok) return loadResult;
+    await addWatermark(page, opts.watermark);
 
     const pdfOpts: PDFOptions = {
       format: (opts.format ?? "A4") as PDFOptions["format"],
@@ -268,6 +287,7 @@ export async function generateScreenshot(
 
     const loadResult = await loadContent(page, opts, timeout);
     if (!loadResult.ok) return loadResult;
+    await addWatermark(page, opts.watermark);
 
     const screenshotOpts: ScreenshotOptions = {
       type: opts.format ?? "png",

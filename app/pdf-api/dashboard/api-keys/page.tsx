@@ -60,6 +60,8 @@ return { Authorization: session ? `Bearer ${session.access_token}` : "" } as Rec
       setShowForm(false);
       setNewKeyName("");
       await fetchKeys();
+    } else {
+      alert(data.error ?? "Could not create the key. Please try again.");
     }
     setCreating(false);
   };

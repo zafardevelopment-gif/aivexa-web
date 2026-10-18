@@ -5,28 +5,10 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { getSessionUser } from "@/lib/pdf-api/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { generateApiKey, hashKey } from "@/lib/pdf-api/api-keys";
-import { createClient } from "@supabase/supabase-js";
 
-// Helper: get logged-in user from cookie-based session
-async function getSessionUser(req: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const authHeader = req.headers.get("authorization");
-  const accessToken =
-    (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null) ??
-    req.cookies.get("sb-access-token")?.value ??
-    req.headers.get("x-supabase-auth") ?? null;
-
-  if (!accessToken) return null;
-
-  const client = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: `Bearer ${accessToken}` } },
-  });
-  const { data: { user } } = await client.auth.getUser();
-  return user;
-}
 
 export async function GET(req: NextRequest) {
   const user = await getSessionUser(req);

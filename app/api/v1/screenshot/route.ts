@@ -69,6 +69,7 @@ export async function POST(req: NextRequest) {
   const format = (body.format as "png" | "jpeg") ?? "png";
 
   const opts: ScreenshotRequestOptions = {
+    watermark: isTest ? "TEST MODE — AIVEXA PDF API (use a live key to remove this)" : undefined,
     html: typeof html === "string" ? html : undefined,
     url: typeof url === "string" ? url : undefined,
     format,
