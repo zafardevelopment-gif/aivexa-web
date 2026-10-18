@@ -443,7 +443,7 @@ Hide the text and recite, then check. Recite to a teacher, parent or friend at l
 
 ## Practise with Miftah
 
-[Miftah](/miftah) has a free **Hifz mode**: pick a surah, hide the text or show only the first word, repeat each ayah 1–20 times and loop a range with your chosen qari, tick ayahs as memorised, and see which surahs are due for revision. Premium adds a word-by-word **recitation check**. It supports your teacher — it doesn't replace one.
+[Miftah](/miftah) has a free **Hifz mode**: pick a surah, hide the text or show only the first word, repeat each ayah 1–20 times and loop a range with your chosen qari, tick ayahs as memorised, and see which surahs are due for revision. It also has a free word-by-word **recitation check**. It supports your teacher — it doesn't replace one.
 `,
   },
   {
@@ -535,6 +535,61 @@ Teach one kalima a week, a line at a time, with its meaning.
 ## Practise with Miftah
 
 [Miftah](/miftah) has a free **Kids corner**: tap any letter or letter-with-harakah to hear it, read the six kalimas with transliteration and meaning, and play a 12-question quiz about Islam. It uses the phone's Arabic voice, so it is a practice aid alongside a teacher.
+`,
+  },
+  {
+    slug: "understand-quran-arabic-most-frequent-words",
+    title: "How to Understand the Qur'an in Arabic: Start With Its Most Frequent Words",
+    description:
+      "A few hundred words make up most of the Qur'an. Learn which words come most often, how to learn five a day, and the simple grammar patterns that unlock the rest.",
+    date: "2026-10-18",
+    category: "Islamic Tools",
+    readTime: "7 min read",
+    cta: "miftah",
+    content: `
+Most Muslims recite the Qur'an every day without understanding the Arabic. The good news: you do **not** need to learn the whole Arabic language first. A small set of words repeats again and again, and learning them first lets you recognise a large part of every page you recite.
+
+## Why frequent words come first
+
+The Qur'an has about 77,000 words, but many of them are the same few hundred words appearing in different places. Small connecting words like *min* (from), *fī* (in), *lā* (no/not) and *'alā* (on) appear thousands of times. Learning them — and the most common nouns and verbs — gives the fastest return for the time you spend. This "frequent words first" approach has been popularised by teachers such as Dr. Abdulazeez Abdulraheem (Understand Quran Academy).
+
+## Some of the most frequent words
+
+| Arabic | Meaning | About how often* |
+|---|---|---|
+| مِنْ | from, of | ~3,200 |
+| اللَّه | Allah | ~2,700 |
+| مَا | what / not / that which | ~2,000 |
+| فِي | in | ~1,700 |
+| لَا | no, not, do not | ~1,700 |
+| قَالَ | he said | ~1,600 |
+| إِنَّ | indeed, surely | ~1,500 |
+| عَلَىٰ | on, upon | ~1,400 |
+| كَانَ | he was | ~1,350 |
+| رَبّ | Lord, Sustainer | ~970 |
+
+*Approximate counts, rounded; they include common forms of each word.
+
+Besides these, five one-letter words are glued to the next word: **وَ** (and), **فَ** (so/then), **بِ** (with/by), **لِ** (for/to) and **كَ** (like). Spotting them is often the first "aha" moment for learners.
+
+## A simple daily routine (10 minutes)
+
+1. **Learn five words a day.** Say each word aloud, read its meaning in your own language and look at it in an ayah.
+2. **Take a short quiz.** Mix today's five words with a few you learned earlier, so old words don't fade.
+3. **Read one short ayah.** Find the words you already know in it, then check the translation. Short surahs like al-Fatiha, al-Ikhlas, al-Asr and al-Kawthar are ideal.
+4. **Revise once a week.** Go through everything you have learned in random order.
+
+## Five grammar patterns that unlock a lot
+
+- **Three kinds of words:** ism (a name or quality), fi'l (an action with a time) and harf (a small linking word).
+- **Al- and tanween:** *al-kitāb* = the Book; *kitābun* = a book.
+- **Attached endings for "whose":** *rabbī* my Lord, *rabbukum* your Lord, *rabbuhum* their Lord.
+- **Past vs present verbs:** past changes at the end (*fa'ala* he did, *fa'alū* they did); present changes at the start (*yaf'alu* he does, *na'budu* we worship).
+- **Root letters:** most words grow from three letters — ع-ل-م (knowing) gives *'alima* (he knew), *'ilm* (knowledge), *'ālim* (scholar), *'alīm* (All-Knowing) and *'ālamīn* (the worlds).
+
+## Learn with a teacher, use tools to practise
+
+A teacher is the best way to learn the Qur'an's language deeply, especially tajweed and tafseer. Apps help with the daily repetition. [Miftah](/miftah) has a free **Understanding Qur'an** section: 267 frequent Qur'anic words with meanings in English, Hindi, Urdu, Bangla, Malayalam, Arabic and Indonesian, five new words a day, a daily quiz that mixes in earlier words, a "revise everything" quiz, practice on real short ayat (your learned words are highlighted and you pick the correct translation) and 10 simple grammar lessons.
 `,
   },
 ];

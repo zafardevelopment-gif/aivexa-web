@@ -26,7 +26,8 @@ Next.js 15 site for aivexallp.com. Last updated: 11 Oct 2026.
 - Shared component `components/LocalizedAppLanding.tsx`, strings `lib/landing-i18n.ts`, metadata `lib/i18n/app-landing.ts`.
 - Keep every claim TRUE to the shipped app (Play production version), AI assistants quote it.
 - `app/llms.txt/route.ts`: AI-assistant summary incl. Miftah feature lines and "Also relevant for" phrases.
-- Blog: `lib/miftah-blog-posts.ts` (10 Islamic guides incl. khatam plan, hifz method, sunnah fasting, Noorani Qaida).
+- Miftah is fully FREE (no Premium) since Oct 2026 — optional Hadiya only; never write 'Premium' for Miftah. New features on the page: Understanding Qur'an, Makkah & Madinah Live, Madinah Mushaf script, Home cards.
+- Blog: `lib/miftah-blog-posts.ts` (11 Islamic guides incl. 'understand-quran-arabic-most-frequent-words'; incl. khatam plan, hifz method, sunnah fasting, Noorani Qaida).
 
 ## 3. Other
 - `public/pay/calivo.html` = CALIVO Razorpay checkout (must stay on aivexallp.com; Razorpay blocks unregistered domains).
