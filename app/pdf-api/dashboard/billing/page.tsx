@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { Check, Zap, Download, ShieldCheck, Pencil } from "lucide-react";
+import { Download, ShieldCheck, Pencil } from "lucide-react";
+import PlanPicker from "@/components/pdf-api/PlanPicker";
 
 type Plan = {
   id: string; name: string; price_monthly: number; price_yearly: number;
-  credits: number; parallel: number; max_pdf_bytes: number; rate_limit_rpm: number; features: string[];
+  credits: number; parallel: number; max_pdf_bytes: number; rate_limit_rpm: number; features: string[]; sort_order?: number;
 };
 type Summary = {
   plan: { id: string; name: string; credits: number; credits_used: number; credits_reset_at: string | null; expires_at: string | null; cycle: string | null; price: number };
@@ -28,7 +29,6 @@ const day = (d: string | null) =>
 export default function BillingPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ name: "", company: "", gstin: "", address: "" });
@@ -162,7 +162,7 @@ export default function BillingPage() {
                   <div className="bill-plan-name">{p!.name} <span className="pdfapi-badge pdfapi-badge-success">Active</span></div>
                   <div className="bill-price">
                     {isPaid ? inr(p!.price) : "₹0"}
-                    <span>/ {p!.cycle === "yearly" ? "year" : "month"}</span>
+                    <span>/ {p!.cycle === "yearly" ? "year" : "month"}{isPaid ? " + GST" : ""}</span>
                   </div>
                 </div>
                 <div>
@@ -268,61 +268,17 @@ export default function BillingPage() {
       </section>
 
       {/* Plans */}
-      <div ref={plansRef} className="bill-plans-head">
-        <div>
-          <h2 style={{ margin: 0, fontSize: 18 }}>Plans</h2>
-          <p className="bill-muted" style={{ margin: "4px 0 0" }}>Prices in INR. Pay once for a month or a year — no auto-renewal.</p>
-        </div>
-        <div className="bill-toggle">
-          {(["monthly", "yearly"] as const).map((c) => (
-            <button key={c} onClick={() => setCycle(c)} className={cycle === c ? "is-on" : ""}>{c === "monthly" ? "Monthly" : "Yearly · 2 months free"}</button>
-          ))}
-        </div>
-      </div>
-
-      <div className="bill-grid">
-        {plans.map((plan) => {
-          const price = cycle === "monthly" ? plan.price_monthly : plan.price_yearly;
-          const isCurrent = plan.id === p?.id;
-          const isFree = plan.price_monthly === 0;
-          const isPro = plan.id === "pro";
-          return (
-            <div key={plan.id} className="pdfapi-card" style={{ position: "relative", borderColor: isCurrent ? "var(--pdf-success)" : isPro ? "var(--pdf-accent)" : undefined }}>
-              {isPro && <div className="bill-ribbon">MOST POPULAR</div>}
-              <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
-                {plan.name} {isCurrent && <span className="pdfapi-badge pdfapi-badge-success" style={{ fontSize: 10 }}>Current</span>}
-              </div>
-              <div style={{ marginBottom: 14 }}>
-                <span style={{ fontSize: 28, fontWeight: 800 }}>{inr(price)}</span>
-                {price > 0 && <span className="bill-muted"> / {cycle === "monthly" ? "month" : "year"}</span>}
-              </div>
-              <ul className="bill-feat">
-                {(Array.isArray(plan.features) ? plan.features : []).map((f) => (
-                  <li key={f}><Check size={13} color="var(--pdf-success)" style={{ flexShrink: 0, marginTop: 2 }} />{f}</li>
-                ))}
-              </ul>
-              <button
-                className={`pdfapi-btn ${isPro && !isCurrent ? "pdfapi-btn-primary" : "pdfapi-btn-secondary"}`}
-                style={{ width: "100%", justifyContent: "center" }}
-                disabled={isFree || loadingPlan !== null}
-                onClick={() => !isFree && buy(plan, cycle)}
-              >
-                {loadingPlan === plan.id ? "Opening…" : isFree ? (isCurrent ? "Current plan" : "Free") : isCurrent ? `Renew ${plan.name}` : `Get ${plan.name}`}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="pdfapi-card bill-ent">
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div className="bill-ent-icon"><Zap size={20} color="var(--pdf-accent)" /></div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>Need more than 5,000 PDFs a month?</div>
-            <div className="bill-muted">Custom volume, GST invoice billing and a dedicated support line.</div>
-          </div>
-        </div>
-        <a href="https://wa.me/919204298771?text=Hi%2C%20I%20need%20a%20custom%20AIVEXA%20PDF%20API%20plan" target="_blank" rel="noopener noreferrer" className="pdfapi-btn pdfapi-btn-primary">Talk to us</a>
+      <div ref={plansRef} className="pdfapi-card" style={{ padding: "28px 24px" }}>
+        <PlanPicker
+          plans={plans}
+          currentPlanId={p?.id}
+          currentCredits={p?.credits}
+          busyPlanId={loadingPlan}
+          onChoose={(plan, c) => {
+            const full = plans.find((x) => x.id === plan.id);
+            if (full) buy(full, c);
+          }}
+        />
       </div>
 
       <style>{`

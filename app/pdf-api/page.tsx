@@ -47,11 +47,11 @@ const FEATURES = [
 export const revalidate = 60;
 
 export default async function PdfApiLanding() {
-  const dbPlans = await getPdfPlans();
+  const dbPlans = (await getPdfPlans()).filter((p) => (p.sort_order ?? 0) < 10);
   const PLANS = dbPlans.map((p) => ({
     name: p.name,
     price: inrFromPaise(p.price_monthly),
-    credits: `${p.credits.toLocaleString("en-IN")} PDFs/month`,
+    credits: `${p.credits.toLocaleString("en-IN")} credits/month`,
     cta: p.price_monthly === 0 ? "Get Started" : `Choose ${p.name}`,
     primary: p.id === "pro",
   }));
@@ -200,7 +200,7 @@ export default async function PdfApiLanding() {
               )}
               <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 8 }}>{p.name}</div>
               <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 4 }}>{p.price}</div>
-              <div style={{ fontSize: 13, color: "var(--pdf-muted)", marginBottom: 20 }}>/month</div>
+              <div style={{ fontSize: 13, color: "var(--pdf-muted)", marginBottom: 20 }}>/month{p.price !== "₹0" ? " + GST" : ""}</div>
               <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 24 }}>{p.credits}</div>
               <Link
                 href={p.price === "₹0" ? "/pdf-api/login?mode=signup" : "/pdf-api/pricing"}

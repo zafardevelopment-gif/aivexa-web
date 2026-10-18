@@ -10,6 +10,7 @@ export type ApiErrorCode =
   | "ACCOUNT_SUSPENDED"
   | "QUOTA_EXCEEDED"
   | "RATE_LIMIT_EXCEEDED"
+  | "TOO_MANY_PARALLEL"
   | "INVALID_HTML"
   | "INVALID_URL"
   | "BLOCKED_URL"
@@ -30,6 +31,7 @@ const ERROR_MESSAGES: Record<ApiErrorCode, string> = {
   ACCOUNT_SUSPENDED: "Your account has been suspended. Please contact support.",
   QUOTA_EXCEEDED: "Monthly PDF quota exceeded. Upgrade your plan to continue.",
   RATE_LIMIT_EXCEEDED: "Too many requests. Slow down and retry after the indicated time.",
+  TOO_MANY_PARALLEL: "Too many conversions running at the same time for your plan. Wait for one to finish, then retry.",
   INVALID_HTML: "The provided HTML could not be parsed or rendered.",
   INVALID_URL: "The provided URL is not a valid HTTP or HTTPS URL.",
   BLOCKED_URL: "The URL points to a private or blocked address.",
@@ -76,6 +78,7 @@ function getHttpStatus(code: ApiErrorCode): number {
       return 401;
     case "QUOTA_EXCEEDED":
     case "RATE_LIMIT_EXCEEDED":
+    case "TOO_MANY_PARALLEL":
       return 429;
     case "INVALID_HTML":
     case "INVALID_URL":

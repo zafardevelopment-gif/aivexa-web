@@ -57,3 +57,20 @@ export function checkRateLimit(
   entry.count++;
   return { ok: true, remaining: limitRpm - entry.count, limit: limitRpm };
 }
+
+// ── Parallel conversions per user ─────────────────────────────
+
+const running = new Map<string, number>();
+
+/** Reserve one conversion slot; returns false when the plan's parallel limit is reached. */
+export function acquireSlot(userId: string, max: number): boolean {
+  const n = running.get(userId) ?? 0;
+  if (n >= Math.max(1, max)) return false;
+  running.set(userId, n + 1);
+  return true;
+}
+
+export function releaseSlot(userId: string): void {
+  const n = (running.get(userId) ?? 1) - 1;
+  if (n <= 0) running.delete(userId); else running.set(userId, n);
+}

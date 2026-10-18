@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
   const { data: payments } = await db
     .from("pdfapi_payment_orders")
-    .select("id, order_id, plan_id, cycle, amount, status, payment_id, paid_at, created_at")
+    .select("id, order_id, plan_id, cycle, amount, base_amount, gst_amount, status, payment_id, paid_at, created_at")
     .eq("user_id", user.id)
     .eq("status", "paid")
     .order("paid_at", { ascending: false })
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
       credits_reset_at: u?.credits_reset_at ?? null,
       expires_at: u?.plan_expires_at ?? null,
       cycle: lastPaid?.cycle ?? null,
-      price: lastPaid ? lastPaid.amount : 0,
+      price: lastPaid ? (lastPaid.base_amount ?? lastPaid.amount) : 0,
     },
     payments: (payments ?? []).map((p) => ({
       id: p.id,

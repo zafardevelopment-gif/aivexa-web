@@ -51,6 +51,7 @@ export type ValidatedKey = {
   creditsUsed: number;
   credits: number;        // plan limit
   rateLimit: number;      // rpm
+  parallel: number;       // concurrent conversions
   maxPdfBytes: number;
 };
 
@@ -96,7 +97,7 @@ export async function validateApiKey(
       pdfapi_users!inner (
         plan_id, credits_used, is_active,
         pdfapi_plans!inner (
-          credits, rate_limit_rpm, max_pdf_bytes
+          credits, rate_limit_rpm, max_pdf_bytes, parallel
         )
       )
     `)
@@ -132,6 +133,7 @@ export async function validateApiKey(
       credits,
       rateLimit: plan.rate_limit_rpm as number,
       maxPdfBytes: plan.max_pdf_bytes as number,
+      parallel: (plan.parallel as number) || 1,
     },
   };
 }
@@ -168,7 +170,7 @@ async function validateSessionToken(
 
   const { data: userRow, error } = await db
     .from("pdfapi_users")
-    .select(`plan_id, credits_used, is_active, pdfapi_plans!inner ( credits, rate_limit_rpm, max_pdf_bytes )`)
+    .select(`plan_id, credits_used, is_active, pdfapi_plans!inner ( credits, rate_limit_rpm, max_pdf_bytes, parallel )`)
     .eq("id", authData.user.id)
     .single();
 
@@ -191,16 +193,23 @@ async function validateSessionToken(
       credits,
       rateLimit: plan.rate_limit_rpm as number,
       maxPdfBytes: plan.max_pdf_bytes as number,
+      parallel: (plan.parallel as number) || 1,
     },
   };
 }
 
 // ── Increment usage ───────────────────────────────────────────
 
-export async function incrementUsage(userId: string): Promise<void> {
+/** 1 credit per started 5 MB of output (a 12 MB PDF = 3 credits). */
+export function creditsFor(bytes: number): number {
+  return Math.max(1, Math.ceil(bytes / (5 * 1024 * 1024)));
+}
+
+export async function incrementUsage(userId: string, credits = 1): Promise<void> {
   const db = supabaseAdmin();
   if (!db) return;
-  await db.rpc("pdfapi_increment_credits", { p_user_id: userId });
+  if (credits <= 1) await db.rpc("pdfapi_increment_credits", { p_user_id: userId });
+  else await db.rpc("pdfapi_increment_credits_by", { p_user_id: userId, p_n: credits });
 }
 
 // ── Log request ───────────────────────────────────────────────

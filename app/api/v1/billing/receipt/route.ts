@@ -8,7 +8,7 @@ import { getSessionUser } from "@/lib/pdf-api/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { generatePdf } from "@/lib/pdf-api/pdf-engine";
 import { siteConfig } from "@/lib/seo/config";
-import { receiptNo } from "@/lib/pdf-api/billing";
+import { receiptNo, SELLER_STATE_CODE } from "@/lib/pdf-api/billing";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
   const { data: p } = await db
     .from("pdfapi_payment_orders")
-    .select("id, order_id, plan_id, cycle, amount, status, payment_id, paid_at, pdfapi_plans(name, credits)")
+    .select("id, order_id, plan_id, cycle, amount, base_amount, gst_amount, gst_rate, status, payment_id, paid_at, pdfapi_plans(name, credits)")
     .eq("id", id)
     .eq("user_id", user.id)
     .eq("status", "paid")
@@ -51,6 +51,18 @@ export async function GET(req: NextRequest) {
   const end = new Date(start);
   if (p.cycle === "yearly") end.setFullYear(end.getFullYear() + 1); else end.setMonth(end.getMonth() + 1);
   const no = receiptNo(p.id, p.paid_at);
+  // GST split (orders before GST was introduced have no split → no tax lines)
+  const base = p.base_amount ?? p.amount;
+  const gst = p.gst_amount ?? 0;
+  const rate = Number(p.gst_rate ?? 0);
+  const buyerGstin = (u?.billing_gstin ?? "").toUpperCase();
+  const intraState = buyerGstin.startsWith(SELLER_STATE_CODE);
+  const taxRows = gst > 0
+    ? (intraState
+        ? `<tr><td colspan="2" class="r">CGST @ ${rate / 2}%</td><td class="r">${inr(Math.floor(gst / 2))}</td></tr><tr><td colspan="2" class="r">SGST @ ${rate / 2}%</td><td class="r">${inr(gst - Math.floor(gst / 2))}</td></tr>`
+        : `<tr><td colspan="2" class="r">IGST @ ${rate}%</td><td class="r">${inr(gst)}</td></tr>`)
+    : "";
+  const title = gst > 0 ? "TAX INVOICE" : "PAYMENT RECEIPT";
   const e = siteConfig.entity;
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
@@ -71,8 +83,8 @@ export async function GET(req: NextRequest) {
     <div class="top">
       <div><div class="brand">AIVEXA <span>PDF API</span></div>
         <div class="muted" style="margin-top:6px;line-height:1.6">${esc(e.legalName)}<br>${esc(e.address.locality)}, ${esc(e.address.region)}, India<br>GSTIN: ${esc(e.gstin)}<br>${esc(e.email)}</div></div>
-      <div><h2>PAYMENT RECEIPT</h2>
-        <div class="muted" style="text-align:right;margin-top:8px;line-height:1.7">Receipt no: <b style="color:#111827">${esc(no)}</b><br>Date: ${esc(day(start))}<br><span class="paid">PAID</span></div></div>
+      <div><h2>${title}</h2>
+        <div class="muted" style="text-align:right;margin-top:8px;line-height:1.7">Invoice no: <b style="color:#111827">${esc(no)}</b><br>Date: ${esc(day(start))}<br><span class="paid">PAID</span></div></div>
     </div>
     <div class="grid">
       <div><div class="label">Billed to</div>
@@ -83,11 +95,13 @@ export async function GET(req: NextRequest) {
     <table>
       <tr><th>Description</th><th>Period</th><th class="r">Amount</th></tr>
       <tr><td><b>AIVEXA PDF API — ${esc(plan?.name ?? p.plan_id)} plan (${p.cycle === "yearly" ? "yearly" : "monthly"})</b><br><span class="muted">${(plan?.credits ?? 0).toLocaleString("en-IN")} PDFs per month</span></td>
-        <td>${esc(day(start))} – ${esc(day(end))}</td><td class="r">${inr(p.amount)}</td></tr>
+        <td>${esc(day(start))} – ${esc(day(end))}</td><td class="r">${inr(base)}</td></tr>
+      ${gst > 0 ? `<tr><td colspan="2" class="r">Taxable value</td><td class="r">${inr(base)}</td></tr>` : ""}
+      ${taxRows}
       <tr class="total"><td colspan="2">Total paid</td><td class="r">${inr(p.amount)}</td></tr>
     </table>
-    <div class="foot">This is a computer-generated payment receipt and does not need a signature. Amount shown is the total amount charged.
-      For a GST tax invoice or any billing question, write to ${esc(e.email)} with the receipt number.</div>
+    <div class="foot">This is a computer-generated document and does not need a signature. Place of supply: ${intraState ? "Bihar" : buyerGstin ? "as per buyer GSTIN" : "as per billing address"}.
+      For any billing question, write to ${esc(e.email)} with the invoice number.</div>
   </body></html>`;
 
   const result = await generatePdf({ html, format: "A4", printBackground: true, waitUntil: "load", margin: { top: "0", right: "0", bottom: "0", left: "0" } });

@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/pdf-api/session";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import Razorpay from "razorpay";
+import { withGst } from "@/lib/pdf-api/billing";
 
 export async function POST(req: NextRequest) {
   const user = await getSessionUser(req);
@@ -35,10 +36,12 @@ export async function POST(req: NextRequest) {
   if (!plan || !plan.is_active) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
-  const amount = cycle === "yearly" ? plan.price_yearly : plan.price_monthly; // paise
-  if (!amount || amount <= 0) {
+  const base = cycle === "yearly" ? plan.price_yearly : plan.price_monthly; // paise, before GST
+  if (!base || base <= 0) {
     return NextResponse.json({ error: "This plan cannot be purchased." }, { status: 400 });
   }
+  const price = withGst(base);
+  const amount = price.total; // charged amount incl. 18% GST
 
   try {
     const razorpay = new Razorpay({
@@ -59,6 +62,9 @@ export async function POST(req: NextRequest) {
       plan_id: plan.id,
       cycle,
       amount,
+      base_amount: price.base,
+      gst_amount: price.gst,
+      gst_rate: price.rate,
       status: "created",
     });
     if (error) {

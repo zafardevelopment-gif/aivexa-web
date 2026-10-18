@@ -2,13 +2,14 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo/config";
 import { getPdfPlans } from "@/lib/pdf-api/plans";
+import PlanPicker from "@/components/pdf-api/PlanPicker";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "AIVEXA PDF API pricing in INR: Free 100 PDFs/month, Starter ₹999, Growth ₹1,999, Pro ₹3,999 per month. Yearly plans get 2 months free. No credit card needed to start.",
+    "AIVEXA PDF API pricing in INR: Free 100 credits/month, Startup ₹749, Standard ₹2,099, Scale ₹3,249 per month + GST. Yearly plans get 2 months free. No credit card needed to start.",
   alternates: { canonical: `${SITE_URL}/pdf-api/pricing` },
 };
 
@@ -17,11 +18,11 @@ const mb = (b: number) => `${Math.round(b / 1048576)} MB`;
 
 const FAQ = [
   { q: "Is there a free plan?", a: "Yes. Every account gets 100 PDFs per month free, forever. No credit card is needed to sign up." },
-  { q: "What counts as one credit?", a: "One successful PDF or screenshot uses one credit. Failed requests and requests made with a test key do not use credits." },
+  { q: "What counts as one credit?", a: "Each started 5 MB of a generated PDF or screenshot uses one credit, so a normal invoice or certificate uses exactly one. Failed requests and test-key requests use no credits." },
   { q: "Do unused credits carry over?", a: "No. Credits reset every month on your reset date, which you can see on the Billing page of your dashboard." },
-  { q: "How do I pay?", a: "Payments are made in INR through Razorpay — UPI, debit or credit card, net banking and wallets are supported. We never store your card details." },
+  { q: "How do I pay?", a: "Payments are made in INR through Razorpay — UPI, debit or credit card, net banking and wallets are supported. 18% GST is added at checkout. We never store your card details." },
   { q: "Will I be charged automatically every month?", a: "No. You pay once for a month or a year. There is no auto-renewal; you can renew or change plan any time from the dashboard." },
-  { q: "Do I get a receipt?", a: "Yes. Every payment has a downloadable PDF receipt on the Billing page. For a GST tax invoice, email us your receipt number and GSTIN." },
+  { q: "Do I get a GST invoice?", a: "Yes. Every payment has a downloadable GST tax invoice on the Billing page. Add your company name and GSTIN under Billing details before paying to have them on the invoice." },
   { q: "Does it support Hindi, Urdu and Arabic?", a: "Yes. The renderer includes Noto fonts for Devanagari, Arabic script (including right-to-left layout) and emoji." },
   { q: "What happens if I run out of credits?", a: "API calls return a QUOTA_EXCEEDED error until your credits reset or you upgrade. Your existing PDFs and keys are not affected." },
 ];
@@ -58,30 +59,11 @@ export default async function PricingPage() {
 
       <section className="pr-hero">
         <h1>Simple pricing in rupees</h1>
-        <p>Start free with 100 PDFs a month. Upgrade only when you need more — pay by UPI, card or net banking. No auto-renewal.</p>
+        <p>Start free with 100 credits a month. Upgrade only when you need more — pay by UPI, card or net banking. Prices exclude 18% GST. No auto-renewal.</p>
       </section>
 
-      <section className="pr-grid">
-        {plans.map((p) => {
-          const pro = p.id === "pro";
-          const free = p.price_monthly === 0;
-          return (
-            <div key={p.id} className={`pdfapi-card pr-card${pro ? " is-pro" : ""}`}>
-              {pro && <div className="pr-ribbon">MOST POPULAR</div>}
-              <h2>{p.name}</h2>
-              <div className="pr-price">{inr(p.price_monthly)}<span>{free ? " forever" : " / month"}</span></div>
-              <div className="pr-year">{free ? "No card needed" : `or ${inr(p.price_yearly)} / year (2 months free)`}</div>
-              <div className="pr-credits">{p.credits.toLocaleString("en-IN")} PDFs / month</div>
-              <ul>
-                {(Array.isArray(p.features) ? p.features : []).map((f) => <li key={f}>✓ {f}</li>)}
-              </ul>
-              <Link href={free ? "/pdf-api/login?mode=signup" : "/pdf-api/dashboard/billing"}
-                className={`pdfapi-btn ${pro ? "pdfapi-btn-primary" : "pdfapi-btn-secondary"}`} style={{ width: "100%", justifyContent: "center" }}>
-                {free ? "Start free" : `Choose ${p.name}`}
-              </Link>
-            </div>
-          );
-        })}
+      <section className="pdfapi-card" style={{ padding: "28px 24px", marginBottom: 32 }}>
+        <PlanPicker plans={plans} />
       </section>
 
       <section className="pdfapi-card pr-compare">
@@ -90,13 +72,14 @@ export default async function PricingPage() {
           <table>
             <thead><tr><th>Feature</th>{plans.map((p) => <th key={p.id}>{p.name}</th>)}</tr></thead>
             <tbody>
-              <tr><td>PDFs per month</td>{plans.map((p) => <td key={p.id}>{p.credits.toLocaleString("en-IN")}</td>)}</tr>
+              <tr><td>Credits per month</td>{plans.map((p) => <td key={p.id}>{p.credits.toLocaleString("en-IN")}</td>)}</tr>
+              <tr><td>Parallel conversions</td>{plans.map((p) => <td key={p.id}>{p.parallel ?? 1}</td>)}</tr>
               <tr><td>Requests per minute</td>{plans.map((p) => <td key={p.id}>{p.rate_limit_rpm}</td>)}</tr>
               <tr><td>Max PDF size</td>{plans.map((p) => <td key={p.id}>{mb(p.max_pdf_bytes)}</td>)}</tr>
               <tr><td>HTML to PDF, URL to PDF, screenshots</td>{plans.map((p) => <td key={p.id}>✓</td>)}</tr>
               <tr><td>Hindi, Urdu, Arabic fonts</td>{plans.map((p) => <td key={p.id}>✓</td>)}</tr>
               <tr><td>Test keys + Playground</td>{plans.map((p) => <td key={p.id}>✓</td>)}</tr>
-              <tr><td>Price per month</td>{plans.map((p) => <td key={p.id}>{inr(p.price_monthly)}</td>)}</tr>
+              <tr><td>Price per month (+ GST)</td>{plans.map((p) => <td key={p.id}>{inr(p.price_monthly)}</td>)}</tr>
             </tbody>
           </table>
         </div>
@@ -110,14 +93,6 @@ export default async function PricingPage() {
             <p>{f.a}</p>
           </details>
         ))}
-      </section>
-
-      <section className="pdfapi-card pr-cta">
-        <div>
-          <h2>Need more than 5,000 PDFs a month?</h2>
-          <p>Custom volume, GST invoice billing and a dedicated support line.</p>
-        </div>
-        <a className="pdfapi-btn pdfapi-btn-primary" href="https://wa.me/919204298771?text=Hi%2C%20I%20need%20a%20custom%20AIVEXA%20PDF%20API%20plan" target="_blank" rel="noopener noreferrer">Talk to us on WhatsApp</a>
       </section>
 
       <style>{`

@@ -4,8 +4,8 @@
  */
 
 import { NextRequest } from "next/server";
-import { validateApiKey, generateRequestId, logRequest, incrementUsage } from "@/lib/pdf-api/api-keys";
-import { checkRateLimit } from "@/lib/pdf-api/rate-limit";
+import { validateApiKey, generateRequestId, logRequest, incrementUsage, creditsFor } from "@/lib/pdf-api/api-keys";
+import { checkRateLimit, acquireSlot, releaseSlot } from "@/lib/pdf-api/rate-limit";
 import { checkUrl } from "@/lib/pdf-api/ssrf-guard";
 import { generatePdf, PdfRequestOptions } from "@/lib/pdf-api/pdf-engine";
 import { apiError } from "@/lib/pdf-api/errors";
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     return apiError(codeMap[keyResult.error] as never ?? "INVALID_API_KEY", requestId);
   }
 
-  const { userId, keyId, isTest, rateLimit, maxPdfBytes } = keyResult.data;
+  const { userId, keyId, isTest, rateLimit, maxPdfBytes, parallel } = keyResult.data;
 
   // ── Rate limit ─────────────────────────────────────────────
   const rl = checkRateLimit(keyId ? `key_${keyId}` : `user_${userId}`, rateLimit);
@@ -85,7 +85,15 @@ export async function POST(req: NextRequest) {
   };
 
   const genStart = Date.now();
-  const result = await generatePdf(opts);
+  if (!acquireSlot(userId, parallel)) {
+    return apiError("TOO_MANY_PARALLEL", requestId, { parallel_limit: parallel });
+  }
+  let result: Awaited<ReturnType<typeof generatePdf>>;
+  try {
+    result = await generatePdf(opts);
+  } finally {
+    releaseSlot(userId);
+  }
   const pdfGenMs = Date.now() - genStart;
   const responseMs = Date.now() - startMs;
 
@@ -111,14 +119,15 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  if (!isTest) await incrementUsage(userId);
+  const credits = creditsFor(result.buffer.length);
+  if (!isTest) await incrementUsage(userId, credits);
 
   await logRequest({
     requestId, userId, apiKeyId: keyId, endpoint: "/v1/url-to-pdf", isTest,
     status: "completed",
     inputType: "url",
     outputSizeBytes: result.buffer.length,
-    responseMs, pdfGenMs, creditsUsed: 1,
+    responseMs, pdfGenMs, creditsUsed: isTest ? 0 : credits,
     ipAddress: req.headers.get("x-forwarded-for") ?? undefined,
     userAgent: req.headers.get("user-agent") ?? undefined,
   });
