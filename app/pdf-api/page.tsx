@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo/config";
+import { getPdfPlans, inrFromPaise } from "@/lib/pdf-api/plans";
 
 export const metadata: Metadata = {
   title: "AIVEXA PDF API — HTML & URL to PDF for Developers",
@@ -18,12 +19,6 @@ const PDF_API_JSONLD = {
   description:
     "REST API that converts HTML or any public URL into a PDF or screenshot using headless Chromium. Supports A4/Letter, landscape, margins, headers and footers, background graphics and Indian and Arabic scripts.",
   provider: { "@type": "Organization", name: "AIVEXA LLP", url: SITE_URL },
-  offers: [
-    { "@type": "Offer", name: "Free", price: "0", priceCurrency: "INR", description: "100 PDFs per month" },
-    { "@type": "Offer", name: "Starter", price: "999", priceCurrency: "INR", description: "1,000 PDFs per month" },
-    { "@type": "Offer", name: "Growth", price: "1999", priceCurrency: "INR", description: "2,000 PDFs per month" },
-    { "@type": "Offer", name: "Pro", price: "3999", priceCurrency: "INR", description: "5,000 PDFs per month" },
-  ],
 };
 
 const CODE_EXAMPLE = `curl -X POST https://www.aivexallp.com/api/v1/pdf \\
@@ -47,17 +42,26 @@ const FEATURES = [
   { icon: "🔢", title: "Request IDs", desc: "Every response includes a unique req_xxx ID for logging, debugging, and support." },
 ];
 
-const PLANS = [
-  { name: "Free", price: "₹0", credits: "100 PDFs/month", cta: "Get Started", primary: false },
-  { name: "Starter", price: "₹999", credits: "1,000 PDFs/month", cta: "Start Starter", primary: false },
-  { name: "Growth", price: "₹1,999", credits: "2,000 PDFs/month", cta: "Start Growth", primary: false },
-  { name: "Pro", price: "₹3,999", credits: "5,000 PDFs/month", cta: "Start Pro", primary: true },
-];
 
-export default function PdfApiLanding() {
+
+export const revalidate = 60;
+
+export default async function PdfApiLanding() {
+  const dbPlans = await getPdfPlans();
+  const PLANS = dbPlans.map((p) => ({
+    name: p.name,
+    price: inrFromPaise(p.price_monthly),
+    credits: `${p.credits.toLocaleString("en-IN")} PDFs/month`,
+    cta: p.price_monthly === 0 ? "Get Started" : `Choose ${p.name}`,
+    primary: p.id === "pro",
+  }));
+  const jsonLd = {
+    ...PDF_API_JSONLD,
+    offers: dbPlans.map((p) => ({ "@type": "Offer", name: p.name, price: String(p.price_monthly / 100), priceCurrency: "INR", description: `${p.credits} PDFs per month` })),
+  };
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PDF_API_JSONLD) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Hero */}
       <section style={{ padding: "80px 0 64px", textAlign: "center" }}>

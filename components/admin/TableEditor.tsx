@@ -7,7 +7,8 @@ import { adminDelete, adminList, adminSave } from "@/app/admin/actions";
 export interface ColumnDef {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "boolean" | "lines" | "image" | "images" | "file";
+  type?: "text" | "textarea" | "number" | "rupees" | "boolean" | "lines" | "image" | "images" | "file";
+  // "rupees" = stored in paise, edited in rupees (999 → 99900)
   // "lines"  = jsonb string[] edited one-per-line
   // "image"  = single image file upload → Supabase Storage, stores public URL
   // "images" = multiple image file upload → Supabase Storage, stores URL[]
@@ -312,6 +313,7 @@ function FileUploadField({ value, onChange }: { value: string; onChange: (url: s
 function toInput(value: unknown, type: ColumnDef["type"]): string {
   if (type === "lines") return Array.isArray(value) ? value.join("\n") : "";
   if (value === null || value === undefined) return "";
+  if (type === "rupees") return String(Number(value) / 100);
   return String(value);
 }
 
@@ -327,6 +329,7 @@ function fromInput(value: string, type: ColumnDef["type"]): unknown {
   if (type === "lines")
     return value.split("\n").map((s) => s.trim()).filter(Boolean);
   if (type === "number") return Number(value) || 0;
+  if (type === "rupees") return Math.round((Number(value) || 0) * 100);
   return value;
 }
 

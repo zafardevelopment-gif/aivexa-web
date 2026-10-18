@@ -19,6 +19,7 @@ const TABLES = new Set([
   "aivexa_messages",
   "aivexa_digital_products",
   "aivexa_orders",
+  "pdfapi_plans",
 ]);
 
 type Row = Record<string, unknown>;

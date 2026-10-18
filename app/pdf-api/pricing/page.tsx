@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo/config";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getPdfPlans } from "@/lib/pdf-api/plans";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -11,29 +11,6 @@ export const metadata: Metadata = {
     "AIVEXA PDF API pricing in INR: Free 100 PDFs/month, Starter ₹999, Growth ₹1,999, Pro ₹3,999 per month. Yearly plans get 2 months free. No credit card needed to start.",
   alternates: { canonical: `${SITE_URL}/pdf-api/pricing` },
 };
-
-type Plan = {
-  id: string; name: string; price_monthly: number; price_yearly: number;
-  credits: number; max_pdf_bytes: number; rate_limit_rpm: number; features: string[];
-};
-
-const FALLBACK: Plan[] = [
-  { id: "free", name: "Free", price_monthly: 0, price_yearly: 0, credits: 100, max_pdf_bytes: 2097152, rate_limit_rpm: 5, features: [] },
-  { id: "starter", name: "Starter", price_monthly: 99900, price_yearly: 999000, credits: 1000, max_pdf_bytes: 5242880, rate_limit_rpm: 20, features: [] },
-  { id: "growth", name: "Growth", price_monthly: 199900, price_yearly: 1999000, credits: 2000, max_pdf_bytes: 10485760, rate_limit_rpm: 50, features: [] },
-  { id: "pro", name: "Pro", price_monthly: 399900, price_yearly: 3999000, credits: 5000, max_pdf_bytes: 26214400, rate_limit_rpm: 150, features: [] },
-];
-
-async function getPlans(): Promise<Plan[]> {
-  const db = supabaseAdmin();
-  if (!db) return FALLBACK;
-  const { data } = await db
-    .from("pdfapi_plans")
-    .select("id, name, price_monthly, price_yearly, credits, max_pdf_bytes, rate_limit_rpm, features")
-    .eq("is_active", true)
-    .order("sort_order");
-  return data && data.length ? (data as Plan[]) : FALLBACK;
-}
 
 const inr = (paise: number) => (paise === 0 ? "₹0" : `₹${(paise / 100).toLocaleString("en-IN")}`);
 const mb = (b: number) => `${Math.round(b / 1048576)} MB`;
@@ -50,7 +27,7 @@ const FAQ = [
 ];
 
 export default async function PricingPage() {
-  const plans = await getPlans();
+  const plans = await getPdfPlans();
 
   const jsonLd = [
     {
