@@ -199,7 +199,7 @@ export default function PdfApiLanding() {
               <div style={{ fontSize: 13, color: "var(--pdf-muted)", marginBottom: 20 }}>/month</div>
               <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 24 }}>{p.credits}</div>
               <Link
-                href="/pdf-api/dashboard"
+                href={p.price === "₹0" ? "/pdf-api/login?mode=signup" : "/pdf-api/pricing"}
                 className={`pdfapi-btn ${p.primary ? "pdfapi-btn-primary" : "pdfapi-btn-secondary"}`}
                 style={{ width: "100%", justifyContent: "center" }}
               >
@@ -209,7 +209,7 @@ export default function PdfApiLanding() {
           ))}
         </div>
         <p style={{ textAlign: "center", marginTop: 20, fontSize: 13, color: "var(--pdf-muted)" }}>
-          Need more? <a href="mailto:mdzafareqbal@gmail.com" style={{ color: "var(--pdf-accent-light)" }}>Contact us</a> for enterprise pricing.
+          Need more? <a href="https://wa.me/919204298771" target="_blank" rel="noopener noreferrer" style={{ color: "var(--pdf-accent-light)" }}>Contact us</a> for enterprise pricing.
         </p>
       </section>
 
