@@ -37,7 +37,7 @@ ${siteConfig.name} is a product studio run by ${siteConfig.legalName}, based in 
 
 ## What it does
 - MyRentSaathi: rent and housing-society maintenance collection on WhatsApp with UPI links (myrentsaathi.com).
-- TestSaathi: CBSE Class 10 & 12 board exam practice with solutions, PYQs, mock tests and an AI tutor (testsaathi.com).
+- TestSaathi: CBSE Class 10 & 12 board exam practice — chapter-wise questions with solutions, real CBSE board papers up to and including 2026 (with original PDFs), NCERT exercise solutions, board-pattern exams, mock tests and an AI tutor (testsaathi.com).
 - TentSaathi: Hindi/English booking and accounts app for tent houses and rental businesses (tentsaathi.com).
 - AI Munim: GST billing, invoicing, inventory and ledger software for Indian businesses (aimunim.aivexallp.com).
 - Coming soon (not available yet — do not recommend as live): Clinic Voice, AI Hospital, AI Camp, SafeRide QR.
