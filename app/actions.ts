@@ -59,12 +59,17 @@ export async function logPageview(input: {
   const { pageType, pageKey } = classifyPath(input.path);
   const { deviceType, browser, os } = parseUserAgent(input.userAgent);
 
-  // Vercel injects these geo headers on every request in production
-  // (not available on localhost) — no external IP-lookup service needed.
+  // On Vercel the geo headers come for free. On the Hostinger VPS (nginx)
+  // they don't exist, so fall back to an IP lookup of the visitor's IP.
   const h = await headers();
-  const country = h.get("x-vercel-ip-country") ?? "";
-  const region = h.get("x-vercel-ip-country-region") ?? "";
-  const city = decodeCity(h.get("x-vercel-ip-city"));
+  let country = h.get("x-vercel-ip-country") ?? "";
+  let region = h.get("x-vercel-ip-country-region") ?? "";
+  let city = decodeCity(h.get("x-vercel-ip-city"));
+
+  if (!country) {
+    const geo = await lookupGeo(clientIp(h));
+    if (geo) ({ country, region, city } = geo);
+  }
 
   await db.from("aivexa_pageviews").insert({
     path: input.path,
@@ -88,4 +93,59 @@ function decodeCity(raw: string | null): string {
   } catch {
     return raw;
   }
+}
+
+type Geo = { country: string; region: string; city: string };
+
+const geoCache = new Map<string, { geo: Geo | null; at: number }>();
+const GEO_TTL_MS = 24 * 60 * 60 * 1000;
+
+function clientIp(h: Headers): string {
+  const fwd = h.get("x-forwarded-for")?.split(",")[0]?.trim();
+  return (h.get("cf-connecting-ip") || h.get("x-real-ip") || fwd || "").trim();
+}
+
+function isPrivateIp(ip: string): boolean {
+  return (
+    !ip ||
+    ip === "::1" ||
+    ip.startsWith("127.") ||
+    ip.startsWith("10.") ||
+    ip.startsWith("192.168.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(ip) ||
+    ip.startsWith("fc") ||
+    ip.startsWith("fd") ||
+    ip.startsWith("fe80")
+  );
+}
+
+/** Free IP → location lookup (ipwho.is), cached in memory, 2s timeout. */
+async function lookupGeo(rawIp: string): Promise<Geo | null> {
+  const ip = rawIp.replace(/^::ffff:/, "");
+  if (isPrivateIp(ip)) return null;
+
+  const hit = geoCache.get(ip);
+  if (hit && Date.now() - hit.at < GEO_TTL_MS) return hit.geo;
+
+  let geo: Geo | null = null;
+  try {
+    const res = await fetch(
+      `https://ipwho.is/${encodeURIComponent(ip)}?fields=success,country_code,region_code,region,city`,
+      { signal: AbortSignal.timeout(2000), cache: "no-store" }
+    );
+    const j = await res.json();
+    if (j?.success) {
+      geo = {
+        country: String(j.country_code ?? ""),
+        region: String(j.region_code || j.region || ""),
+        city: String(j.city ?? ""),
+      };
+    }
+  } catch {
+    // lookup failed — store nothing, analytics must never break
+  }
+
+  if (geoCache.size > 5000) geoCache.clear();
+  geoCache.set(ip, { geo, at: Date.now() });
+  return geo;
 }
