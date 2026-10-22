@@ -30,6 +30,15 @@ export async function GET(req: NextRequest) {
     .limit(50);
 
   const lastPaid = payments?.[0] ?? null;
+
+  const { data: sub } = await db
+    .from("pdfapi_subscriptions")
+    .select("plan_id, cycle, status, current_end, cancel_at_cycle_end")
+    .eq("user_id", user.id)
+    .in("status", ["active", "authenticated", "pending"])
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
   const plan = (u?.pdfapi_plans as unknown) as Record<string, unknown> | null;
 
   return NextResponse.json({
@@ -52,6 +61,9 @@ export async function GET(req: NextRequest) {
       paid_at: p.paid_at,
       payment_id: p.payment_id,
     })),
+    autopay: sub
+      ? { on: !sub.cancel_at_cycle_end, status: sub.status, plan_id: sub.plan_id, cycle: sub.cycle, next_charge: sub.current_end }
+      : null,
     billing: {
       name: u?.billing_name ?? "",
       company: u?.billing_company ?? "",

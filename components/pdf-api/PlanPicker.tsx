@@ -24,10 +24,11 @@ export default function PlanPicker({
   currentPlanId?: string;
   currentCredits?: number;
   /** Dashboard: start payment. Public page: leave empty to link to signup. */
-  onChoose?: (plan: PickerPlan, cycle: "monthly" | "yearly") => void;
+  onChoose?: (plan: PickerPlan, cycle: "monthly" | "yearly", autoRenew: boolean) => void;
   busyPlanId?: string | null;
 }) {
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
+  const [autoRenew, setAutoRenew] = useState(true);
   const currentIsHigher = (plans.find((p) => p.id === currentPlanId)?.sort_order ?? 0) >= HIGHER_FROM;
   const [higher, setHigher] = useState(currentIsHigher);
   const hasHigher = plans.some((p) => (p.sort_order ?? 0) >= HIGHER_FROM);
@@ -55,6 +56,14 @@ export default function PlanPicker({
         </div>
       </div>
 
+      <div className="pp-opts">
+      {onChoose && (
+        <label className="pp-switch">
+          <input type="checkbox" checked={autoRenew} onChange={(e) => setAutoRenew(e.target.checked)} />
+          <span className="pp-track"><span /></span>
+          Auto-renew with UPI Autopay / card (cancel anytime)
+        </label>
+      )}
       {hasHigher && (
         <label className="pp-switch">
           <input type="checkbox" checked={higher} onChange={(e) => setHigher(e.target.checked)} />
@@ -62,6 +71,7 @@ export default function PlanPicker({
           Show higher plans
         </label>
       )}
+      </div>
 
       <div className="pp-grid">
         {shown.map((p) => {
@@ -74,7 +84,7 @@ export default function PlanPicker({
           else if (onChoose) {
             action = free
               ? <div className="pp-btn is-muted">Included</div>
-              : <button className="pp-btn" disabled={!!busyPlanId} onClick={() => onChoose(p, cycle)}>
+              : <button className="pp-btn" disabled={!!busyPlanId} onClick={() => onChoose(p, cycle, autoRenew)}>
                   {busyPlanId === p.id ? "Opening…" : isCurrent ? "Renew" : "Change Plan"}
                 </button>;
           } else {
@@ -121,6 +131,7 @@ export default function PlanPicker({
         .pp-toggle button { border: 0; background: transparent; color: var(--pdf-muted); padding: 7px 16px; border-radius: 8px; font: inherit; font-size: 14px; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; }
         .pp-toggle button.on { background: var(--pdf-text); color: var(--pdf-bg, #0b0d12); font-weight: 600; }
         .pp-pill { background: rgba(34,197,94,0.15); color: var(--pdf-success); font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+        .pp-opts { display: flex; gap: 24px; flex-wrap: wrap; }
         .pp-switch { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--pdf-muted); cursor: pointer; margin: 6px 0 16px; user-select: none; }
         .pp-switch input { display: none; }
         .pp-track { width: 32px; height: 18px; border-radius: 999px; background: var(--pdf-border); position: relative; transition: background .2s; }

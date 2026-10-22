@@ -21,7 +21,7 @@ const FAQ = [
   { q: "What counts as one credit?", a: "Each started 5 MB of a generated PDF or screenshot uses one credit, so a normal invoice or certificate uses exactly one. Failed requests and test-key requests use no credits." },
   { q: "Do unused credits carry over?", a: "No. Credits reset every month on your reset date, which you can see on the Billing page of your dashboard." },
   { q: "How do I pay?", a: "Payments are made in INR through Razorpay — UPI, debit or credit card, net banking and wallets are supported. 18% GST is added at checkout. We never store your card details." },
-  { q: "Will I be charged automatically every month?", a: "No. You pay once for a month or a year. There is no auto-renewal; you can renew or change plan any time from the dashboard." },
+  { q: "Will I be charged automatically every month?", a: "Only if you choose auto-renew at checkout. Auto-renew uses UPI Autopay or a card mandate, you get a notice before each debit, and you can cancel it anytime from the Billing page — your plan then stays active until the paid period ends. You can also pay once without auto-renew." },
   { q: "Do I get a GST invoice?", a: "Yes. Every payment has a downloadable GST tax invoice on the Billing page. Add your company name and GSTIN under Billing details before paying to have them on the invoice." },
   { q: "Does it support Hindi, Urdu and Arabic?", a: "Yes. The renderer includes Noto fonts for Devanagari, Arabic script (including right-to-left layout) and emoji." },
   { q: "What happens if I run out of credits?", a: "API calls return a QUOTA_EXCEEDED error until your credits reset or you upgrade. Your existing PDFs and keys are not affected." },
@@ -59,7 +59,7 @@ export default async function PricingPage() {
 
       <section className="pr-hero">
         <h1>Simple pricing in rupees</h1>
-        <p>Start free with 100 credits a month. Upgrade only when you need more — pay by UPI, card or net banking. Prices exclude 18% GST. No auto-renewal.</p>
+        <p>Start free with 100 credits a month. Upgrade only when you need more — pay by UPI, card or net banking. Prices exclude 18% GST. Pay once, or turn on auto-renew.</p>
       </section>
 
       <section className="pdfapi-card" style={{ padding: "28px 24px", marginBottom: 32 }}>

@@ -13,6 +13,7 @@ type Summary = {
   plan: { id: string; name: string; credits: number; credits_used: number; credits_reset_at: string | null; expires_at: string | null; cycle: string | null; price: number };
   payments: { id: number; receipt_no: string; plan_id: string; cycle: string; amount: number; paid_at: string; payment_id: string }[];
   billing: { name: string; company: string; gstin: string; address: string; email: string };
+  autopay: { on: boolean; status: string; plan_id: string; cycle: string; next_charge: string | null } | null;
 };
 
 declare global {
@@ -71,12 +72,42 @@ export default function BillingPage() {
       document.body.appendChild(script);
     });
 
-  const buy = async (plan: Plan, buyCycle: "monthly" | "yearly") => {
+  const buy = async (plan: Plan, buyCycle: "monthly" | "yearly", autoRenew = false) => {
     if (loadingPlan) return;
     setLoadingPlan(plan.id);
     try {
       if (!(await loadRazorpay())) { alert("Could not load the payment window. Please check your internet connection."); setLoadingPlan(null); return; }
       const headers = await authHeader();
+      if (autoRenew) {
+        const res = await fetch("/api/payments/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...headers },
+          body: JSON.stringify({ planId: plan.id, cycle: buyCycle }),
+        });
+        const sub = await res.json().catch(() => ({}));
+        if (!res.ok) { alert(sub.error ?? "Could not start auto-pay. Please try again."); setLoadingPlan(null); return; }
+        const rzpSub = new window.Razorpay({
+          key: sub.keyId,
+          subscription_id: sub.subscriptionId,
+          name: "AIVEXA PDF API",
+          description: `${plan.name} plan — auto-renews ${buyCycle === "yearly" ? "every year" : "every month"}`,
+          prefill: { email: sub.userEmail ?? "", name: summary?.billing.name || "" },
+          theme: { color: "#6366f1" },
+          handler: async (r: Record<string, string>) => {
+            const v = await fetch("/api/payments/subscription-verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", ...(await authHeader()) },
+              body: JSON.stringify({ paymentId: r.razorpay_payment_id, subscriptionId: r.razorpay_subscription_id, signature: r.razorpay_signature }),
+            });
+            setLoadingPlan(null);
+            if (v.ok) { alert(`Auto-pay is on. You are now on the ${plan.name} plan.`); load(); }
+            else alert("Payment received but the plan could not be updated. Please contact support with your payment ID: " + r.razorpay_payment_id);
+          },
+          modal: { ondismiss: () => setLoadingPlan(null) },
+        });
+        rzpSub.open();
+        return;
+      }
       const res = await fetch("/api/payments/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...headers },
@@ -113,6 +144,14 @@ export default function BillingPage() {
       alert("Something went wrong. Please try again.");
       setLoadingPlan(null);
     }
+  };
+
+  const cancelAutoRenew = async () => {
+    if (!confirm("Turn off auto-renew? Your plan stays active until the end of the period you already paid for.")) return;
+    const res = await fetch("/api/payments/subscription-cancel", { method: "POST", headers: await authHeader() });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) alert(d.error ?? "Could not turn off auto-renew. Please try again.");
+    load();
   };
 
   const downloadReceipt = async (id: number, no: string) => {
@@ -169,7 +208,9 @@ export default function BillingPage() {
                   <div className="bill-credits">{p!.credits.toLocaleString("en-IN")} PDFs / month</div>
                   <div className="bill-muted">
                     {isPaid
-                      ? <>Valid until <b>{day(p!.expires_at)}</b>{daysLeft !== null && daysLeft <= 7 ? ` — ${Math.max(daysLeft, 0)} day(s) left` : ""}. No auto-renewal.</>
+                      ? (summary?.autopay?.on
+                          ? <>Auto-renews on <b>{day(summary.autopay.next_charge ?? p!.expires_at)}</b> via Razorpay.</>
+                          : <>Valid until <b>{day(p!.expires_at)}</b>{daysLeft !== null && daysLeft <= 7 ? ` — ${Math.max(daysLeft, 0)} day(s) left` : ""}. Auto-renew is off.</>)
                       : <>Free forever. Credits reset on {day(p!.credits_reset_at)}.</>}
                   </div>
                 </div>
@@ -184,7 +225,10 @@ export default function BillingPage() {
                 <button className="pdfapi-btn pdfapi-btn-primary" onClick={() => plansRef.current?.scrollIntoView({ behavior: "smooth" })}>
                   {isPaid ? "Change plan" : "Upgrade plan"}
                 </button>
-                {isPaid && currentPlan && (
+                {summary?.autopay?.on && (
+                  <button className="pdfapi-btn pdfapi-btn-secondary" onClick={cancelAutoRenew}>Cancel auto-renew</button>
+                )}
+                {isPaid && currentPlan && !summary?.autopay?.on && (
                   <button className="pdfapi-btn pdfapi-btn-secondary" disabled={!!loadingPlan}
                     onClick={() => buy(currentPlan, p!.cycle === "yearly" ? "yearly" : "monthly")}>
                     {loadingPlan === currentPlan.id ? "Opening…" : "Renew now"}
@@ -203,7 +247,7 @@ export default function BillingPage() {
               <ShieldCheck size={22} color="var(--pdf-success)" />
               <div>
                 <div style={{ fontWeight: 600 }}>Razorpay secure checkout</div>
-                <div className="bill-muted">UPI, cards, net banking and wallets. We never store your card details.</div>
+                <div className="bill-muted">UPI, cards, net banking and wallets. Auto-pay uses a UPI Autopay or card mandate that you can cancel anytime. We never store your card details.</div>
               </div>
             </div>
           </section>
@@ -274,9 +318,9 @@ export default function BillingPage() {
           currentPlanId={p?.id}
           currentCredits={p?.credits}
           busyPlanId={loadingPlan}
-          onChoose={(plan, c) => {
+          onChoose={(plan, c, auto) => {
             const full = plans.find((x) => x.id === plan.id);
-            if (full) buy(full, c);
+            if (full) buy(full, c, auto);
           }}
         />
       </div>
