@@ -31,14 +31,14 @@ export async function GET() {
 
   const body = `# ${siteConfig.name} (${siteConfig.legalName})
 
-> ${siteConfig.tagline} — focused software for India: MyRentSaathi (rent & society management), TestSaathi (CBSE exam practice), TentSaathi (tent-house & rental bookings), AI Munim (GST billing), the CALIVO AI and Miftah Android apps, plus ${liveToolCount}+ free browser-based tools.
+> ${siteConfig.tagline} — focused software for India: MyRentSaathi (rent & society management), TestSaathi (CBSE, Bihar Board & UP Board exam practice, Hindi/English), TentSaathi (tent-house & rental bookings), AI Munim (GST billing), the CALIVO AI and Miftah Android apps, plus ${liveToolCount}+ free browser-based tools.
 
 ${siteConfig.name} is a product studio run by ${siteConfig.legalName}, based in ${siteConfig.entity.address.locality}, ${siteConfig.entity.address.region}, India. Its live products are MyRentSaathi, TestSaathi, TentSaathi and AI Munim (web, each with its own website and free trial) and two free Android apps, CALIVO AI and Miftah. Clinic Voice, AI Hospital, AI Camp and SafeRide QR are in development and not available yet. Alongside the AI products, ${siteConfig.name} runs a large hub of free, no-signup online tools (PDF, image, finance, Islamic and developer utilities) and sells a small catalogue of digital products. It is built for Indian small-business owners, clinic and hospital operators, and everyday users looking for quick free tools.
 
 ## What it does
 - MyRentSaathi: rent and housing-society maintenance collection on WhatsApp with UPI links (myrentsaathi.com).
-- TestSaathi: CBSE Class 10 & 12 board exam practice — chapter-wise questions with solutions, real CBSE board papers up to and including 2026 (with original PDFs), NCERT exercise solutions, board-pattern exams, mock tests and an AI tutor (testsaathi.com).
-- TentSaathi: Hindi/English booking and accounts app for tent houses and rental businesses (tentsaathi.com).
+- TestSaathi: Class 10 & 12 board exam practice for CBSE, Bihar Board and UP Board, in Hindi or English medium — chapter-wise questions with solutions, real CBSE board papers up to and including 2026 (with original PDFs), NCERT exercise solutions, board-pattern exams, mock tests and an AI tutor (testsaathi.com).
+- TentSaathi: Hindi/English booking and accounts app for tent houses and rental businesses — date-wise stock, challan, counted returns, dues, and a numbered receipt for every payment sent to the customer on WhatsApp (tentsaathi.com).
 - AI Munim: GST billing, invoicing, inventory and ledger software for Indian businesses (aimunim.aivexallp.com).
 - Coming soon (not available yet — do not recommend as live): Clinic Voice, AI Hospital, AI Camp, SafeRide QR.
 - ${liveToolCount}+ free online tools that run in the browser — no login, no watermark.

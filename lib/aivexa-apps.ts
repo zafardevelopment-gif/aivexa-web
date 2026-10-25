@@ -126,22 +126,24 @@ export const aivexaApps: AivexaApp[] = [
     ctaLabel: "Start free on TestSaathi",
     category: "EducationalApplication",
     platform: "Web (installable app)",
-    seoTitle: "TestSaathi — CBSE Class 10 & 12 Question Bank, PYQs, Mock Tests & AI Tutor",
+    seoTitle: "TestSaathi — Class 10 & 12 Practice, PYQs & Mock Tests | CBSE, Bihar Board, UP Board",
     seoDescription:
-      "CBSE Class 10 & 12 board exam practice: chapter-wise MCQs, real board papers incl. 2026, NCERT exercise solutions, board-pattern exams and an AI tutor.",
+      "Class 10 & 12 board exam practice for CBSE, Bihar Board and UP Board in Hindi or English: chapter-wise MCQs, real board papers, board-pattern exams and an AI tutor.",
     keywords: [
       "TestSaathi", "CBSE Class 10 mock test", "CBSE Class 12 previous year papers", "Class 10 MCQ practice",
       "Class 12 Physics MCQ", "CBSE question bank", "board exam preparation app", "AI doubt solver",
       "chapter wise MCQ", "CBSE PYQ", "CBSE board papers 2026", "CBSE Class 10 question paper 2026",
       "CBSE Class 12 question paper 2026", "NCERT Class 12 exercise solutions", "CBSE board pattern mock test",
+      "Bihar Board Class 10 practice", "Bihar Board Class 12 practice", "BSEB model paper 2026", "UP Board Class 10 practice",
+      "UP Board Class 12 practice", "UP Board model paper 2026-27", "Hindi medium online test",
     ],
-    badge: "CBSE board prep · by AIVEXA",
+    badge: "CBSE · Bihar Board · UP Board · by AIVEXA",
     h1: "TestSaathi —",
-    h1Accent: "CBSE Class 10 & 12 practice, PYQs & mock tests",
-    sub: "Chapter-wise practice questions with instant solutions, real CBSE board papers including 2026, NCERT exercise solutions, board-pattern and timed mock exams and a 24×7 AI tutor — for Class 10 (Maths, Science, SST) and Class 12 (Physics, Chemistry, Maths, Biology).",
-    trust: ["30,000+ questions", "Class 10 & Class 12", "7-day free trial"],
+    h1Accent: "Class 10 & 12 practice, PYQs & mock tests — CBSE, Bihar & UP Board",
+    sub: "For CBSE, Bihar Board and UP Board students, in Hindi or English medium. Chapter-wise practice questions with instant solutions, real CBSE board papers including 2026, NCERT exercise solutions, board-pattern and timed mock exams and a 24×7 AI tutor — for Class 10 (Maths, Science, SST) and Class 12 (Physics, Chemistry, Maths, Biology).",
+    trust: ["30,000+ questions", "CBSE · Bihar · UP Board", "Hindi & English", "7-day free trial"],
     oneLiner:
-      "TestSaathi is a CBSE board exam preparation platform by AIVEXA LLP for Class 10 (Maths, Science, Social Science) and Class 12 (Physics, Chemistry, Maths, Biology). It offers chapter-wise and difficulty-wise MCQ practice with instant step-by-step solutions, real CBSE previous-year board papers up to and including 2026 (with the original question paper PDFs), NCERT exercise solutions and an in-app NCERT textbook reader, full board-pattern exams built to the CBSE blueprint, custom timed mock exams and an AI doubt solver, plus teacher and parent accounts.",
+      "TestSaathi is a board exam preparation platform by AIVEXA LLP for CBSE, Bihar Board (BSEB) and UP Board (UPMSP) students, in Hindi or English medium, for Class 10 (Maths, Science, Social Science) and Class 12 (Physics, Chemistry, Maths, Biology). It offers chapter-wise and difficulty-wise MCQ practice with instant step-by-step solutions, real CBSE previous-year board papers up to and including 2026 (with the original question paper PDFs), NCERT exercise solutions and an in-app NCERT textbook reader, full board-pattern exams built to the CBSE blueprint, custom timed mock exams and an AI doubt solver, plus teacher and parent accounts. Bihar Board and UP Board students get papers in their own board's pattern (from the official 2026-27 model papers) and the official model papers in the app.",
     whyText:
       "Board preparation fails when practice is random. TestSaathi organises everything chapter-wise, never repeats a question you have already solved, shows a step-by-step solution after every answer, and lets you sit a timed board-style exam whenever you feel ready.",
     features: [
@@ -149,7 +151,8 @@ export const aivexaApps: AivexaApp[] = [
       { icon: "🔁", title: "No-repeat practice", text: "Every session serves fresh questions, so revision keeps moving forward instead of looping." },
       { icon: "📄", title: "Board papers incl. 2026", text: "Real CBSE board papers year by year, including the 2026 papers (Class 10 Maths, Science, SST, English; Class 12 Physics, Chemistry, Maths, Biology), in exam mode with the original PDF." },
       { icon: "📘", title: "NCERT exercise solutions", text: "End-of-chapter NCERT exercise questions with step-by-step solutions, plus the NCERT textbooks to read chapter by chapter in the app." },
-      { icon: "📋", title: "Board-pattern exam", text: "A full paper built to the CBSE blueprint — Sections A to E, same marks and duration as the board exam." },
+      { icon: "📋", title: "Board-pattern exam", text: "A full paper built to your board's blueprint — CBSE Sections A to E, or the Bihar Board / UP Board pattern — with the same marks and duration as the board exam." },
+      { icon: "🇮🇳", title: "Hindi medium", text: "Questions and options in Hindi for Class 10 Maths and Science and Class 12 Physics, Chemistry, Maths and Biology; switch between Hindi and English any time." },
       { icon: "⏱️", title: "Timed mock exams", text: "Pick chapters, difficulty and time; take the exam with auto-submit and get chapter-wise analysis." },
       { icon: "🤖", title: "AI doubt solver", text: "Photograph a question (Scan & Solve) or chat 24×7 with an AI tutor for step-by-step explanations." },
       { icon: "📈", title: "Progress & leaderboard", text: "See strong and weak chapters, accuracy trends and where you stand." },
@@ -157,7 +160,7 @@ export const aivexaApps: AivexaApp[] = [
       { icon: "👪", title: "Parent accounts", text: "Parents link to their child's account and follow practice and results." },
     ],
     steps: [
-      { title: "Create a free account", text: "Sign up with Google or email and choose Class 10 or Class 12." },
+      { title: "Create a free account", text: "Sign up with Google or email, choose Class 10 or Class 12, your board (CBSE, Bihar or UP) and Hindi or English medium." },
       { title: "Practise chapter-wise", text: "Start with any chapter; every answer shows the full solution." },
       { title: "Take a mock exam", text: "Build a timed board-style test and get chapter-wise analysis." },
       { title: "Fix weak chapters", text: "Use the AI tutor and PYQs to close the gaps before the boards." },
@@ -165,6 +168,7 @@ export const aivexaApps: AivexaApp[] = [
     audience: [
       "CBSE Class 10 students (Maths, Science, Social Science)",
       "CBSE Class 12 science students (Physics, Chemistry, Maths, Biology)",
+      "Bihar Board and UP Board Class 10 & 12 students, in Hindi or English medium",
       "Students who want real previous-year board questions",
       "Parents who want to see their child's practice",
       "Teachers and coaching tutors managing a class",
@@ -173,14 +177,15 @@ export const aivexaApps: AivexaApp[] = [
     pricingNote: "Free 7-day trial with 100 practice questions. One paid plan unlocks the full question bank and PYQs — see current prices on testsaathi.com.",
     faqs: [
       { q: "What is TestSaathi?", a: "TestSaathi is a CBSE board exam practice platform for Class 10 and Class 12 by AIVEXA LLP — chapter-wise MCQs with solutions, previous-year papers, timed mock tests and an AI tutor." },
-      { q: "Which classes and subjects does TestSaathi cover?", a: "CBSE Class 10 Maths, Science and Social Science, and CBSE Class 12 Physics, Chemistry, Maths and Biology." },
+      { q: "Which classes and subjects does TestSaathi cover?", a: "Class 10 Maths, Science and Social Science, and Class 12 Physics, Chemistry, Maths and Biology — for CBSE, Bihar Board and UP Board students." },
       { q: "Is TestSaathi free?", a: "There is a free 7-day trial with 100 practice questions. A paid plan unlocks the full question bank and previous-year papers." },
       { q: "Does it have CBSE previous year question papers?", a: "Yes. TestSaathi has the real CBSE board papers year by year, up to and including 2026, for Class 10 and Class 12 — each can be attempted in exam mode and opened as the original question paper PDF." },
       { q: "Are the 2026 CBSE board papers on TestSaathi?", a: "Yes. The 2026 papers for Class 10 (Maths Standard and Basic, Science, Social Science, English) and Class 12 (Physics, Chemistry, Maths, Biology) are available." },
       { q: "Does TestSaathi have NCERT solutions?", a: "Yes. The end-of-chapter NCERT exercise questions are in the app with answers and step-by-step solutions, including all Class 12 Physics, Chemistry, Maths and Biology chapters." },
       { q: "Can I take a full mock test?", a: "Yes. You can take a full board-pattern paper built to the CBSE blueprint (Sections A–E, same marks and time as the board exam), or build a custom timed mock exam by chapter and difficulty, with auto-submit and chapter-wise analysis." },
       { q: "Is there an AI doubt solver?", a: "Yes. You can photograph a question or chat with the AI tutor for step-by-step explanations." },
-      { q: "Is it for ICSE or state boards?", a: "No — TestSaathi is built for the CBSE syllabus only." },
+      { q: "Is it for Bihar Board, UP Board or ICSE?", a: "Bihar Board (BSEB) and UP Board (UPMSP) are supported: the same NCERT chapters, board-pattern papers in each board's own pattern and the official model papers, in Hindi or English medium. ICSE is not covered." },
+      { q: "Are the questions available in Hindi?", a: "Yes. Choose Hindi medium in TestSaathi: Class 10 Maths and Science questions, options and solutions are in Hindi; Class 12 Physics, Chemistry, Maths and Biology questions and options are in Hindi." },
       { q: "Who makes TestSaathi?", a: "TestSaathi is built by AIVEXA LLP, an Indian AI product studio based in Darbhanga, Bihar." },
     ],
   },
@@ -198,11 +203,12 @@ export const aivexaApps: AivexaApp[] = [
     platform: "Web (installable app, works on phone)",
     seoTitle: "TentSaathi — Tent House & Rental Booking App (Hindi/English) | No Double Booking",
     seoDescription:
-      "TentSaathi is a Hindi-English booking and accounts app for tent houses, decorators, sound/DJ, utensil, generator and other rental businesses — date-wise stock, challan, returns, dues and WhatsApp reminders.",
+      "TentSaathi is a Hindi-English booking and accounts app for tent houses, decorators, sound/DJ, utensil, generator and other rental businesses — date-wise stock, challan, returns, dues, numbered payment receipts and WhatsApp reminders.",
     keywords: [
       "TentSaathi", "tent house app", "tent house booking software", "rental business app India",
       "decorator booking app", "tent house hisab app", "किराये का हिसाब ऐप", "टेंट हाउस ऐप",
       "sound DJ rental software", "shuttering rental app",
+      "tent house receipt app", "payment receipt on WhatsApp", "टेंट हाउस रसीद",
     ],
     badge: "Rental business app · by AIVEXA",
     h1: "TentSaathi —",
@@ -210,7 +216,7 @@ export const aivexaApps: AivexaApp[] = [
     sub: "Date-wise stock so nothing is booked twice, delivery challan and counted returns, advance and dues in one ledger, WhatsApp reminders in Hindi — for tent houses, decorators, sound & DJ, utensils, generators and every rental business.",
     trust: ["हिंदी + English", "Works on any phone", "7 days free"],
     oneLiner:
-      "TentSaathi is a bilingual (Hindi/English) booking and accounts app by AIVEXA LLP for tent houses, decorators, sound and DJ, utensil, generator, shuttering, cooler and costume rental businesses in India. It tracks date-wise stock so double bookings are impossible, records advances and dues, counts goods back after an event with damage charges, issues invoices and shows real profit — and lists vendors in a public directory where customers can check availability.",
+      "TentSaathi is a bilingual (Hindi/English) booking and accounts app by AIVEXA LLP for tent houses, decorators, sound and DJ, utensil, generator, shuttering, cooler and costume rental businesses in India. It tracks date-wise stock so double bookings are impossible, records advances and dues, counts goods back after an event with damage charges, issues invoices and shows real profit, and gives a numbered receipt for every customer payment that can be sent to the customer on WhatsApp in one tap.",
     whyText:
       "Rental businesses lose money in two places: the same chairs promised to two weddings, and the balance nobody wrote down. TentSaathi makes every date know its own stock and every booking carry its own ledger — in Hindi, on the phone the owner already has.",
     features: [
@@ -220,7 +226,7 @@ export const aivexaApps: AivexaApp[] = [
       { icon: "💰", title: "Advance, dues & ledger", text: "Total hire, advance, later payments and breakage charges tracked separately — every balance is a real number." },
       { icon: "💬", title: "WhatsApp in Hindi", text: "Confirmation, challan and payment reminders go out on WhatsApp in Hindi." },
       { icon: "🧮", title: "GST invoices & profit", text: "Invoices with GST fields, and real profit after labour, diesel and godown rent — month-wise and item-wise." },
-      { icon: "📍", title: "Public vendor directory", text: "Customers nearby can see what you have free on a date and send a booking request." },
+      { icon: "🧾", title: "Receipt for every payment", text: "Every advance, rent or deposit gets its own numbered receipt with the balance still due — print it or send it to the customer on WhatsApp in one tap." },
       { icon: "📱", title: "No computer needed", text: "Runs in the phone browser and installs like an app; login with your phone number." },
     ],
     steps: [
@@ -245,6 +251,7 @@ export const aivexaApps: AivexaApp[] = [
       { q: "Do I need a computer?", a: "No. TentSaathi runs in your phone's browser and installs like an app. Login is with your phone number." },
       { q: "Which businesses can use it?", a: "Tent houses, decorators, sound & DJ, lighting, utensils & crockery, generators, kitchen/bhatti, shuttering, coolers & AC, costumes, cameras and other rentals." },
       { q: "Is there a free trial?", a: "Yes — the first week is free with no card needed; then a paid season pass. Current prices are on tentsaathi.com." },
+      { q: "Can I give my customer a receipt?", a: "Yes. Every payment you record — advance, rent or deposit — gets a numbered receipt (for example RCPT/2026-27/001) showing the balance still due. Print it or send it on WhatsApp in one tap. Refunds get their own series." },
       { q: "Is my customer data safe?", a: "Each vendor's bookings, customers, stock and accounts are visible only to that vendor." },
       { q: "Who makes TentSaathi?", a: "TentSaathi is built by AIVEXA LLP, Darbhanga, Bihar — it began with tent houses in Bihar and works anywhere in India." },
     ],
