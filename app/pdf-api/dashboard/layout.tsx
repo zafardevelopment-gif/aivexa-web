@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import {
   LayoutDashboard, Key, BarChart2, ScrollText,
-  FlaskConical, CreditCard, Settings, BookOpen, LogOut, Home
+  FlaskConical, CreditCard, Settings, BookOpen, LogOut, Home, Users
 } from "lucide-react";
 
 const navItems = [
@@ -24,6 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [email, setEmail] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const supabase = useMemo(() => createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -40,6 +41,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       }
       setEmail(session.user.email ?? "");
       setChecked(true);
+      fetch("/api/v1/admin/me", { headers: { Authorization: `Bearer ${session.access_token}` } })
+        .then((r) => r.json()).then((j) => setIsAdmin(!!j.admin)).catch(() => {});
     });
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") window.location.replace("/pdf-api/login");
@@ -67,7 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="pdfdash">
       <aside className="pdfdash-side">
         <div className="pdfdash-nav">
-          {navItems.map((item) => {
+          {[...navItems, ...(isAdmin ? [{ href: "/pdf-api/dashboard/users", label: "Users", icon: Users, exact: false }] : [])].map((item) => {
             const active = isActive(item.href, item.exact);
             const Icon = item.icon;
             return (
