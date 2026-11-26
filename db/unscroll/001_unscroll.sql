@@ -1,0 +1,157 @@
+-- Unscroll family backend — PostgreSQL schema (VPS database).
+-- Run once:  psql "$UNSCROLL_DATABASE_URL" -f db/unscroll/001_unscroll.sql
+-- Safe to re-run (IF NOT EXISTS everywhere).
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Parents (and individual users) who sign in with an email code.
+CREATE TABLE IF NOT EXISTS unscroll_users (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email         text NOT NULL UNIQUE,
+  display_name  text NOT NULL DEFAULT '',
+  role          text NOT NULL DEFAULT 'parent' CHECK (role IN ('individual', 'parent')),
+  family_id     uuid,
+  created_at    timestamptz NOT NULL DEFAULT now(),
+  last_seen_at  timestamptz
+);
+
+CREATE TABLE IF NOT EXISTS unscroll_families (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  owner_id    uuid NOT NULL REFERENCES unscroll_users(id) ON DELETE CASCADE,
+  -- IANA time zone used to decide "today" for bonus time and daily summaries.
+  time_zone   text NOT NULL DEFAULT 'Asia/Kolkata',
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+DO $$ BEGIN
+  ALTER TABLE unscroll_users ADD CONSTRAINT unscroll_users_family_fk FOREIGN KEY (family_id) REFERENCES unscroll_families(id) ON DELETE SET NULL;
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- One-time email sign-in codes (only a hash of the code is stored).
+CREATE TABLE IF NOT EXISTS unscroll_email_challenges (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email       text NOT NULL,
+  code_hash   text NOT NULL,
+  attempts    int  NOT NULL DEFAULT 0,
+  expires_at  timestamptz NOT NULL,
+  used_at     timestamptz,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS unscroll_email_challenges_email_idx ON unscroll_email_challenges (email, created_at DESC);
+
+-- Login sessions: opaque tokens, stored as SHA-256 hashes.
+CREATE TABLE IF NOT EXISTS unscroll_sessions (
+  id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id             uuid NOT NULL REFERENCES unscroll_users(id) ON DELETE CASCADE,
+  access_hash         text NOT NULL UNIQUE,
+  refresh_hash        text NOT NULL UNIQUE,
+  access_expires_at   timestamptz NOT NULL,
+  refresh_expires_at  timestamptz NOT NULL,
+  revoked_at          timestamptz,
+  created_at          timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS unscroll_sessions_user_idx ON unscroll_sessions (user_id);
+
+CREATE TABLE IF NOT EXISTS unscroll_children (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  family_id   uuid NOT NULL REFERENCES unscroll_families(id) ON DELETE CASCADE,
+  name        text NOT NULL,
+  birth_year  int,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS unscroll_children_family_idx ON unscroll_children (family_id);
+
+-- Short-lived 6-digit codes the parent shows and the child's phone enters.
+CREATE TABLE IF NOT EXISTS unscroll_pairing_codes (
+  code        text PRIMARY KEY,
+  child_id    uuid NOT NULL REFERENCES unscroll_children(id) ON DELETE CASCADE,
+  expires_at  timestamptz NOT NULL,
+  used_at     timestamptz,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+
+-- The child's phone. One active device per child; pairing again replaces it.
+CREATE TABLE IF NOT EXISTS unscroll_devices (
+  id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  child_id       uuid NOT NULL REFERENCES unscroll_children(id) ON DELETE CASCADE,
+  token_hash     text NOT NULL UNIQUE,
+  model          text NOT NULL DEFAULT '',
+  os             text NOT NULL DEFAULT 'android',
+  app_version    text NOT NULL DEFAULT '',
+  guard_running  boolean,
+  permissions    jsonb NOT NULL DEFAULT '{}'::jsonb,
+  last_sync_at   timestamptz,
+  revoked_at     timestamptz,
+  created_at     timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS unscroll_devices_child_idx ON unscroll_devices (child_id) WHERE revoked_at IS NULL;
+
+-- Rules the parent sets (RuleSet JSON from the app). bonus_day: the family-local day
+-- that rules.bonusMinutes were granted for; bonus time expires when the day changes.
+CREATE TABLE IF NOT EXISTS unscroll_rules (
+  child_id    uuid PRIMARY KEY REFERENCES unscroll_children(id) ON DELETE CASCADE,
+  rules       jsonb NOT NULL,
+  bonus_day   text,
+  updated_at  timestamptz NOT NULL DEFAULT now()
+);
+
+-- Daily usage uploaded by the child's phone (one row per child per local day).
+CREATE TABLE IF NOT EXISTS unscroll_usage_days (
+  child_id    uuid NOT NULL REFERENCES unscroll_children(id) ON DELETE CASCADE,
+  day_key     text NOT NULL,
+  total_ms    bigint NOT NULL DEFAULT 0,
+  unlocks     int,
+  apps        jsonb NOT NULL DEFAULT '[]'::jsonb,
+  source      text NOT NULL DEFAULT 'device',
+  updated_at  timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (child_id, day_key)
+);
+
+CREATE TABLE IF NOT EXISTS unscroll_extra_time_requests (
+  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  child_id         uuid NOT NULL REFERENCES unscroll_children(id) ON DELETE CASCADE,
+  package_name     text NOT NULL,
+  label            text NOT NULL,
+  minutes          int  NOT NULL CHECK (minutes BETWEEN 1 AND 600),
+  reason           text,
+  status           text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'denied')),
+  granted_minutes  int,
+  created_at       timestamptz NOT NULL DEFAULT now(),
+  decided_at       timestamptz
+);
+CREATE INDEX IF NOT EXISTS unscroll_requests_child_idx ON unscroll_extra_time_requests (child_id, created_at DESC);
+
+-- Alerts shown in the parent's app and sent as push notifications.
+CREATE TABLE IF NOT EXISTS unscroll_alerts (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  family_id   uuid NOT NULL REFERENCES unscroll_families(id) ON DELETE CASCADE,
+  child_id    uuid REFERENCES unscroll_children(id) ON DELETE CASCADE,
+  kind        text NOT NULL,
+  title       text NOT NULL,
+  body        text NOT NULL,
+  read        boolean NOT NULL DEFAULT false,
+  -- Prevents the same alert twice (e.g. one "limit reached" per app per day).
+  dedupe_key  text UNIQUE,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS unscroll_alerts_family_idx ON unscroll_alerts (family_id, created_at DESC);
+
+-- Firebase Cloud Messaging tokens, for a parent (user_id) or a child's phone (device_id).
+CREATE TABLE IF NOT EXISTS unscroll_push_tokens (
+  token       text PRIMARY KEY,
+  user_id     uuid REFERENCES unscroll_users(id) ON DELETE CASCADE,
+  device_id   uuid REFERENCES unscroll_devices(id) ON DELETE CASCADE,
+  platform    text NOT NULL DEFAULT 'android',
+  updated_at  timestamptz NOT NULL DEFAULT now(),
+  CHECK (user_id IS NOT NULL OR device_id IS NOT NULL)
+);
+CREATE INDEX IF NOT EXISTS unscroll_push_tokens_user_idx ON unscroll_push_tokens (user_id);
+CREATE INDEX IF NOT EXISTS unscroll_push_tokens_device_idx ON unscroll_push_tokens (device_id);
+
+-- Plan state (Google Play verification comes later; the owner build unlocks everything).
+CREATE TABLE IF NOT EXISTS unscroll_subscriptions (
+  user_id      uuid PRIMARY KEY REFERENCES unscroll_users(id) ON DELETE CASCADE,
+  tier         text NOT NULL DEFAULT 'free',
+  status       text NOT NULL DEFAULT 'none',
+  expires_at   timestamptz,
+  verified_at  timestamptz
+);

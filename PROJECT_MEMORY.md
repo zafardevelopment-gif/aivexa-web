@@ -35,3 +35,9 @@ Next.js 15 site for aivexallp.com. Last updated: 11 Oct 2026.
 - Miftah Juma Khutba admin/feed was built then removed (no official Haramain API; owner chose not to enter khutbas manually).
 - Admin App Analytics: `app/admin/(panel)/app-analytics/page.tsx`, `app/admin/app-actions.ts`.
 - Typecheck: `node_modules/.bin/tsc --noEmit -p .`
+
+## 4. Unscroll family backend (Nov 2026)
+- API for the Unscroll app at `/api/unscroll/v1/*` (catch-all route → `lib/unscroll/router.ts` → `lib/unscroll/handlers.ts`).
+- PostgreSQL on the VPS via `pg` (`UNSCROLL_DATABASE_URL`), schema `db/unscroll/001_unscroll.sql`; push via FCM HTTP v1 (`lib/unscroll/push.ts`).
+- Daily cron `POST /api/unscroll/cron/daily` (Bearer `UNSCROLL_CRON_SECRET`); health check `/api/unscroll/health`.
+- Setup steps: `db/unscroll/README.md`.
