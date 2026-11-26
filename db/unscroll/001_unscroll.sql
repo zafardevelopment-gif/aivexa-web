@@ -155,3 +155,58 @@ CREATE TABLE IF NOT EXISTS unscroll_subscriptions (
   expires_at   timestamptz,
   verified_at  timestamptz
 );
+
+-- Anonymous app opens for the admin App Analytics page (no account needed).
+-- install_id is a random id created by the app; no personal data.
+CREATE TABLE IF NOT EXISTS unscroll_daily_active (
+  install_id   text NOT NULL,
+  day          date NOT NULL,
+  mode         text NOT NULL DEFAULT 'individual',
+  app_version  text,
+  first_at     timestamptz NOT NULL DEFAULT now(),
+  last_at      timestamptz NOT NULL DEFAULT now(),
+  opens        int  NOT NULL DEFAULT 1,
+  PRIMARY KEY (install_id, day)
+);
+CREATE INDEX IF NOT EXISTS unscroll_daily_active_day_idx ON unscroll_daily_active (day);
+CREATE TABLE IF NOT EXISTS unscroll_app_opens (
+  install_id  text NOT NULL,
+  opened_at   timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS unscroll_app_opens_at_idx ON unscroll_app_opens (opened_at);
+
+-- Razorpay billing (website checkout, UPI Autopay / card).
+ALTER TABLE unscroll_subscriptions ADD COLUMN IF NOT EXISTS provider             text;
+ALTER TABLE unscroll_subscriptions ADD COLUMN IF NOT EXISTS plan_key             text;
+ALTER TABLE unscroll_subscriptions ADD COLUMN IF NOT EXISTS rzp_subscription_id  text;
+ALTER TABLE unscroll_subscriptions ADD COLUMN IF NOT EXISTS cancel_at_period_end boolean NOT NULL DEFAULT false;
+ALTER TABLE unscroll_subscriptions ADD COLUMN IF NOT EXISTS updated_at           timestamptz NOT NULL DEFAULT now();
+
+-- Razorpay plan ids, created automatically the first time a plan is bought (re-created if the price changes).
+CREATE TABLE IF NOT EXISTS unscroll_rzp_plans (
+  plan_key     text PRIMARY KEY,
+  amount       int  NOT NULL,           -- paise, incl. GST
+  rzp_plan_id  text NOT NULL,
+  created_at   timestamptz NOT NULL DEFAULT now()
+);
+
+-- Every checkout the app starts (one Razorpay subscription each).
+CREATE TABLE IF NOT EXISTS unscroll_rzp_checkouts (
+  rzp_subscription_id  text PRIMARY KEY,
+  user_id              uuid NOT NULL REFERENCES unscroll_users(id) ON DELETE CASCADE,
+  plan_key             text NOT NULL,
+  status               text NOT NULL DEFAULT 'created',
+  created_at           timestamptz NOT NULL DEFAULT now(),
+  updated_at           timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS unscroll_rzp_checkouts_user_idx ON unscroll_rzp_checkouts (user_id, created_at DESC);
+
+-- Successful payments (first payment + every renewal). Safe against duplicates.
+CREATE TABLE IF NOT EXISTS unscroll_payments (
+  payment_id           text PRIMARY KEY,
+  user_id              uuid REFERENCES unscroll_users(id) ON DELETE SET NULL,
+  plan_key             text NOT NULL,
+  amount               int  NOT NULL,   -- paise
+  rzp_subscription_id  text,
+  created_at           timestamptz NOT NULL DEFAULT now()
+);

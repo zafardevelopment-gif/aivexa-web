@@ -48,11 +48,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // App landing pages in every language, each listing its hreflang siblings.
     ...langEntries("/calivo-ai", ["en", "hi", "ur", "ar"]),
     ...langEntries("/miftah", ["en", "hi", "ur", "bn", "ml", "ar", "id"]),
+    ...langEntries("/unscroll", ["en", "hi"]),
     { url: `${BASE_URL}/myrentsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/testsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/tentsaathi`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/ai-munim`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/calivo-ai/privacy-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/unscroll/privacy-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const categoryEntries: MetadataRoute.Sitemap = toolCategories.map((cat) => ({

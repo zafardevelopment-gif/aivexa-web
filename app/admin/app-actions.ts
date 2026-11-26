@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { ADMIN_COOKIE, verifyToken } from "@/lib/admin-auth";
+import { q as unscrollQ } from "@/lib/unscroll/db";
 
 // ─────────────────────────────────────────────────────────────────────
 // App Analytics for the admin panel: CALIVO AI (live from the CALIVO
@@ -346,7 +347,7 @@ function referrerLabel(ref: string | null): string {
 }
 
 /** Traffic to an app's pages on aivexallp.com (/calivo…, /miftah…, its blog). */
-export async function getAppTraffic(app: "calivo" | "miftah", days = 30): Promise<AppTraffic> {
+export async function getAppTraffic(app: "calivo" | "miftah" | "unscroll", days = 30): Promise<AppTraffic> {
   const empty: AppTraffic = {
     error: "",
     days,
@@ -432,4 +433,127 @@ export async function getAppTraffic(app: "calivo" | "miftah", days = 30): Promis
       device: [r.device_type, r.os].filter(Boolean).join(" · ") || "—",
     })),
   };
+}
+
+
+// ───────────────────────────── Unscroll (VPS PostgreSQL) ─────────────────────────────
+
+export interface UnscrollStats {
+  error: string;
+  configured: boolean;
+  activeToday: number;
+  activeYesterday: number;
+  active7d: number;
+  active30d: number;
+  installsSeen: number;
+  dailyActive: { date: string; count: number }[];
+  opensByHour: number[]; // 24 buckets, IST, last 7 days
+  modes: { label: string; count: number }[]; // last 30 days
+  versions: { label: string; count: number }[]; // last 7 days
+  parents: number;
+  signupsToday: number;
+  signups7d: number;
+  signups30d: number;
+  families: number;
+  children: number;
+  devicesPaired: number;
+  devicesSynced24h: number;
+  pushTokens: number;
+  requests30d: number;
+  requestsApproved30d: number;
+  requestsPending: number;
+  alerts7d: number;
+  dailySignups: { date: string; count: number }[];
+  recent: { email: string; created_at: string; children: number }[];
+  metric: AppMetric;
+}
+
+const IST_TODAY = "(now() AT TIME ZONE 'Asia/Kolkata')::date";
+
+export async function getUnscrollStats(): Promise<UnscrollStats> {
+  const base: UnscrollStats = {
+    error: "", configured: false,
+    activeToday: 0, activeYesterday: 0, active7d: 0, active30d: 0, installsSeen: 0,
+    dailyActive: [], opensByHour: [], modes: [], versions: [],
+    parents: 0, signupsToday: 0, signups7d: 0, signups30d: 0, families: 0, children: 0,
+    devicesPaired: 0, devicesSynced24h: 0, pushTokens: 0,
+    requests30d: 0, requestsApproved30d: 0, requestsPending: 0, alerts7d: 0,
+    dailySignups: [], recent: [], metric: EMPTY_METRIC,
+  };
+  if (!(await isAdmin())) return { ...base, error: "Not authorised" };
+  base.metric = await getMetric("unscroll");
+  if (!process.env.UNSCROLL_DATABASE_URL) {
+    return { ...base, error: "UNSCROLL_DATABASE_URL is not set in .env.local on the server." };
+  }
+  base.configured = true;
+  const n = (v: unknown) => Number(v ?? 0);
+  try {
+    const [act] = await unscrollQ<Record<string, string>>(`
+      SELECT
+        count(DISTINCT install_id) FILTER (WHERE day = ${IST_TODAY})            AS today,
+        count(DISTINCT install_id) FILTER (WHERE day = ${IST_TODAY} - 1)        AS yesterday,
+        count(DISTINCT install_id) FILTER (WHERE day > ${IST_TODAY} - 7)        AS d7,
+        count(DISTINCT install_id) FILTER (WHERE day > ${IST_TODAY} - 30)       AS d30,
+        count(DISTINCT install_id)                                              AS seen
+      FROM unscroll_daily_active`);
+    const daily = await unscrollQ<{ d: string; c: string }>(`
+      SELECT to_char(g::date, 'YYYY-MM-DD') AS d, count(DISTINCT a.install_id) AS c
+      FROM generate_series(${IST_TODAY} - 29, ${IST_TODAY}, interval '1 day') g
+      LEFT JOIN unscroll_daily_active a ON a.day = g::date
+      GROUP BY g ORDER BY g`);
+    const hours = await unscrollQ<{ h: string; c: string }>(`
+      SELECT extract(hour FROM opened_at AT TIME ZONE 'Asia/Kolkata')::int AS h, count(*) AS c
+      FROM unscroll_app_opens WHERE opened_at > now() - interval '7 days' GROUP BY 1`);
+    const modes = await unscrollQ<{ label: string; c: string }>(`
+      SELECT mode AS label, count(DISTINCT install_id) AS c FROM unscroll_daily_active
+      WHERE day > ${IST_TODAY} - 30 GROUP BY mode ORDER BY 2 DESC`);
+    const versions = await unscrollQ<{ label: string; c: string }>(`
+      SELECT coalesce(app_version, 'unknown') AS label, count(DISTINCT install_id) AS c FROM unscroll_daily_active
+      WHERE day > ${IST_TODAY} - 7 GROUP BY 1 ORDER BY 2 DESC LIMIT 6`);
+    const [acc] = await unscrollQ<Record<string, string>>(`
+      SELECT
+        (SELECT count(*) FROM unscroll_users)                                                        AS parents,
+        (SELECT count(*) FROM unscroll_users WHERE created_at >= date_trunc('day', now() AT TIME ZONE 'Asia/Kolkata') AT TIME ZONE 'Asia/Kolkata') AS today,
+        (SELECT count(*) FROM unscroll_users WHERE created_at > now() - interval '7 days')            AS d7,
+        (SELECT count(*) FROM unscroll_users WHERE created_at > now() - interval '30 days')           AS d30,
+        (SELECT count(*) FROM unscroll_families)                                                     AS families,
+        (SELECT count(*) FROM unscroll_children)                                                     AS children,
+        (SELECT count(*) FROM unscroll_devices WHERE revoked_at IS NULL)                             AS paired,
+        (SELECT count(*) FROM unscroll_devices WHERE revoked_at IS NULL AND last_sync_at > now() - interval '24 hours') AS synced,
+        (SELECT count(*) FROM unscroll_push_tokens)                                                  AS tokens,
+        (SELECT count(*) FROM unscroll_extra_time_requests WHERE created_at > now() - interval '30 days') AS req30,
+        (SELECT count(*) FROM unscroll_extra_time_requests WHERE created_at > now() - interval '30 days' AND status = 'approved') AS appr30,
+        (SELECT count(*) FROM unscroll_extra_time_requests WHERE status = 'pending')                 AS pending,
+        (SELECT count(*) FROM unscroll_alerts WHERE created_at > now() - interval '7 days')           AS alerts7`);
+    const signups = await unscrollQ<{ d: string; c: string }>(`
+      SELECT to_char(g::date, 'YYYY-MM-DD') AS d, count(u.id) AS c
+      FROM generate_series(${IST_TODAY} - 29, ${IST_TODAY}, interval '1 day') g
+      LEFT JOIN unscroll_users u ON (u.created_at AT TIME ZONE 'Asia/Kolkata')::date = g::date
+      GROUP BY g ORDER BY g`);
+    const recent = await unscrollQ<{ email: string; created_at: Date; children: string }>(`
+      SELECT u.email, u.created_at,
+        (SELECT count(*) FROM unscroll_children c WHERE c.family_id = u.family_id) AS children
+      FROM unscroll_users u ORDER BY u.created_at DESC LIMIT 12`);
+
+    const byHour = new Array(24).fill(0) as number[];
+    for (const r of hours) byHour[n(r.h)] = n(r.c);
+    const modeName: Record<string, string> = { individual: "Self (own phone)", parent: "Parent", child: "Child phone" };
+    return {
+      ...base,
+      activeToday: n(act?.today), activeYesterday: n(act?.yesterday), active7d: n(act?.d7), active30d: n(act?.d30),
+      installsSeen: n(act?.seen),
+      dailyActive: daily.map((r) => ({ date: r.d, count: n(r.c) })),
+      opensByHour: byHour,
+      modes: modes.map((r) => ({ label: modeName[r.label] ?? r.label, count: n(r.c) })),
+      versions: versions.map((r) => ({ label: r.label, count: n(r.c) })),
+      parents: n(acc?.parents), signupsToday: n(acc?.today), signups7d: n(acc?.d7), signups30d: n(acc?.d30),
+      families: n(acc?.families), children: n(acc?.children),
+      devicesPaired: n(acc?.paired), devicesSynced24h: n(acc?.synced), pushTokens: n(acc?.tokens),
+      requests30d: n(acc?.req30), requestsApproved30d: n(acc?.appr30), requestsPending: n(acc?.pending), alerts7d: n(acc?.alerts7),
+      dailySignups: signups.map((r) => ({ date: r.d, count: n(r.c) })),
+      recent: recent.map((r) => ({ email: r.email, created_at: new Date(r.created_at).toISOString(), children: n(r.children) })),
+    };
+  } catch (e) {
+    return { ...base, error: `Unscroll database: ${e instanceof Error ? e.message : String(e)}` };
+  }
 }

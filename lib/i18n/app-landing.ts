@@ -7,6 +7,8 @@ import { LANG_META, type LandingContent, type LangCode } from "@/lib/landing-i18
 import { langPath, type LandingApp } from "@/components/LocalizedAppLanding";
 import { MIFTAH_CONTENT, MIFTAH_LANGS } from "./miftah-content";
 import { CALIVO_CONTENT, CALIVO_LANGS } from "./calivo-content";
+import { UNSCROLL_CONTENT, UNSCROLL_LANGS } from "./unscroll-content";
+import { unscroll, unscrollPlayUrl, UNSCROLL_PLAY_URL_CLEAN, UNSCROLL_PACKAGE, UNSCROLL_ON_PLAY } from "@/lib/unscroll-app";
 
 const GOLD = "#C7A25A";
 
@@ -52,8 +54,31 @@ export const calivoApp: LandingApp = {
   posts: blogPosts.filter((p) => p.cta === "calivo").slice(0, 6),
 };
 
-export function contentFor(app: "miftah" | "calivo", lang: string): LandingContent | null {
-  const map = app === "miftah" ? MIFTAH_CONTENT : CALIVO_CONTENT;
+export const unscrollApp: LandingApp = {
+  name: "Unscroll",
+  basePath: "/unscroll",
+  langs: UNSCROLL_LANGS,
+  icon: "/unscroll/unscroll-icon.png",
+  playUrl: unscrollPlayUrl,
+  playUrlClean: UNSCROLL_PLAY_URL_CLEAN,
+  badgeImg: PLAY_BADGE_IMG,
+  category: "LifestyleApplication",
+  subCategory: "Screen time, parental control, app blocker",
+  alternateNames: ["Unscroll: Screen Time & Parental Control", "Unscroll by AIVEXA"],
+  privacyHref: "/unscroll/privacy-policy",
+  supportEmail: unscroll.supportEmail,
+  screenshots: [],
+  brandStyle: { "--cv-green": "#2F6F5E", "--cv-green-d": "#1F4F43", "--cv-green-l": "#EEF4F1" } as React.CSSProperties,
+  heroBackground: "radial-gradient(1100px 480px at 85% 10%, #DDEFE8 0%, transparent 60%), linear-gradient(180deg, #F6FAF8 0%, #fff 100%)",
+  h1Gradient: "linear-gradient(90deg, #1F4F43, #2F6F5E)",
+  bandBackground: "linear-gradient(135deg, #1F4F43 0%, #2F6F5E 60%, #4E8C7A 100%)",
+  stepBackground: "linear-gradient(135deg, #2F6F5E, #1F4F43)",
+  heroVisual: "card",
+  comingSoon: !UNSCROLL_ON_PLAY,
+};
+
+export function contentFor(app: "miftah" | "calivo" | "unscroll", lang: string): LandingContent | null {
+  const map = app === "miftah" ? MIFTAH_CONTENT : app === "unscroll" ? UNSCROLL_CONTENT : CALIVO_CONTENT;
   return map[lang] ?? null;
 }
 
@@ -84,4 +109,5 @@ export function landingMetadata(app: LandingApp, lang: LangCode, c: LandingConte
 
 export const MIFTAH_OG = "/miftah/miftah-og.png";
 export const CALIVO_OG = "/calivo/calivo-og.png";
-export { MIFTAH_PACKAGE, CALIVO_PACKAGE };
+export const UNSCROLL_OG = "/unscroll/unscroll-og.png";
+export { MIFTAH_PACKAGE, CALIVO_PACKAGE, UNSCROLL_PACKAGE };

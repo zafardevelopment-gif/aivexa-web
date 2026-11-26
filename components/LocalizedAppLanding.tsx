@@ -26,6 +26,8 @@ export interface LandingApp {
   /** "card" = Miftah prayer card, "phones" = two screenshots. */
   heroVisual: "card" | "phones";
   footNote?: string;
+  /** Not on Google Play yet: show a "Coming soon" pill instead of the Play badge. */
+  comingSoon?: boolean;
   posts?: { slug: string; title: string; description: string }[];
 }
 
@@ -34,6 +36,19 @@ export function langPath(app: Pick<LandingApp, "basePath">, lang: LangCode): str
 }
 
 function PlayBadge({ app, source, height, alt }: { app: LandingApp; source: string; height: number; alt: string }) {
+  if (app.comingSoon) {
+    return (
+      <a
+        href={`mailto:${app.supportEmail}?subject=${encodeURIComponent(`Notify me: ${app.name} on Google Play`)}`}
+        style={{
+          display: "inline-flex", alignItems: "center", gap: ".5rem", height, padding: "0 1.2rem", borderRadius: 12,
+          background: "#111827", color: "#fff", fontWeight: 700, textDecoration: "none", fontSize: ".95rem",
+        }}
+      >
+        ▶ Coming soon on Google Play · Notify me
+      </a>
+    );
+  }
   return (
     <a href={app.playUrl(source)} target="_blank" rel="noopener" aria-label={alt} style={{ display: "inline-block", lineHeight: 0 }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -99,9 +114,7 @@ export default function LocalizedAppLanding({ app, lang, c }: { app: LandingApp;
       description: c.what[0],
       url,
       inLanguage: lang,
-      downloadUrl: app.playUrlClean,
-      installUrl: app.playUrlClean,
-      sameAs: [app.playUrlClean],
+      ...(app.comingSoon ? {} : { downloadUrl: app.playUrlClean, installUrl: app.playUrlClean, sameAs: [app.playUrlClean] }),
       operatingSystem: "Android",
       applicationCategory: app.category,
       applicationSubCategory: app.subCategory,

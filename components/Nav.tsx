@@ -19,6 +19,7 @@ const links: { href: string; label: string; newTab?: boolean; badge?: string }[]
 const mobileApps: { href: string; label: string; sub: string; badge?: string }[] = [
   { href: "/calivo-ai", label: "CALIVO AI", sub: "AI calorie counter & diet coach", badge: "New" },
   { href: "/miftah", label: "Miftah", sub: "Prayer times, Azan, Qibla & Quran" },
+  { href: "/unscroll", label: "Unscroll", sub: "Screen time & parental control", badge: "Soon" },
 ];
 
 export default function Nav({ siteName }: { siteName: string }) {

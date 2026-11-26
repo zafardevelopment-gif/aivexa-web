@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Unscroll · Secure payment</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;margin:0;color:#1b1f2a;text-align:center;padding:0 20px;background:#f6f8fb}
+  img{width:64px;height:64px;border-radius:16px}
+  h1{font-size:18px;margin:14px 0 4px}
+  p{color:#5b6270;margin:4px 0}
+  button{margin-top:18px;padding:12px 24px;border:0;border-radius:12px;background:#2f6f5e;color:#fff;font-size:16px;font-weight:600}
+  a{margin-top:16px;color:#5b6270}
+</style>
+</head>
+<body>
+<img src="/unscroll/unscroll-icon.png" alt="Unscroll">
+<h1 id="plan">Unscroll</h1>
+<p id="msg">Opening secure payment…</p>
+<button id="pay" style="display:none">Pay securely</button>
+<a href="/pay/unscroll-done.html?status=cancelled" id="back">Cancel and return to the app</a>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+(function () {
+  // Opened by the Unscroll app with: sub, key, email, plan (from /api/unscroll/v1/billing/razorpay/checkout).
+  var q = new URLSearchParams(location.search);
+  var sub = q.get("sub") || "", key = q.get("key") || "", email = q.get("email") || "", plan = q.get("plan") || "Unscroll Premium";
+  var msg = document.getElementById("msg"), btn = document.getElementById("pay");
+  document.getElementById("plan").textContent = plan;
+  if (!/^sub_[A-Za-z0-9]+$/.test(sub) || !/^rzp_(live|test)_[A-Za-z0-9]+$/.test(key)) {
+    msg.textContent = "Invalid payment link. Please start again from the Unscroll app.";
+    document.getElementById("back").style.display = "none";
+    return;
+  }
+  function goCancel() { location.href = "/pay/unscroll-done.html?status=cancelled"; }
+  function openPay() {
+    if (!window.Razorpay) { msg.textContent = "Could not load payment. Check your internet and try again."; btn.style.display = "inline-block"; return; }
+    var rz = new Razorpay({
+      key: key,
+      subscription_id: sub,
+      name: "Unscroll",
+      description: plan + " (auto-renews, cancel anytime)",
+      image: location.origin + "/unscroll/unscroll-icon.png",
+      prefill: email ? { email: email } : {},
+      theme: { color: "#2f6f5e" },
+      callback_url: location.origin + "/api/unscroll/pay/return",
+      redirect: true,
+      modal: { ondismiss: goCancel }
+    });
+    rz.on("payment.failed", function (r) {
+      msg.textContent = (r && r.error && r.error.description) || "Payment failed. Please try again.";
+      btn.style.display = "inline-block";
+    });
+    rz.open();
+  }
+  btn.onclick = openPay;
+  window.addEventListener("load", openPay);
+})();
+</script>
+</body>
+</html>

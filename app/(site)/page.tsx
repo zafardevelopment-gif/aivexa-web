@@ -103,7 +103,7 @@ export default async function Home() {
                   <Logo src={m.icon} name={m.name} size={30} />
                   <span>
                     <b>{m.name}</b>
-                    <small>Android app</small>
+                    <small>{m.play ? "Android app" : "Android · coming soon"}</small>
                   </span>
                 </Link>
               ))}
@@ -206,9 +206,15 @@ export default async function Home() {
                       <Link href={m.href} className="lp-btn lp-btn-primary">
                         View details <ArrowRight size={15} strokeWidth={2.2} />
                       </Link>
-                      <a href={m.play} target="_blank" rel="noopener" className="lp-btn lp-btn-ghost">
-                        <Smartphone size={14} strokeWidth={2.2} /> Get on Google Play
-                      </a>
+                      {m.play ? (
+                        <a href={m.play} target="_blank" rel="noopener" className="lp-btn lp-btn-ghost">
+                          <Smartphone size={14} strokeWidth={2.2} /> Get on Google Play
+                        </a>
+                      ) : (
+                        <span className="lp-btn lp-btn-ghost" style={{ cursor: "default" }}>
+                          <Smartphone size={14} strokeWidth={2.2} /> Coming soon on Google Play
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>

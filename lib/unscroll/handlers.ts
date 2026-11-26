@@ -7,6 +7,7 @@ import { createAlert } from "./alerts";
 import { pushToChild } from "./push";
 import { emptyRules, familyTimeZone, loadRules, sanitizeRules, saveRules } from "./rules";
 import { dayKeyIn, fmtDuration } from "./time";
+import { cancelAtPeriodEnd, isPlanKey, publicPlans, startCheckout } from "./billing";
 
 type Params = Record<string, string>;
 type H = (req: Request, p: Params, url: URL) => Promise<Response>;
@@ -386,12 +387,34 @@ const devicePushToken: H = async req => {
 
 const subscription: H = async req => {
   const u = await requireUser(req);
-  // Owner build: everything unlocked until Google Play billing is switched on.
-  if (process.env.UNSCROLL_UNLOCK_ALL !== "false") {
-    return ok({ tier: "family_premium", status: "active", expiresAtMs: null, verifiedAtMs: Date.now() });
+  const s = await one<{ tier: string; status: string; expires_at: Date | null; verified_at: Date | null; plan_key: string | null; cancel_at_period_end: boolean | null; provider: string | null }>(
+    `SELECT tier, status, expires_at, verified_at, plan_key, cancel_at_period_end, provider FROM unscroll_subscriptions WHERE user_id = $1`, [u.id]);
+  const paidActive = !!s && s.status === "active" && (!s.expires_at || new Date(s.expires_at).getTime() > Date.now());
+  const extra = { planKey: s?.plan_key ?? null, cancelAtPeriodEnd: !!s?.cancel_at_period_end, provider: s?.provider ?? null, paid: paidActive };
+  // Owner build: everything unlocked until paid plans are switched on (UNSCROLL_UNLOCK_ALL=false).
+  if (process.env.UNSCROLL_UNLOCK_ALL !== "false" && !paidActive) {
+    return ok({ tier: "family_premium", status: "active", expiresAtMs: null, verifiedAtMs: Date.now(), ...extra });
   }
-  const s = await one<{ tier: string; status: string; expires_at: Date | null; verified_at: Date | null }>(`SELECT * FROM unscroll_subscriptions WHERE user_id = $1`, [u.id]);
-  return ok({ tier: s?.tier ?? "free", status: s?.status ?? "none", expiresAtMs: s?.expires_at ? new Date(s.expires_at).getTime() : null, verifiedAtMs: s?.verified_at ? new Date(s.verified_at).getTime() : null });
+  if (!s || !paidActive) {
+    return ok({ tier: "free", status: s?.expires_at ? "expired" : "none", expiresAtMs: s?.expires_at ? new Date(s.expires_at).getTime() : null, verifiedAtMs: Date.now(), ...extra });
+  }
+  return ok({ tier: s.tier, status: "active", expiresAtMs: s.expires_at ? new Date(s.expires_at).getTime() : null, verifiedAtMs: Date.now(), ...extra });
+};
+
+const billingPlans: H = async () => ok({ plans: publicPlans() });
+
+const razorpayCheckout: H = async req => {
+  const u = await requireUser(req);
+  const b = await body<{ plan?: string }>(req);
+  if (!isPlanKey(b.plan)) throw new HttpError(400, "Choose a valid plan");
+  limit(`checkout:${u.id}`, 10, 60 * 60_000);
+  return ok(await startCheckout({ id: u.id, email: u.email }, b.plan));
+};
+
+const razorpayCancel: H = async req => {
+  const u = await requireUser(req);
+  await cancelAtPeriodEnd(u.id);
+  return noContent();
 };
 
 const verifyPurchase: H = async req => {
@@ -402,6 +425,32 @@ const verifyPurchase: H = async req => {
 const weeklyInsights: H = async req => {
   await requireUser(req);
   return ok({ items: [] });
+};
+
+/* ================= Anonymous app-open ping (admin analytics) ================= */
+
+/** Counts an app open at most once per 15 minutes per install. No account, no personal data. */
+const appPing: H = async req => {
+  const b = await body<{ installId?: string; mode?: string; version?: string }>(req);
+  const installId = str(b.installId, "installId", 64);
+  if (!/^[A-Za-z0-9_-]{8,64}$/.test(installId)) throw new HttpError(400, "Invalid installId");
+  const mode = b.mode === "parent" || b.mode === "child" ? b.mode : "individual";
+  const version = typeof b.version === "string" ? b.version.slice(0, 20) : null;
+  limit(`ping:${ip(req)}`, 120, 60 * 60_000);
+  const day = dayKeyIn("Asia/Kolkata");
+  const row = await one<{ counted: boolean }>(
+    `INSERT INTO unscroll_daily_active (install_id, day, mode, app_version)
+       VALUES ($1, $2::date, $3, $4)
+     ON CONFLICT (install_id, day) DO UPDATE SET
+       mode = EXCLUDED.mode,
+       app_version = COALESCE(EXCLUDED.app_version, unscroll_daily_active.app_version),
+       opens = unscroll_daily_active.opens + CASE WHEN unscroll_daily_active.last_at < now() - interval '15 minutes' THEN 1 ELSE 0 END,
+       last_at = CASE WHEN unscroll_daily_active.last_at < now() - interval '15 minutes' THEN now() ELSE unscroll_daily_active.last_at END
+     RETURNING (last_at = now()) AS counted`,
+    [installId, day, mode, version],
+  );
+  if (row?.counted) await q(`INSERT INTO unscroll_app_opens (install_id) VALUES ($1)`, [installId]);
+  return noContent();
 };
 
 /* ================= Route table ================= */
@@ -437,4 +486,8 @@ export const routes: Array<[method: string, pattern: string, handler: H]> = [
   ["GET", "subscription", subscription],
   ["POST", "subscription/google-play/verify", verifyPurchase],
   ["POST", "insights/weekly", weeklyInsights],
+  ["POST", "app/ping", appPing],
+  ["GET", "billing/plans", billingPlans],
+  ["POST", "billing/razorpay/checkout", razorpayCheckout],
+  ["POST", "billing/razorpay/cancel", razorpayCancel],
 ];

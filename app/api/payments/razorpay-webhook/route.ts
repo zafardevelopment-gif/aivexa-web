@@ -1,13 +1,14 @@
 /**
  * POST /api/payments/razorpay-webhook
  * Razorpay → AIVEXA PDF API. Handles auto-pay renewals and status changes.
- * Only events whose subscription notes say product = "pdf-api" are processed;
+ * Events with subscription notes product = "pdf-api" or "unscroll" are processed;
  * everything else (other apps on the same Razorpay account) is acknowledged and ignored.
  */
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { applySubscriptionPayment, Cycle } from "@/lib/pdf-api/subscriptions";
+import { handleWebhook as handleUnscrollWebhook } from "@/lib/unscroll/billing";
 
 export const runtime = "nodejs";
 
@@ -29,6 +30,10 @@ export async function POST(req: NextRequest) {
   try { evt = JSON.parse(raw); } catch { return NextResponse.json({ ok: true }); }
 
   const sub = evt.payload?.subscription?.entity;
+  if (sub?.notes?.product === "unscroll") {
+    try { await handleUnscrollWebhook(evt); } catch (e) { console.error("[unscroll] webhook", e); return NextResponse.json({ error: "retry" }, { status: 500 }); }
+    return NextResponse.json({ ok: true });
+  }
   if (!sub || sub.notes?.product !== "pdf-api") return NextResponse.json({ ok: true, ignored: true });
 
   const db = supabaseAdmin();

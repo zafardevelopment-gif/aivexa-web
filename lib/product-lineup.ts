@@ -48,6 +48,16 @@ export const MOBILE_APPS = [
     href: "/miftah",
     play: "https://play.google.com/store/apps/details?id=com.aivexallp.miftah",
   },
+  {
+    slug: "unscroll",
+    name: "Unscroll",
+    icon: "/unscroll/unscroll-icon.png",
+    tagline: "Screen time & parental control",
+    short: "App-wise time limits, website blocking in every browser, PIN or fingerprint lock, and a family mode where parents set the rules for their child's phone.",
+    href: "/unscroll",
+    // null until the Play listing is live (also flip UNSCROLL_ON_PLAY in lib/unscroll-app.ts)
+    play: null,
+  },
 ] as const;
 
 export const COMING_SOON: { slug: string; name: string; icon: string; tagline: string }[] = [

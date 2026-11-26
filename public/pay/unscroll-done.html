@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Unscroll · Payment</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;margin:0;color:#1b1f2a;text-align:center;padding:0 24px;background:#f6f8fb}
+  img{width:64px;height:64px;border-radius:16px}
+  h1{font-size:20px;margin:16px 0 6px}
+  p{color:#5b6270;max-width:360px;line-height:1.5}
+  .ok{color:#15803d}.bad{color:#b91c1c}
+</style>
+</head>
+<body>
+<img src="/unscroll/unscroll-icon.png" alt="Unscroll">
+<h1 id="t">Payment</h1>
+<p id="m"></p>
+<p style="font-size:14px">You can close this page and go back to the Unscroll app.</p>
+<script>
+  var s = new URLSearchParams(location.search).get("status");
+  var t = document.getElementById("t"), m = document.getElementById("m");
+  if (s === "success") { t.textContent = "Payment successful ✓"; t.className = "ok"; m.textContent = "Your plan is now active. Open Unscroll — it updates in a few seconds. A receipt is on its way to your email."; }
+  else if (s === "cancelled") { t.textContent = "Payment cancelled"; m.textContent = "No money was taken. You can choose a plan again any time from Settings › Plans in the app."; }
+  else { t.textContent = "Payment not completed"; t.className = "bad"; m.textContent = "If money was debited, it will be confirmed automatically within a few minutes or refunded by Razorpay. Need help? Email support@aivexallp.com."; }
+</script>
+</body>
+</html>

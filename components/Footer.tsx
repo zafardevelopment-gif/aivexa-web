@@ -27,6 +27,7 @@ export default function Footer({ settings }: { settings: Settings }) {
             <Link href="/ai-munim">AI Munim</Link>
             <Link href="/calivo-ai">CALIVO AI (Calorie App)</Link>
             <Link href="/miftah">Miftah (Prayer Times &amp; Quran App)</Link>
+            <Link href="/unscroll">Unscroll (Screen Time &amp; Parental Control)</Link>
           </div>
         </div>
         <div>

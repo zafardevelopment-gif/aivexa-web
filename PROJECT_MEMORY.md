@@ -41,3 +41,11 @@ Next.js 15 site for aivexallp.com. Last updated: 11 Oct 2026.
 - PostgreSQL on the VPS via `pg` (`UNSCROLL_DATABASE_URL`), schema `db/unscroll/001_unscroll.sql`; push via FCM HTTP v1 (`lib/unscroll/push.ts`).
 - Daily cron `POST /api/unscroll/cron/daily` (Bearer `UNSCROLL_CRON_SECRET`); health check `/api/unscroll/health`.
 - Setup steps: `db/unscroll/README.md`.
+- Website: landing `/unscroll` (+ `/unscroll/hi`) from `lib/unscroll-app.ts` + `lib/i18n/unscroll-content.ts`; privacy `/unscroll/privacy-policy`.
+  Not on Play yet → `UNSCROLL_ON_PLAY=false` (shows "Coming soon") and `play: null` in `lib/product-lineup.ts`; flip both at launch.
+- Payments: Razorpay subscriptions (`lib/unscroll/billing.ts`, plans + prices in PLANS, incl. GST). App → `POST /v1/billing/razorpay/checkout`
+  → opens `/pay/unscroll.html` → Razorpay → `POST /api/unscroll/pay/return` (signature check, unlock) → `/pay/unscroll-done.html`.
+  Renewals/cancellations via the shared webhook `/api/payments/razorpay-webhook` (notes.product = "unscroll").
+  `UNSCROLL_UNLOCK_ALL=true` keeps everything free for testing; set false when paid plans go live.
+- Admin App Analytics → Unscroll tab (`getUnscrollStats`): anonymous app opens (`POST /v1/app/ping` → unscroll_daily_active / unscroll_app_opens) + family/account counts.
+- DB setup/upgrade on the VPS: `bash db/unscroll/setup-unscroll-db.sh` (DB "unscroll" inside the aivexa-db Supabase container, port 6002; re-run after SQL changes).

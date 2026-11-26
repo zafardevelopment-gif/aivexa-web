@@ -48,5 +48,11 @@ export async function POST(req: Request) {
         body: "The phone may be off, offline, or Unscroll may have been stopped.", dedupeKey: `nosync:${c.id}:${today}` })) stale++;
     }
   }
+  // Retention (see /unscroll/privacy-policy): keep child usage 90 days, anonymous opens 180 days.
+  await q(`DELETE FROM unscroll_usage_days WHERE updated_at < now() - interval '90 days'`);
+  await q(`DELETE FROM unscroll_app_opens WHERE opened_at < now() - interval '180 days'`);
+  await q(`DELETE FROM unscroll_daily_active WHERE day < (now() AT TIME ZONE 'Asia/Kolkata')::date - 400`);
+  await q(`DELETE FROM unscroll_email_challenges WHERE created_at < now() - interval '7 days'`);
+  await q(`DELETE FROM unscroll_alerts WHERE created_at < now() - interval '90 days'`);
   return NextResponse.json({ ok: true, children: children.length, summaries, stale });
 }
