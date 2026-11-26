@@ -16,11 +16,11 @@ export const UNSCROLL_PLAY_URL_CLEAN = `https://play.google.com/store/apps/detai
 
 export const unscroll = {
   name: "Unscroll",
-  tagline: "Screen time control & parental control for Indian families",
+  tagline: "Screen time control & parental control for families",
   oneLiner:
     "Unscroll is an Android app by AIVEXA LLP that helps you and your children use the phone less — app-wise time limits, focus and bedtime schedules, a strict mode with no easy bypass, website blocking in every browser, app lock with PIN or fingerprint, and a family mode where parents set the rules for their children's phones.",
   platform: "Android (Google Play)",
-  price: "Free to download. Pro ₹49/month or ₹299/year · Family ₹99/month or ₹599/year (incl. GST, up to 5 children's phones).",
+  price: "Free to download. Optional Pro and Family plans (monthly or yearly) — Family covers up to 5 children's phones. Prices are shown in the app.",
   supportEmail: "support@aivexallp.com",
 
   features: [
@@ -45,7 +45,7 @@ export const unscroll = {
 
   audience: [
     "Parents who want to control their child's phone time without daily fights",
-    "Students preparing for board exams, NEET, JEE or UPSC who keep getting pulled into Reels",
+    "Students preparing for exams who keep getting pulled into Reels and Shorts",
     "Working professionals who want focused office hours",
     "Anyone who loses hours to YouTube Shorts and Instagram Reels at night",
     "Families who want phone-free dinner and prayer time",
@@ -53,14 +53,14 @@ export const unscroll = {
   ],
 
   faqs: [
-    { q: "What is Unscroll?", a: "Unscroll is a screen time and parental control app for Android made by AIVEXA LLP in India. It sets app-wise time limits, schedules and website blocks — for your own phone or, in Family mode, for your child's phone from yours." },
+    { q: "What is Unscroll?", a: "Unscroll is a screen time and parental control app for Android made by AIVEXA LLP. It sets app-wise time limits, schedules and website blocks — for your own phone or, in Family mode, for your child's phone from yours." },
     { q: "Can my child simply open YouTube in the browser instead?", a: "No. With 'Block websites too' switched on, the website of a paused app (for example youtube.com) is blocked in every browser until the allowed time starts again." },
     { q: "Can my child uninstall Unscroll?", a: "On a child's phone linked to a parent, Unscroll turns on uninstall protection, and the app and its settings are locked with the parent's PIN or fingerprint." },
-    { q: "Is Unscroll free?", a: "Yes, the basic app is free. Pro costs ₹49 a month or ₹299 a year, and Family costs ₹99 a month or ₹599 a year for a parent and up to 5 children's phones (prices include GST)." },
+    { q: "Is Unscroll free?", a: "Yes, the basic app is free. Optional Pro and Family plans are available monthly or yearly; Family covers a parent and up to 5 children's phones. Prices are shown in the app before you pay." },
     { q: "Does Unscroll read my child's messages or photos?", a: "No. Unscroll only uses which apps were used and for how long, to apply the rules. It does not read messages, photos, calls or browsing content." },
-    { q: "Does it work on all Android phones?", a: "It works on Android phones including OnePlus, Oppo, Vivo, Realme, Xiaomi and Samsung. On some brands you must allow Unscroll to run in the background — the app shows you exactly where." },
+    { q: "Does it work on all Android phones?", a: "It works on Android phones from all major brands, including Samsung, Xiaomi, OnePlus, Oppo, Vivo, Realme, Motorola and Pixel. On some brands you must allow Unscroll to run in the background — the app shows you exactly where." },
     { q: "Is prayer mode compulsory?", a: "No. Prayer mode is optional and off by default. You can use it for namaz, puja or any prayer time you set yourself." },
     { q: "Is Unscroll available on iPhone?", a: "Not yet — Unscroll is currently for Android only." },
-    { q: "Who makes Unscroll?", a: "Unscroll is built by AIVEXA LLP, an Indian software company in Darbhanga, Bihar. Support: support@aivexallp.com." },
+    { q: "Who makes Unscroll?", a: "Unscroll is built by AIVEXA LLP, a software company based in India. Support: support@aivexallp.com." },
   ],
 } as const;

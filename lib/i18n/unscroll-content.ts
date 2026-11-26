@@ -7,16 +7,16 @@ const ICONS = unscroll.features.map((f) => f.icon);
 const withIcons = (items: [string, string][]) => items.map(([title, text], i) => ({ icon: ICONS[i], title, text }));
 
 const en: LandingContent = {
-  title: "Unscroll — Screen Time & Parental Control App for Android (India)",
-  desc: "Set app-wise time limits, block YouTube and Instagram in apps and browsers, lock settings with PIN or fingerprint, and control your child's phone from yours. Made in India by AIVEXA.",
+  title: "Unscroll — Screen Time & Parental Control App for Android",
+  desc: "Set app-wise time limits, block YouTube and Instagram in apps and browsers, lock settings with PIN or fingerprint, and control your child's phone from yours. Free to start.",
   keywords: [
-    "Unscroll", "screen time app India", "parental control app India", "app time limit Android", "block YouTube for kids",
+    "Unscroll", "screen time app", "parental control app", "screen time app India", "app time limit Android", "block YouTube for kids",
     "block Instagram Reels", "child phone control from parent phone", "app lock with fingerprint", "digital detox app",
     "focus app for students", "stop doomscrolling", "uninstall protection parental control", "prayer time app blocker",
   ],
-  h1Rest: "Screen Time & Parental Control for Indian Families",
+  h1Rest: "Screen Time & Parental Control for the Whole Family",
   sub: "App-wise limits, study and bedtime schedules, website blocking in every browser and a family mode where you set the rules for your child's phone — without daily fights.",
-  trust: ["✅ Free to start", "👨‍👩‍👧 Parent + child", "🇮🇳 Made in India"],
+  trust: ["✅ Free to start", "👨‍👩‍👧 Parent + child", "🔒 No ads, no data selling"],
   what: [
     unscroll.oneLiner,
     "Most screen-time apps are easy to get around: open the website instead, play the video in a small window, or just uninstall the app. Unscroll was built to close those doors — while keeping calls, maps and study apps always working.",
@@ -34,14 +34,14 @@ const en: LandingContent = {
 
 const hi: LandingContent = {
   title: "Unscroll — बच्चों के फ़ोन का कंट्रोल और स्क्रीन टाइम ऐप (Android)",
-  desc: "हर ऐप का अलग टाइम, YouTube और Instagram ऐप व ब्राउज़र दोनों में ब्लॉक, PIN या फ़िंगरप्रिंट लॉक, और अपने फ़ोन से बच्चे के फ़ोन का कंट्रोल। AIVEXA का भारतीय ऐप।",
+  desc: "हर ऐप का अलग टाइम, YouTube और Instagram ऐप व ब्राउज़र दोनों में ब्लॉक, PIN या फ़िंगरप्रिंट लॉक, और अपने फ़ोन से बच्चे के फ़ोन का कंट्रोल। मुफ़्त शुरुआत।",
   keywords: [
     "बच्चों का फ़ोन कंट्रोल", "पैरेंटल कंट्रोल ऐप", "स्क्रीन टाइम ऐप", "YouTube ब्लॉक कैसे करें", "रील्स की आदत",
     "मोबाइल की लत", "ऐप लॉक", "Unscroll", "parental control hindi", "screen time hindi",
   ],
-  h1Rest: "भारतीय परिवारों के लिए स्क्रीन टाइम और पैरेंटल कंट्रोल",
+  h1Rest: "पूरे परिवार के लिए स्क्रीन टाइम और पैरेंटल कंट्रोल",
   sub: "हर ऐप का अलग टाइम, पढ़ाई और सोने का शेड्यूल, हर ब्राउज़र में वेबसाइट ब्लॉक, और फ़ैमिली मोड जिसमें बच्चे के फ़ोन के नियम आप अपने फ़ोन से तय करते हैं — बिना रोज़ की लड़ाई।",
-  trust: ["✅ मुफ़्त शुरुआत", "👨‍👩‍👧 माता-पिता + बच्चे", "🇮🇳 भारत में बना"],
+  trust: ["✅ मुफ़्त शुरुआत", "👨‍👩‍👧 माता-पिता + बच्चे", "🔒 कोई विज्ञापन नहीं, डेटा बिक्री नहीं"],
   what: [
     "Unscroll, AIVEXA LLP का Android ऐप है जो आपको और आपके बच्चों को फ़ोन कम इस्तेमाल करने में मदद करता है — हर ऐप का टाइम लिमिट, फ़ोकस और बेडटाइम शेड्यूल, बिना बायपास वाला स्ट्रिक्ट मोड, हर ब्राउज़र में वेबसाइट ब्लॉक, PIN या फ़िंगरप्रिंट से ऐप लॉक, और फ़ैमिली मोड।",
     "ज़्यादातर स्क्रीन टाइम ऐप आसानी से तोड़े जा सकते हैं — ब्राउज़र में वेबसाइट खोल लो, वीडियो छोटी विंडो में चला लो, या ऐप ही हटा दो। Unscroll इन सब रास्तों को बंद करता है, और कॉल, मैप व पढ़ाई वाले ऐप हमेशा चलते रहते हैं।",
@@ -67,21 +67,21 @@ const hi: LandingContent = {
   ],
   audience: [
     "माता-पिता जो बिना रोज़ की लड़ाई के बच्चे का फ़ोन टाइम कंट्रोल करना चाहते हैं",
-    "बोर्ड, NEET, JEE या UPSC की तैयारी करने वाले छात्र",
+    "परीक्षा की तैयारी करने वाले छात्र जो Reels और Shorts में खो जाते हैं",
     "ऑफ़िस में फ़ोकस से काम करना चाहने वाले",
     "जो रात में Shorts और Reels में घंटों खो देते हैं",
     "परिवार जो खाने और नमाज़/पूजा का समय फ़ोन-फ़्री चाहते हैं",
     "माता-पिता जिनका बच्चा Chrome में YouTube खोल लेता है",
   ],
-  price: "डाउनलोड मुफ़्त। Pro ₹49/महीना या ₹299/साल · Family ₹99/महीना या ₹599/साल (GST सहित, 5 बच्चों के फ़ोन तक)।",
+  price: "डाउनलोड मुफ़्त। Pro और Family प्लान (महीने या साल के) वैकल्पिक हैं — Family में 5 बच्चों के फ़ोन तक। क़ीमत ऐप में दिखती है।",
   faqs: [
     { q: "Unscroll क्या है?", a: "AIVEXA LLP का Android ऐप जो हर ऐप का टाइम लिमिट, शेड्यूल और वेबसाइट ब्लॉक करता है — अपने फ़ोन के लिए या फ़ैमिली मोड में अपने फ़ोन से बच्चे के फ़ोन के लिए।" },
     { q: "क्या बच्चा ब्राउज़र में YouTube खोल लेगा?", a: "नहीं। 'वेबसाइट भी ब्लॉक करें' चालू होने पर रुके हुए ऐप की वेबसाइट (जैसे youtube.com) हर ब्राउज़र में बंद रहती है।" },
     { q: "क्या बच्चा Unscroll हटा सकता है?", a: "माता-पिता से जुड़े बच्चे के फ़ोन पर अनइंस्टॉल सुरक्षा चालू रहती है और सेटिंग्स PIN या फ़िंगरप्रिंट से लॉक रहती हैं।" },
-    { q: "क्या Unscroll मुफ़्त है?", a: "हाँ, बेसिक ऐप मुफ़्त है। Pro ₹49/महीना या ₹299/साल, और Family ₹99/महीना या ₹599/साल (5 बच्चों के फ़ोन तक, GST सहित)।" },
+    { q: "क्या Unscroll मुफ़्त है?", a: "हाँ, बेसिक ऐप मुफ़्त है। Pro और Family प्लान महीने या साल के लिए वैकल्पिक हैं; क़ीमत भुगतान से पहले ऐप में दिखती है।" },
     { q: "क्या यह बच्चे के मैसेज या फ़ोटो पढ़ता है?", a: "नहीं। Unscroll सिर्फ़ यह देखता है कि कौन सा ऐप कितनी देर चला, ताकि नियम लागू हों। मैसेज, फ़ोटो या कॉल नहीं पढ़ता।" },
     { q: "क्या नमाज़/पूजा मोड ज़रूरी है?", a: "नहीं, यह वैकल्पिक है और डिफ़ॉल्ट रूप से बंद रहता है।" },
-    { q: "Unscroll किसने बनाया?", a: "AIVEXA LLP, दरभंगा, बिहार। सपोर्ट: support@aivexallp.com" },
+    { q: "Unscroll किसने बनाया?", a: "AIVEXA LLP (भारत)। सपोर्ट: support@aivexallp.com" },
   ],
   heroCard: { greet: "आज · फ़ैमिली मोड", next: "YouTube लिमिट", prayer: "18 मिनट बाक़ी", remaining: "पढ़ाई का समय शाम 6:00 बजे से" },
   ctaTitle: "अपने परिवार के लिए Unscroll लें",
