@@ -1,7 +1,7 @@
 import { randomBytes } from "crypto";
 import { one, q, tx } from "./db";
 import { HttpError, body, int, noContent, ok, str } from "./http";
-import { issueSession, newDeviceToken, refreshSession, requireDevice, requireParent, requireUser, sha256, sixDigits, type UserRow } from "./auth";
+import { issueSession, newDeviceToken, normalisePairing, pairingCode8, refreshSession, requireDevice, requireParent, requireUser, sha256, sixDigits, type UserRow } from "./auth";
 import { sendCodeEmail } from "./email";
 import { createAlert } from "./alerts";
 import { pushToChild } from "./push";
@@ -187,7 +187,7 @@ const pairingCode: H = async (req, p) => {
   await ownChild(u.family_id, p.childId);
   await q(`DELETE FROM unscroll_pairing_codes WHERE child_id = $1 OR expires_at < now() - interval '1 day'`, [p.childId]);
   for (let i = 0; i < 5; i++) {
-    const code = sixDigits();
+    const code = pairingCode8();
     const row = await one<{ expires_at: Date }>(
       `INSERT INTO unscroll_pairing_codes (code, child_id, expires_at) VALUES ($1, $2, now() + interval '15 minutes')
        ON CONFLICT (code) DO NOTHING RETURNING expires_at`, [code, p.childId]);
@@ -270,7 +270,7 @@ const listAlerts: H = async req => {
 const pairDevice: H = async req => {
   limit(`pair:${ip(req)}`, 10, 10 * 60_000);
   const b = await body<{ code?: string; device?: { model?: string; os?: string; appVersion?: string } }>(req);
-  const code = str(b.code, "code", 12).replace(/\D/g, "");
+  const code = normalisePairing(str(b.code, "code", 40));
   const token = newDeviceToken();
   const result = await tx(async c => {
     const pc = (await c.query<{ child_id: string }>(
@@ -284,6 +284,92 @@ const pairDevice: H = async req => {
   });
   await createAlert({ familyId: result.family_id, childId: result.id, kind: "device_paired", title: `${result.name}'s phone is connected`, body: "You can now set limits and see usage from your phone." });
   return ok({ familyId: result.family_id, childId: result.id, childName: result.name, deviceToken: token });
+};
+
+/* ---------- QR pairing: child shows a QR, parent scans it ---------- */
+
+let pairTableReady = false;
+async function ensurePairTable() {
+  if (pairTableReady) return;
+  await q(`CREATE TABLE IF NOT EXISTS unscroll_pair_requests (
+    code text PRIMARY KEY, secret_hash text NOT NULL, model text NOT NULL DEFAULT '', os text NOT NULL DEFAULT 'android',
+    app_version text NOT NULL DEFAULT '', child_id uuid REFERENCES unscroll_children(id) ON DELETE CASCADE, device_token text,
+    claimed_at timestamptz, delivered_at timestamptz, expires_at timestamptz NOT NULL, created_at timestamptz NOT NULL DEFAULT now())`);
+  pairTableReady = true;
+}
+
+/** Child phone: start a QR pairing request. The QR shows `code`; `secret` stays on the child phone. */
+const createPairRequest: H = async req => {
+  limit(`pairreq:${ip(req)}`, 20, 10 * 60_000);
+  await ensurePairTable();
+  const b = await body<{ device?: { model?: string; os?: string; appVersion?: string } }>(req);
+  const secret = randomBytes(24).toString("base64url");
+  await q(`DELETE FROM unscroll_pair_requests WHERE expires_at < now() - interval '1 day'`);
+  for (let i = 0; i < 5; i++) {
+    const code = pairingCode8() + pairingCode8();
+    const row = await one<{ expires_at: Date }>(
+      `INSERT INTO unscroll_pair_requests (code, secret_hash, model, os, app_version, expires_at) VALUES ($1, $2, $3, $4, $5, now() + interval '15 minutes')
+       ON CONFLICT (code) DO NOTHING RETURNING expires_at`,
+      [code, sha256(secret), String(b.device?.model ?? "").slice(0, 80), String(b.device?.os ?? "android").slice(0, 20), String(b.device?.appVersion ?? "").slice(0, 20)]);
+    if (row) return ok({ code, secret, qr: `unscroll://pair?code=${code}`, expiresAtMs: new Date(row.expires_at).getTime() }, 201);
+  }
+  throw new HttpError(503, "Please try again");
+};
+
+/** Child phone: poll until the parent has scanned. Returns the device credential exactly once. */
+const pollPairRequest: H = async (req, p) => {
+  limit(`pairpoll:${ip(req)}`, 400, 10 * 60_000);
+  await ensurePairTable();
+  const b = await body<{ secret?: string }>(req);
+  const secret = str(b.secret, "secret", 100);
+  const r = await one<{ code: string; secret_hash: string; child_id: string | null; device_token: string | null; expires_at: Date; delivered_at: Date | null }>(
+    `SELECT code, secret_hash, child_id, device_token, expires_at, delivered_at FROM unscroll_pair_requests WHERE code = $1`, [normalisePairing(p.code)]);
+  if (!r || r.secret_hash !== sha256(secret)) throw new HttpError(404, "Not found");
+  if (!r.child_id) {
+    if (new Date(r.expires_at).getTime() < Date.now()) return ok({ status: "expired" });
+    return ok({ status: "waiting" });
+  }
+  if (!r.device_token) return ok({ status: "done" });
+  const child = await one<{ id: string; name: string; family_id: string }>(`SELECT id, name, family_id FROM unscroll_children WHERE id = $1`, [r.child_id]);
+  if (!child) throw new HttpError(404, "Not found");
+  await q(`UPDATE unscroll_pair_requests SET device_token = NULL, delivered_at = now() WHERE code = $1`, [r.code]);
+  return ok({ status: "paired", claim: { familyId: child.family_id, childId: child.id, childName: child.name, deviceToken: r.device_token } });
+};
+
+/** Parent: scanned the child's QR. Links that phone to an existing child, or creates the child. */
+const claimPairRequest: H = async req => {
+  const u = await requireParent(req);
+  await ensurePairTable();
+  const b = await body<{ code?: string; childId?: string | null; name?: string | null }>(req);
+  let code = str(b.code, "code", 200);
+  const m = /code=([0-9A-Za-z-]+)/.exec(code);
+  if (m) code = m[1];
+  code = normalisePairing(code);
+  const token = newDeviceToken();
+  const child = await tx(async c => {
+    const r = (await c.query<{ code: string; model: string; os: string; app_version: string }>(
+      `SELECT code, model, os, app_version FROM unscroll_pair_requests WHERE code = $1 AND child_id IS NULL AND expires_at > now() FOR UPDATE`, [code])).rows[0];
+    if (!r) throw new HttpError(400, "This QR code has expired or was already used. Open Unscroll on your child's phone for a new one.");
+    let ch: { id: string; name: string; family_id: string } | undefined;
+    if (b.childId) {
+      ch = (await c.query<{ id: string; name: string; family_id: string }>(`SELECT id, name, family_id FROM unscroll_children WHERE id = $1 AND family_id = $2`, [b.childId, u.family_id])).rows[0];
+      if (!ch) throw new HttpError(404, "Child not found");
+    } else {
+      const name = str(b.name, "name", 40);
+      const n = (await c.query<{ n: string }>(`SELECT count(*) AS n FROM unscroll_children WHERE family_id = $1`, [u.family_id])).rows[0];
+      if (Number(n?.n ?? 0) >= 5) throw new HttpError(409, "A family can have up to 5 children");
+      ch = (await c.query<{ id: string; name: string; family_id: string }>(`INSERT INTO unscroll_children (family_id, name) VALUES ($1, $2) RETURNING id, name, family_id`, [u.family_id, name])).rows[0];
+    }
+    if (!ch) throw new HttpError(500, "Could not create the child");
+    await c.query(`UPDATE unscroll_devices SET revoked_at = now() WHERE child_id = $1 AND revoked_at IS NULL`, [ch.id]);
+    await c.query(`INSERT INTO unscroll_devices (child_id, token_hash, model, os, app_version, last_sync_at) VALUES ($1, $2, $3, $4, $5, now())`,
+      [ch.id, sha256(token), r.model, r.os, r.app_version]);
+    await c.query(`UPDATE unscroll_pair_requests SET child_id = $2, device_token = $3, claimed_at = now() WHERE code = $1`, [r.code, ch.id, token]);
+    return ch;
+  });
+  if (!(await one(`SELECT 1 FROM unscroll_rules WHERE child_id = $1`, [child.id]))) await saveRules(child.id, emptyRules(), null);
+  await createAlert({ familyId: child.family_id, childId: child.id, kind: "device_paired", title: `${child.name}'s phone is connected`, body: "You can now set limits and see usage from your phone." });
+  return ok({ childId: child.id, childName: child.name });
 };
 
 const deviceRules: H = async req => {
@@ -477,6 +563,9 @@ export const routes: Array<[method: string, pattern: string, handler: H]> = [
   ["POST", "family/extra-time-requests/:requestId/decision", decideRequest],
   ["GET", "family/alerts", listAlerts],
   ["POST", "devices/pair", pairDevice],
+  ["POST", "devices/pair-requests", createPairRequest],
+  ["POST", "devices/pair-requests/:code/poll", pollPairRequest],
+  ["POST", "family/pair-requests/claim", claimPairRequest],
   ["GET", "devices/me/rules", deviceRules],
   ["POST", "devices/me/usage", uploadUsage],
   ["POST", "devices/me/status", deviceStatus],

@@ -6,6 +6,11 @@ export const sha256 = (s: string) => createHash("sha256").update(s).digest("hex"
 const token = (prefix: string) => `${prefix}_${randomBytes(32).toString("base64url")}`;
 export const sixDigits = () => String(randomInt(0, 1_000_000)).padStart(6, "0");
 
+/** Same alphabet/length as the app (src/features/pairing/pairing.ts): no 0/O/1/I/L. */
+export const PAIRING_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
+export const pairingCode8 = () => Array.from({ length: 8 }, () => PAIRING_ALPHABET[randomInt(0, PAIRING_ALPHABET.length)]).join("");
+export const normalisePairing = (s: string) => s.toUpperCase().replace(/[^0-9A-Z]/g, "");
+
 const ACCESS_MS = 24 * 60 * 60 * 1000;
 const REFRESH_MS = 120 * 24 * 60 * 60 * 1000;
 

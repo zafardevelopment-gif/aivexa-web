@@ -217,3 +217,18 @@ CREATE TABLE IF NOT EXISTS unscroll_plan_prices (
   amount      int  NOT NULL,           -- paise, incl. GST
   updated_at  timestamptz NOT NULL DEFAULT now()
 );
+
+-- QR pairing: the child's phone shows a QR, the parent scans it (code = what is in the QR).
+CREATE TABLE IF NOT EXISTS unscroll_pair_requests (
+  code          text PRIMARY KEY,
+  secret_hash   text NOT NULL,
+  model         text NOT NULL DEFAULT '',
+  os            text NOT NULL DEFAULT 'android',
+  app_version   text NOT NULL DEFAULT '',
+  child_id      uuid REFERENCES unscroll_children(id) ON DELETE CASCADE,
+  device_token  text,               -- handed to the child phone once, then cleared
+  claimed_at    timestamptz,
+  delivered_at  timestamptz,
+  expires_at    timestamptz NOT NULL,
+  created_at    timestamptz NOT NULL DEFAULT now()
+);

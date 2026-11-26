@@ -49,3 +49,4 @@ Next.js 15 site for aivexallp.com. Last updated: 11 Oct 2026.
   `UNSCROLL_UNLOCK_ALL=true` keeps everything free for testing; set false when paid plans go live.
 - Admin App Analytics → Unscroll tab (`getUnscrollStats`): anonymous app opens (`POST /v1/app/ping` → unscroll_daily_active / unscroll_app_opens) + family/account counts.
 - DB setup/upgrade on the VPS: `bash db/unscroll/setup-unscroll-db.sh` (DB "unscroll" inside the aivexa-db Supabase container, port 6002; re-run after SQL changes).
+- Pairing: (a) QR — child phone `POST /v1/devices/pair-requests` → shows `unscroll://pair?code=…`, polls `/devices/pair-requests/:code/poll`; parent scans (Google code scanner) → `POST /v1/family/pair-requests/claim {code, name|childId}`. (b) 8-character code (alphabet without 0/O/1/I/L) — same format as the app.
