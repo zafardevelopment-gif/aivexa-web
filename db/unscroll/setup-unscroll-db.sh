@@ -24,13 +24,7 @@ fi
 # Admin psql (superuser) and app psql (as unscroll), inside the container or native.
 admin_psql() {
   if [ -n "$DB_CONTAINER" ]; then
-    local u
-    for u in supabase_admin postgres; do
-      if docker exec -i "$DB_CONTAINER" psql -h 127.0.0.1 -U "$u" -d postgres -tAc "select 1" >/dev/null 2>&1; then
-        docker exec -i "$DB_CONTAINER" psql -h 127.0.0.1 -U "$u" -v ON_ERROR_STOP=1 -q "$@"; return
-      fi
-    done
-    echo "Container $DB_CONTAINER mein admin login nahi hua (supabase_admin/postgres)." >&2; exit 1
+    docker exec -i "$DB_CONTAINER" psql -h 127.0.0.1 -U "$ADMIN_USER" -v ON_ERROR_STOP=1 -q "$@"
   else
     sudo -u postgres psql -v ON_ERROR_STOP=1 -q "$@"
   fi
@@ -42,6 +36,18 @@ app_psql() {
     PGPASSWORD="$DB_PASS" psql -h 127.0.0.1 -U "$DB_USER" -d "$DB_NAME" -v ON_ERROR_STOP=1 -q "$@"
   fi
 }
+
+# Find a superuser login inside the container (probe must not read the heredoc on stdin).
+ADMIN_USER=""
+if [ -n "$DB_CONTAINER" ]; then
+  for u in supabase_admin postgres; do
+    if docker exec "$DB_CONTAINER" psql -h 127.0.0.1 -U "$u" -d postgres -tAc "select 1" </dev/null >/dev/null 2>&1; then
+      ADMIN_USER="$u"; break
+    fi
+  done
+  [ -n "$ADMIN_USER" ] || { echo "Container $DB_CONTAINER mein admin login nahi hua (supabase_admin/postgres)." >&2; exit 1; }
+  echo "Admin user: $ADMIN_USER"
+fi
 
 echo "== Role aur database bana rahe hain (${DB_CONTAINER:-native}) =="
 admin_psql -d postgres <<SQL
