@@ -1,25 +1,50 @@
 #!/usr/bin/env bash
-# Unscroll DB setup for the VPS. Run as the deploy user (needs sudo):
-#   bash setup-unscroll-db.sh
-# Creates role + database "unscroll" (if missing), loads the schema, prints the .env.local line.
-# Safe to re-run: existing role/database are kept, schema uses IF NOT EXISTS.
+# Unscroll DB setup for the VPS.
+# Default: uses the self-hosted Supabase Postgres container "aivexa-db" (host port 6002)
+# and creates a SEPARATE database "unscroll" inside it (website data untouched).
+#   bash db/unscroll/setup-unscroll-db.sh
+# Other container/port:  DB_CONTAINER=nsa-db DB_HOST_PORT=5003 bash db/unscroll/setup-unscroll-db.sh
+# Native Postgres (no Docker):  DB_CONTAINER= DB_HOST_PORT=5432 bash db/unscroll/setup-unscroll-db.sh
+# Safe to re-run: keeps the same password (~/.unscroll_db_password), schema uses IF NOT EXISTS.
 set -euo pipefail
 
+DB_CONTAINER="${DB_CONTAINER-aivexa-db}"
+DB_HOST_PORT="${DB_HOST_PORT-6002}"
 DB_NAME="unscroll"
 DB_USER="unscroll"
 PASS_FILE="$HOME/.unscroll_db_password"
-
-command -v psql >/dev/null || { echo "psql nahi mila. Pehle: sudo apt install -y postgresql-client"; exit 1; }
 
 if [ -f "$PASS_FILE" ]; then
   DB_PASS="$(cat "$PASS_FILE")"
 else
   DB_PASS="$(openssl rand -hex 24)"
-  umask 077; echo "$DB_PASS" > "$PASS_FILE"
+  ( umask 077; echo "$DB_PASS" > "$PASS_FILE" )
 fi
 
-echo "== Role aur database bana rahe hain =="
-sudo -u postgres psql -v ON_ERROR_STOP=1 -q <<SQL
+# Admin psql (superuser) and app psql (as unscroll), inside the container or native.
+admin_psql() {
+  if [ -n "$DB_CONTAINER" ]; then
+    local u
+    for u in supabase_admin postgres; do
+      if docker exec -i "$DB_CONTAINER" psql -h 127.0.0.1 -U "$u" -d postgres -tAc "select 1" >/dev/null 2>&1; then
+        docker exec -i "$DB_CONTAINER" psql -h 127.0.0.1 -U "$u" -v ON_ERROR_STOP=1 -q "$@"; return
+      fi
+    done
+    echo "Container $DB_CONTAINER mein admin login nahi hua (supabase_admin/postgres)." >&2; exit 1
+  else
+    sudo -u postgres psql -v ON_ERROR_STOP=1 -q "$@"
+  fi
+}
+app_psql() {
+  if [ -n "$DB_CONTAINER" ]; then
+    docker exec -i -e PGPASSWORD="$DB_PASS" "$DB_CONTAINER" psql -h 127.0.0.1 -U "$DB_USER" -d "$DB_NAME" -v ON_ERROR_STOP=1 -q "$@"
+  else
+    PGPASSWORD="$DB_PASS" psql -h 127.0.0.1 -U "$DB_USER" -d "$DB_NAME" -v ON_ERROR_STOP=1 -q "$@"
+  fi
+}
+
+echo "== Role aur database bana rahe hain (${DB_CONTAINER:-native}) =="
+admin_psql -d postgres <<SQL
 DO \$\$ BEGIN
   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '$DB_USER') THEN
     CREATE ROLE $DB_USER LOGIN PASSWORD '$DB_PASS';
@@ -28,16 +53,13 @@ DO \$\$ BEGIN
   END IF;
 END \$\$;
 SQL
-if ! sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'" | grep -q 1; then
-  sudo -u postgres createdb -O "$DB_USER" "$DB_NAME"
+if ! admin_psql -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'" | grep -q 1; then
+  admin_psql -d postgres -c "CREATE DATABASE $DB_NAME OWNER $DB_USER;"
 fi
-# pgcrypto extension needs superuser on some setups, so create it as postgres.
-sudo -u postgres psql -v ON_ERROR_STOP=1 -q -d "$DB_NAME" -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
-
-URL="postgres://$DB_USER:$DB_PASS@127.0.0.1:5432/$DB_NAME"
+admin_psql -d "$DB_NAME" -c "CREATE EXTENSION IF NOT EXISTS pgcrypto; GRANT ALL ON SCHEMA public TO $DB_USER;"
 
 echo "== Schema load ho raha hai =="
-psql "$URL" -v ON_ERROR_STOP=1 -q <<'SQL_EOF'
+app_psql <<'SQL_EOF'
 -- Unscroll family backend — PostgreSQL schema (VPS database).
 -- Run once:  psql "$UNSCROLL_DATABASE_URL" -f db/unscroll/001_unscroll.sql
 -- Safe to re-run (IF NOT EXISTS everywhere).
@@ -198,7 +220,15 @@ CREATE TABLE IF NOT EXISTS unscroll_subscriptions (
 SQL_EOF
 
 echo "== Tables =="
-psql "$URL" -tAc "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name LIKE 'unscroll_%' ORDER BY 1;"
+app_psql -tAc "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name LIKE 'unscroll_%' ORDER BY 1;"
+
+URL="postgres://$DB_USER:$DB_PASS@127.0.0.1:$DB_HOST_PORT/$DB_NAME"
+echo "== Host se connection test (port $DB_HOST_PORT) =="
+if command -v psql >/dev/null; then
+  if psql "$URL" -tAc "select 'host connection OK'" 2>/tmp/unscroll_conn_err; then :; else
+    echo "WARNING: host se connect nahi hua:"; cat /tmp/unscroll_conn_err
+  fi
+fi
 
 echo
 echo "DONE. Yeh line /var/www/aivexa-web/.env.local mein daalein (ya purani UNSCROLL_DATABASE_URL replace karein):"
