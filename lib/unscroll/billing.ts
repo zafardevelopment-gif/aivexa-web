@@ -9,6 +9,7 @@ import { HttpError } from "./http";
  * Change a price here and a new Razorpay plan is created automatically on the next purchase
  * (existing subscribers keep their old price).
  */
+/** Default prices. The live prices are edited in Admin › App Analytics › Unscroll (table unscroll_plan_prices). */
 export const PLANS = {
   pro_monthly:    { tier: "individual_premium", cycle: "monthly", amount: 4900,  name: "Unscroll Pro — monthly" },
   pro_yearly:     { tier: "individual_premium", cycle: "yearly",  amount: 29900, name: "Unscroll Pro — yearly" },
@@ -28,15 +29,47 @@ export function rzp() {
   return r;
 }
 
-export function publicPlans() {
+let priceTableReady = false;
+async function ensurePriceTable() {
+  if (priceTableReady) return;
+  await q(`CREATE TABLE IF NOT EXISTS unscroll_plan_prices (plan_key text PRIMARY KEY, amount int NOT NULL, updated_at timestamptz NOT NULL DEFAULT now())`);
+  priceTableReady = true;
+}
+
+/** Current price of every plan in paise (admin overrides, else defaults). */
+export async function currentPrices(): Promise<Record<PlanKey, number>> {
+  await ensurePriceTable();
+  const rows = await q<{ plan_key: string; amount: number }>(`SELECT plan_key, amount FROM unscroll_plan_prices`);
+  const out = {} as Record<PlanKey, number>;
+  for (const key of Object.keys(PLANS) as PlanKey[]) out[key] = PLANS[key].amount;
+  for (const r of rows) if (isPlanKey(r.plan_key) && r.amount > 0) out[r.plan_key] = r.amount;
+  return out;
+}
+
+/** Saves new prices (paise). Existing subscribers keep the price they signed up with. */
+export async function savePrices(prices: Partial<Record<PlanKey, number>>): Promise<void> {
+  await ensurePriceTable();
+  for (const [key, amount] of Object.entries(prices)) {
+    if (!isPlanKey(key)) continue;
+    const a = Math.round(Number(amount));
+    if (!Number.isFinite(a) || a < 100 || a > 10_000_000) throw new Error(`Invalid price for ${key}`);
+    await q(`INSERT INTO unscroll_plan_prices (plan_key, amount, updated_at) VALUES ($1, $2, now())
+             ON CONFLICT (plan_key) DO UPDATE SET amount = EXCLUDED.amount, updated_at = now()`, [key, a]);
+  }
+}
+
+const rupees = (paise: number) => `₹${Number.isInteger(paise / 100) ? paise / 100 : (paise / 100).toFixed(2)}`;
+
+export async function publicPlans() {
+  const prices = await currentPrices();
   return (Object.keys(PLANS) as PlanKey[]).map(key => ({
-    key, tier: PLANS[key].tier, cycle: PLANS[key].cycle, amountPaise: PLANS[key].amount, name: PLANS[key].name,
-    price: `₹${PLANS[key].amount / 100}`,
+    key, tier: PLANS[key].tier, cycle: PLANS[key].cycle, amountPaise: prices[key], name: PLANS[key].name,
+    price: rupees(prices[key]),
   }));
 }
 
 async function ensurePlan(key: PlanKey): Promise<string> {
-  const p = PLANS[key];
+  const p = { ...PLANS[key], amount: (await currentPrices())[key] };
   const row = await one<{ rzp_plan_id: string; amount: number }>(`SELECT rzp_plan_id, amount FROM unscroll_rzp_plans WHERE plan_key = $1`, [key]);
   if (row && row.amount === p.amount) return row.rzp_plan_id;
   const created = await rzp().plans.create({
@@ -92,8 +125,9 @@ export async function applyPayment(opts: { subscriptionId: string; paymentId: st
   const c = await one<{ user_id: string; plan_key: string }>(`SELECT user_id, plan_key FROM unscroll_rzp_checkouts WHERE rzp_subscription_id = $1`, [opts.subscriptionId]);
   if (!c || !isPlanKey(c.plan_key)) return false;
   const key = c.plan_key;
+  const amount = opts.amount ?? (await one<{ amount: number }>(`SELECT amount FROM unscroll_rzp_plans WHERE plan_key = $1`, [key]))?.amount ?? PLANS[key].amount;
   const fresh = await one(`INSERT INTO unscroll_payments (payment_id, user_id, plan_key, amount, rzp_subscription_id) VALUES ($1, $2, $3, $4, $5)
-    ON CONFLICT (payment_id) DO NOTHING RETURNING payment_id`, [opts.paymentId, c.user_id, key, opts.amount ?? PLANS[key].amount, opts.subscriptionId]);
+    ON CONFLICT (payment_id) DO NOTHING RETURNING payment_id`, [opts.paymentId, c.user_id, key, amount, opts.subscriptionId]);
   const end = new Date((opts.currentEnd ?? periodEnd(key)).getTime() + GRACE_MS);
   await q(`UPDATE unscroll_rzp_checkouts SET status = 'active', updated_at = now() WHERE rzp_subscription_id = $1`, [opts.subscriptionId]);
   await q(

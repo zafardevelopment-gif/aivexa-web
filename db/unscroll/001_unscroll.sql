@@ -210,3 +210,10 @@ CREATE TABLE IF NOT EXISTS unscroll_payments (
   rzp_subscription_id  text,
   created_at           timestamptz NOT NULL DEFAULT now()
 );
+
+-- Prices set from the admin panel (App Analytics › Unscroll). Missing rows = defaults in lib/unscroll/billing.ts.
+CREATE TABLE IF NOT EXISTS unscroll_plan_prices (
+  plan_key    text PRIMARY KEY,
+  amount      int  NOT NULL,           -- paise, incl. GST
+  updated_at  timestamptz NOT NULL DEFAULT now()
+);

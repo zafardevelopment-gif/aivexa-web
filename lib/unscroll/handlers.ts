@@ -401,7 +401,7 @@ const subscription: H = async req => {
   return ok({ tier: s.tier, status: "active", expiresAtMs: s.expires_at ? new Date(s.expires_at).getTime() : null, verifiedAtMs: Date.now(), ...extra });
 };
 
-const billingPlans: H = async () => ok({ plans: publicPlans() });
+const billingPlans: H = async () => ok({ plans: await publicPlans() });
 
 const razorpayCheckout: H = async req => {
   const u = await requireUser(req);

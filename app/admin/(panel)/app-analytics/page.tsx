@@ -6,6 +6,8 @@ import {
   getCalivoStats,
   getMiftahStats,
   getUnscrollStats,
+  getUnscrollPrices,
+  saveUnscrollPrices,
   saveAppMetric,
   saveMiftahImpact,
   type AppMetric,
@@ -15,6 +17,7 @@ import {
   type MiftahImpact,
   type MiftahStats,
   type UnscrollStats,
+  type UnscrollPriceRow,
 } from "@/app/admin/app-actions";
 
 type AppKey = "calivo" | "miftah" | "unscroll";
@@ -629,6 +632,79 @@ function Split({ title, rows }: { title: string; rows: { label: string; count: n
   );
 }
 
+
+function UnscrollPrices() {
+  const [rows, setRows] = useState<UnscrollPriceRow[]>([]);
+  const [vals, setVals] = useState<Record<string, string>>({});
+  const [rev, setRev] = useState({ revenue30d: 0, payments30d: 0 });
+  const [err, setErr] = useState("");
+  const [msg, setMsg] = useState("");
+  const load = useCallback(async () => {
+    const r = await getUnscrollPrices();
+    setErr(r.error);
+    setRows(r.rows);
+    setRev({ revenue30d: r.revenue30d, payments30d: r.payments30d });
+    setVals(Object.fromEntries(r.rows.map((x) => [x.key, String(x.rupees)])));
+  }, []);
+  useEffect(() => {
+    load();
+  }, [load]);
+  const n = (k: string) => Number(vals[k] || 0);
+  const save = (k: string) => (n(k.replace("yearly", "monthly")) ? Math.round((1 - n(k) / (n(k.replace("yearly", "monthly")) * 12)) * 100) : 0);
+
+  return (
+    <div className="admin-card" style={{ padding: "1rem 1.2rem" }}>
+      {err && <div className="form-alert err">{err}</div>}
+      <div className="admin-cards" style={{ marginBottom: ".8rem" }}>
+        <Card value={inr(rev.revenue30d)} label="Collected · 30 days" hint="Razorpay, incl. GST" />
+        <Card value={num(rev.payments30d)} label="Payments · 30 days" hint="first payments + renewals" />
+      </div>
+      <div style={{ fontSize: ".82rem", color: "var(--muted-2)", marginBottom: ".7rem" }}>
+        Prices in ₹ <b>including GST</b>. The app shows the new price at once — no app update needed. People who already
+        subscribed keep the price they signed up with.
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: ".7rem" }}>
+        {rows.map((r) => (
+          <label key={r.key} style={{ fontSize: ".78rem" }}>
+            {r.name}
+            <input
+              style={input}
+              type="number"
+              min={1}
+              step="1"
+              value={vals[r.key] ?? ""}
+              onChange={(e) => setVals((v) => ({ ...v, [r.key]: e.target.value }))}
+            />
+            <span style={{ color: "var(--muted-2)" }}>
+              default ₹{r.defaultRupees}
+              {r.key.endsWith("yearly") && save(r.key) > 0 ? ` · saves ${save(r.key)}% vs monthly` : ""}
+            </span>
+          </label>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 8, marginTop: ".9rem", alignItems: "center" }}>
+        <button
+          style={btn}
+          onClick={async () => {
+            const payload: Record<string, number> = {};
+            for (const r of rows) payload[r.key] = Number(vals[r.key]);
+            if (Object.values(payload).some((v) => !Number.isFinite(v) || v < 1)) {
+              setMsg("Every price must be at least ₹1");
+              return;
+            }
+            const e = await saveUnscrollPrices(payload);
+            setMsg(e || "Saved ✓ — live in the app now.");
+            if (!e) load();
+          }}
+        >
+          Save prices
+        </button>
+        {msg && <span style={{ fontSize: ".82rem", color: msg.startsWith("Saved") ? "#15803d" : "#b91c1c" }}>{msg}</span>}
+      </div>
+    </div>
+  );
+}
+
 function UnscrollTab() {
   const [s, setS] = useState<UnscrollStats | null>(null);
   const load = useCallback(async () => setS(await getUnscrollStats()), []);
@@ -703,6 +779,9 @@ function UnscrollTab() {
             </tbody>
           </table>
         )}
+      </Section>
+      <Section title="Plan prices & payments (Razorpay)">
+        <UnscrollPrices />
       </Section>
       <Section title="Installs (from Play Console)">
         <InstallsEditor app="unscroll" metric={s.metric} onSaved={load} />

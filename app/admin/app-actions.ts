@@ -6,6 +6,7 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { ADMIN_COOKIE, verifyToken } from "@/lib/admin-auth";
 import { q as unscrollQ } from "@/lib/unscroll/db";
+import { currentPrices as unscrollCurrentPrices, savePrices as unscrollSavePrices, PLANS as UNSCROLL_PLANS, type PlanKey as UnscrollPlanKey } from "@/lib/unscroll/billing";
 
 // ─────────────────────────────────────────────────────────────────────
 // App Analytics for the admin panel: CALIVO AI (live from the CALIVO
@@ -555,5 +556,43 @@ export async function getUnscrollStats(): Promise<UnscrollStats> {
     };
   } catch (e) {
     return { ...base, error: `Unscroll database: ${e instanceof Error ? e.message : String(e)}` };
+  }
+}
+
+
+export interface UnscrollPriceRow {
+  key: string;
+  name: string;
+  rupees: number;
+  defaultRupees: number;
+}
+
+/** Plan prices shown in the app (₹ incl. GST). */
+export async function getUnscrollPrices(): Promise<{ error: string; rows: UnscrollPriceRow[]; revenue30d: number; payments30d: number }> {
+  if (!(await isAdmin())) return { error: "Not authorised", rows: [], revenue30d: 0, payments30d: 0 };
+  if (!process.env.UNSCROLL_DATABASE_URL) return { error: "UNSCROLL_DATABASE_URL is not set", rows: [], revenue30d: 0, payments30d: 0 };
+  try {
+    const prices = await unscrollCurrentPrices();
+    const rows = (Object.keys(UNSCROLL_PLANS) as UnscrollPlanKey[]).map((key) => ({
+      key, name: UNSCROLL_PLANS[key].name, rupees: prices[key] / 100, defaultRupees: UNSCROLL_PLANS[key].amount / 100,
+    }));
+    const [p] = await unscrollQ<{ total: string; n: string }>(
+      `SELECT coalesce(sum(amount), 0) AS total, count(*) AS n FROM unscroll_payments WHERE created_at > now() - interval '30 days'`);
+    return { error: "", rows, revenue30d: Number(p?.total ?? 0) / 100, payments30d: Number(p?.n ?? 0) };
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : String(e), rows: [], revenue30d: 0, payments30d: 0 };
+  }
+}
+
+export async function saveUnscrollPrices(rupees: Record<string, number>): Promise<string> {
+  if (!(await isAdmin())) return "Not authorised";
+  try {
+    const paise: Record<string, number> = {};
+    for (const [k, v] of Object.entries(rupees)) paise[k] = Math.round(Number(v) * 100);
+    await unscrollSavePrices(paise as Partial<Record<UnscrollPlanKey, number>>);
+    revalidatePath("/admin/app-analytics");
+    return "";
+  } catch (e) {
+    return e instanceof Error ? e.message : String(e);
   }
 }
