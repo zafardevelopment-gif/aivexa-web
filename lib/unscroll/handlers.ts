@@ -435,6 +435,11 @@ const deviceStatus: H = async req => {
     [typeof b.guardRunning === "boolean" ? b.guardRunning : null, JSON.stringify(perms), d.deviceId]);
   const today = dayKeyIn(await familyTimeZone(d.familyId));
   const off = Object.entries(perms).filter(([, v]) => v === false).map(([k]) => k);
+  if (off.includes("uninstallProtection")) {
+    await createAlert({ familyId: d.familyId, childId: d.childId, kind: "permission_removed", title: `Uninstall protection is off on ${d.childName}'s phone`,
+      body: "Unscroll could be uninstalled. Ask to switch it back on from the banner in Unscroll on the phone.",
+      dedupeKey: `admin:${d.childId}:${today}` });
+  }
   if (off.includes("usageAccess") || off.includes("overlay") || b.guardRunning === false) {
     await createAlert({ familyId: d.familyId, childId: d.childId, kind: "permission_removed", title: `Check ${d.childName}'s phone`,
       body: b.guardRunning === false ? "Unscroll's protection is not running on the phone." : "A permission Unscroll needs was switched off on the phone.",

@@ -57,7 +57,7 @@ export interface PushMessage {
   data?: Record<string, string>;
 }
 
-async function sendTo(tokens: string[], msg: PushMessage): Promise<void> {
+async function sendTo(tokens: string[], msg: PushMessage, dataOnly = false): Promise<void> {
   const sa = serviceAccount();
   if (!sa || !tokens.length) return;
   const at = await accessToken(sa);
@@ -66,12 +66,16 @@ async function sendTo(tokens: string[], msg: PushMessage): Promise<void> {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${at}` },
       body: JSON.stringify({
-        message: {
-          token,
-          notification: { title: msg.title, body: msg.body },
-          data: msg.data ?? {},
-          android: { priority: "high", notification: { channel_id: "unscroll_family", sound: "default" } },
-        },
+        // Child phones get data-only messages so the app always wakes up and can apply new
+        // rules in the background; it shows the notification itself from data.title/body.
+        message: dataOnly
+          ? { token, data: { ...(msg.data ?? {}), title: msg.title, body: msg.body }, android: { priority: "high" } }
+          : {
+              token,
+              notification: { title: msg.title, body: msg.body },
+              data: msg.data ?? {},
+              android: { priority: "high", notification: { channel_id: "unscroll_family", sound: "default" } },
+            },
       }),
     });
     // Token no longer valid (app uninstalled / data cleared): forget it.
@@ -105,7 +109,7 @@ export async function pushToChild(childId: string, msg: PushMessage): Promise<vo
        WHERE d.child_id = $1 AND d.revoked_at IS NULL`,
       [childId],
     );
-    await sendTo(rows.map(r => r.token), msg);
+    await sendTo(rows.map(r => r.token), msg, true);
   } catch (e) {
     console.error("[unscroll/push] child", e);
   }
