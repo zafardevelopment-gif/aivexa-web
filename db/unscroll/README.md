@@ -22,7 +22,7 @@ UNSCROLL_UNLOCK_ALL=true
 `RESEND_API_KEY` (already set for the store) sends the sign-in codes.
 
 ## 3. Firebase (push notifications)
-1. console.firebase.google.com → Add project "Unscroll" → Add Android app, package `com.unscroll.app`.
+1. console.firebase.google.com → Add project "Unscroll" → Add Android app, package `com.aivexallp.unscroll`.
 2. Download `google-services.json` → put it in the app repo at `android/app/google-services.json`.
 3. Project settings → Service accounts → Generate new private key → upload the JSON to the server
    at the path in `UNSCROLL_FCM_SERVICE_ACCOUNT_FILE` (chmod 600, never commit it).

@@ -4,7 +4,7 @@
  * Set UNSCROLL_ON_PLAY = true once the Play Store listing is live — the page then shows the Play badge.
  */
 
-export const UNSCROLL_PACKAGE = "com.unscroll.app";
+export const UNSCROLL_PACKAGE = "com.aivexallp.unscroll";
 export const UNSCROLL_ON_PLAY = false;
 
 export const unscrollPlayUrl = (source = "website") =>

@@ -50,11 +50,17 @@ const startEmail: H = async req => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new HttpError(400, "Enter a valid email address");
   limit(`email:${email}`, 5, 60 * 60_000);
   limit(`emailip:${ip(req)}`, 20, 60 * 60_000);
-  const code = sixDigits();
+  // Google Play review account: reviewers cannot read our sign-in emails, so this one
+  // address signs in with a fixed code set on the server (both env vars must be set).
+  const reviewEmail = (process.env.UNSCROLL_REVIEW_EMAIL ?? "").trim().toLowerCase();
+  const reviewCode = (process.env.UNSCROLL_REVIEW_CODE ?? "").replace(/\D/g, "");
+  const isReview = !!reviewEmail && reviewCode.length === 6 && email === reviewEmail;
+  const code = isReview ? reviewCode : sixDigits();
   const row = await one<{ id: string }>(
     `INSERT INTO unscroll_email_challenges (email, code_hash, expires_at) VALUES ($1, $2, now() + interval '10 minutes') RETURNING id`,
     [email, sha256(`${email}:${code}`)],
   );
+  if (isReview) return ok({ challengeId: row!.id });
   try {
     await sendCodeEmail(email, code);
   } catch (e) {
